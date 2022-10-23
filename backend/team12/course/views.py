@@ -1,13 +1,13 @@
-from django.db.models import Case, When, Q, Value, IntegerField, F
+from django.db.models import Q, F
 from django.db import transaction
 from django.core.paginator import Paginator
 from rest_framework import status, viewsets, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from course.serializers import CourseSerializer, CourseRetrieveSerializer
+from course.serializers import CourseListSerializer, CourseRetrieveSerializer
 from course.models import Course
-from typing import List
-from team12.exceptions import NotFound
+from team12.exceptions import FieldError
+from course.const import DRIVE
 
 
 class CourseViewSet(
@@ -23,7 +23,7 @@ class CourseViewSet(
         if self.action in ["retrieve", "play"]:
             return CourseRetrieveSerializer
         elif self.action == "list":
-            return CourseSerializer
+            return CourseListSerializer
 
     # POST /course
     @transaction.atomic
@@ -43,20 +43,40 @@ class CourseViewSet(
         """Retrieve Course"""
         return super().retrieve(request, pk=None)
 
-    # GET /course/?search_type=(string)&search_keyword=(string)&major=(string)&credit=(string)
+    # GET /course/?category=(string)
+    # &search_keyword=(string)
+    # &filter=(string)
     def list(self, request):
         """List Courses"""
+        page = request.GET.get('page', '1')
+        category = request.query_params.get("category", DRIVE)
+        search_keyword = request.query_params.get("search_keyword", "")
+        f_param = request.query_params.get("filter", False)
         
-        return Response({}, status=status.HTTP_200_OK)
+        if not category:
+            raise FieldError('query parameter missing [category]')
+        
+        courses = Course.objects.filter(category=category)
+        if search_keyword:
+            courses = courses.filter(
+                Q(title__icontains=search_keyword) | 
+                Q(description__icontains=search_keyword))
+        courses = courses.order_by(F("created_at").desc())
+        if f_param:
+            if f_param == "use": courses = courses.order_by(F("u_counts").desc())
+            elif f_param == "time_asc": courses = courses.order_by(F("e_times").asc(nulls_last=True))
+            elif f_param == "time_desc": courses = courses.order_by(F("e_times").desc(nulls_last=True))
+            elif f_param == "distance_asc": courses = courses.order_by(F("distance").asc(nulls_last=True))
+            elif f_param == "distance_desc": courses = courses.order_by(F("distance").desc(nulls_last=True))
+        
+        courses = Paginator(courses, 20).get_page(page)
+        return Response(self.get_serializer(courses, many=True).data, status=status.HTTP_200_OK)
     
     # PUT /course/:courseId/play
     @action(methods=['PUT'], detail=True)
     @transaction.atomic
     def play(self, request, pk=None):
-        try:
-            target = self.queryset.get(pk=pk)
-        except Course.DoesNotExist:
-            return NotFound()
+        target = self.get_boject()
         target.u_counts += 1
         target.save()
         return Response(self.get_serializer(target).data, status=status.HTTP_200_OK)

@@ -47,3 +47,21 @@ class CourseRetrieveSerializer(serializers.ModelSerializer):
         return PointSerializer(course.layover).data
     def get_destination(self, course):
         return PointSerializer(course.destination).data
+
+class CourseListSerializer(serializers.ModelSerializer):
+    """
+    Course Model List Serializer
+    """
+
+    class Meta:
+        model = Course 
+        fields = (
+            'id',
+            'title',
+            'description',
+            'created_at',
+            'u_counts',
+            'e_time',
+            'distance'
+        )
+    

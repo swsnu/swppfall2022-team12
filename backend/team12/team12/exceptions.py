@@ -50,7 +50,7 @@ class AlreadyLogin(BaseError):
 
 class FieldError(BaseError):
     status_code = status.HTTP_400_BAD_REQUEST
-    default_detail = '입력이 잘못 되었습니다.'
+    default_detail = 'Invalid field.'
     default_code = 'E201'
 
 class DuplicationError(BaseError):
