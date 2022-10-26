@@ -9,7 +9,8 @@ class PointSerializer(serializers.ModelSerializer):
         model = Point
         fields = (
             'latitude',
-            'longitude'
+            'longitude',
+            'idx'
         )
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -24,15 +25,11 @@ class CourseRetrieveSerializer(serializers.ModelSerializer):
     """
     Course Model Retrieve Serializer
     """
-    start = serializers.SerializerMethodField()
-    layover = serializers.SerializerMethodField()
-    destination = serializers.SerializerMethodField()
+    points = serializers.SerializerMethodField()
     class Meta:
         model = Course 
         fields = (
-            'start',
-            'layover',
-            'destination',
+            'points',
             'title',
             'description',
             'created_at',
@@ -41,12 +38,9 @@ class CourseRetrieveSerializer(serializers.ModelSerializer):
             'distance'
         )
     
-    def get_start(self, course):
-        return PointSerializer(course.start).data
-    def get_layover(self, course):
-        return PointSerializer(course.layover).data
-    def get_destination(self, course):
-        return PointSerializer(course.destination).data
+    def get_points(self, course):
+        points = course.points.order_by('idx')
+        return PointSerializer(points, many=True).data
 
 class CourseListSerializer(serializers.ModelSerializer):
     """
