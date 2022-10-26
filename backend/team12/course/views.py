@@ -5,7 +5,7 @@ from rest_framework import status, viewsets, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from course.serializers import CourseListSerializer, CourseRetrieveSerializer
-from course.models import Course
+from course.models import Course, Point
 from team12.exceptions import FieldError
 from course.const import DRIVE
 
@@ -80,3 +80,33 @@ class CourseViewSet(
         target.u_counts += 1
         target.save()
         return Response(self.get_serializer(target).data, status=status.HTTP_200_OK)
+    
+    @action(methods=['POST'], detail=False)
+    def dummy(self, request):
+        """Temporary view for create dummy courses."""
+        category = request.data.get('category')
+        nums = request.data.get('nums', 10)
+
+        ids = []
+        for i in range(nums):
+            c = Course.objects.create(
+                category=category if category else DRIVE,
+                title = f"test title...{i}",
+                description = f"test description...{i}",
+                u_counts = i,
+                distance = i
+            )
+            ids.append(c.id)
+            Point.objects.create(
+                course=c,
+                latitude=37.513272317072,
+                longitude=127.09431687965,
+                idx=0
+            )
+            Point.objects.create(
+                course=c,
+                latitude=37.513272317072,
+                longitude=127.09431687965,
+                idx=1
+            )
+        return Response(ids, status=status.HTTP_200_OK)
