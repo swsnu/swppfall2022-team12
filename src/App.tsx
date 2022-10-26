@@ -1,9 +1,15 @@
 import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import CourseDetail from "./contatiners/CourseDetail";
 
 function App() {
   return (
     <div className="App">
-      <h1>Hello team12!</h1>
+      <BrowserRouter>
+        <Routes>
+          <Route path="*" element={<h1>Not Found</h1>} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
