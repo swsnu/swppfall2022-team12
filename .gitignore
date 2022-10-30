@@ -107,3 +107,6 @@ build
 .idea
 .DS_Store
 out/
+
+# API KEY
+.env
