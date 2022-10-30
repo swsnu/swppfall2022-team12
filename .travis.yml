@@ -14,10 +14,15 @@ jobs:
 
   - language: node_js
     node_js: 14
+     addons:
+      sonarcloud:
+        organization: "your SonarCloud organization key (e.g. swsnu)"
+        token:
+          secure: "YNJKmy2RlOFFb4hYpITvhXn0TofkVFQtFYQwdkIoAArVLYWU9qO1CydjI4tv+NgRerDBzmzZ5S2WhOClox6Gcso26rs9t6MwoNJk1kwELPUqzDKRJ12xpte08YAVeTtF/m5UEDK7i1ExwRQKwstaH5bC8EYrF48ijR2d1ffKOw1MFghm5ktI6zVRggW2ZUbLu2pA/dHFMiq/HCvYEGifDtzd6T1ageFu7zefhjE4i+SPQh6G4M9E4dp8ODhmsH8d3hbD2TfRLPktIV5OqsPt7CYdzsDRm4OHn3NiiThY5rnqderYRWx3dGIj00ir4rmNCLZcJjhXNzBXp7jsZtUMxDMjASMZ9JFKI/9CZ3lg5qnrLrLCw5XI3O2nmv1SJLeZTj4Zj5cfsPHh6FfVObpVaeM1CqMvkPV2qIMU7yrHd4ujZeE1fysBLloiWPDpDz0XnS9D5IgPxEds4pEx4g1KbrnY1gPNn1uu2UJ6w5Qq8GrTnjIdPpOXj3B/a36s2vx4JPls9HpISB/dcEVooNFhMn3KKlK2BCHJ+TZoO1pcnrMxnBED9/J998rxqmnH86rMLpcHMqGg1t9H6WrLNs1rfckkCZWBcFK/qLIeMs9MEABSSEykslto6c2dz3/fBPtTfhgCcjObo8Niwk03qCcDwSTdq31XfVZDDF2XcwumZcs="
     install:
       - cd frontend
       - yarn install
     scripts:
       - ./node_modules/.bin/eslint src
       - yarn test --coverage --watchAll=false
-      
+      - cd .. && sonar-scanner
