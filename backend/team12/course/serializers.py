@@ -28,6 +28,7 @@ class CourseSerializer(serializers.ModelSerializer):
             'e_time',
             'distance'
         )
+        extra_kwargs = {"e_time":{'format':'%H:%M'}}
 
     def validate(self, data):
         title = data.get('title')
@@ -98,6 +99,7 @@ class CourseDetailSerializer(serializers.ModelSerializer):
             'e_time',
             'distance'
         )
+        extra_kwargs = {"e_time":{'format':'%H:%M'}}
     
     def get_points(self, course):
         points = course.points.order_by('idx')
@@ -119,4 +121,5 @@ class CourseListSerializer(serializers.ModelSerializer):
             'e_time',
             'distance'
         )
+        extra_kwargs = {"e_time":{'format':'%H:%M'}}
     
