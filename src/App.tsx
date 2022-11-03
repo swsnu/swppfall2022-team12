@@ -1,17 +1,12 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import CourseDetail from "./contatiners/CourseDetail";
+import { useEffect } from "react";
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="*" element={<h1>Not Found</h1>} />
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <div>Drive Course Live</div>
   );
 }
 
 export default App;
+
