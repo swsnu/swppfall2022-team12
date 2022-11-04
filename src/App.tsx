@@ -8,7 +8,7 @@ import MainPage from "./Container/MainPage/MainPage";
 function App() {
 
   return (
-    <>
+    <div className="App">
       <BrowserRouter>
         <Routes>
           <Route path="/courses" element={<CourseList />} />
@@ -17,7 +17,7 @@ function App() {
           <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
       </BrowserRouter>
-    </>
+    </div>
   );
 }
 
