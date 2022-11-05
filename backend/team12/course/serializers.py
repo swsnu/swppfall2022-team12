@@ -9,6 +9,8 @@ class PointSerializer(serializers.ModelSerializer):
     class Meta:
         model = Point
         fields = (
+            'pid',
+            'name',
             'latitude',
             'longitude',
             'idx'
@@ -58,8 +60,9 @@ class CourseSerializer(serializers.ModelSerializer):
             if not len(points) > 1:
                 raise FieldError("points should be more than 2.")
             else:
-                if len(set(map(lambda x: tuple(x.keys()), points))) != 1:
-                    raise FieldError("points keys must be 'longitude', 'latitude'.")
+                if len(set(map(lambda x: tuple(x.keys()), points))) != 1 or \
+                    set(points[0].keys())!={'name', 'pid', 'longitude', 'latitude'}:
+                    raise FieldError("points keys must have 'name', 'pid', 'longitude', 'latitude'.")
         else:
             missing_fields.append("points")
         
@@ -74,6 +77,8 @@ class CourseSerializer(serializers.ModelSerializer):
         for idx, point in enumerate(points):
             points_list.append(
                 Point(
+                    pid=point['pid'],
+                    name=point['name'],
                     course=course,
                     longitude=point['longitude'],
                     latitude=point['latitude'],
@@ -88,10 +93,13 @@ class CourseDetailSerializer(serializers.ModelSerializer):
     Course Model Detail Serializer
     """
     points = serializers.SerializerMethodField()
+    p_counts = serializers.SerializerMethodField()
     class Meta:
         model = Course 
         fields = (
+            'id',
             'points',
+            'p_counts',
             'title',
             'description',
             'created_at',
@@ -104,6 +112,8 @@ class CourseDetailSerializer(serializers.ModelSerializer):
     def get_points(self, course):
         points = course.points.order_by('idx')
         return PointSerializer(points, many=True).data
+    def get_p_counts(self, course):
+        return course.points.count()
 
 class CourseListSerializer(serializers.ModelSerializer):
     """

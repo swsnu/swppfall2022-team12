@@ -83,7 +83,7 @@ class CourseViewSet(
     @action(methods=['PUT'], detail=True)
     @transaction.atomic
     def play(self, request, pk=None):
-        target = self.get_boject()
+        target = self.get_object()
         target.u_counts += 1
         target.save()
         return Response(self.get_serializer(target).data, status=status.HTTP_200_OK)
