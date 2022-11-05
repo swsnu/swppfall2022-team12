@@ -3,7 +3,7 @@ import axios from "axios";
 
 const { Tmapv3 } = window;
 
-export default function SearchTMap(keyword, onClick) {
+function SearchTMap(keyword) {
   const [searchMap, setSearchMap] = useState();
 
   const initTMap = () => {
@@ -16,12 +16,13 @@ export default function SearchTMap(keyword, onClick) {
       zoomControl : true,
       scrollwheel : true
     });
+    console.log(keyword)
 
     // 2. POI 통합 검색 API 요청
     // 검색 버튼이 눌렸을 경우
-    if (onClick > 0) {
+    if (keyword !== "") {
       const params = {
-        appKey: process.env.REACT_APP_TMAP_API_KEY,
+        appKey: process.env.REACT_APP_TMAP_API_KEY2,
         searchKeyword: keyword,
         resCoordType: "EPSG3857",
         reqCoordType: "WGS84GEO",
@@ -30,12 +31,15 @@ export default function SearchTMap(keyword, onClick) {
       axios.get("https://apis.openapi.sk.com/tmap/pois?version=1&format=json&callback=result", {params})
         .then(response => console.log(response.data))
     }
+    else {
+      console.log("No Keyword!")
+    }
     return map;
   }
 
   useEffect(() => {
     setSearchMap(initTMap());
-  }, [])
+  }, [keyword])
 
   useEffect(() => {
     if (searchMap === null) {
@@ -60,3 +64,5 @@ export default function SearchTMap(keyword, onClick) {
     </>
   )
 }
+
+export default React.memo(SearchTMap);
