@@ -4,7 +4,7 @@ from django.core.paginator import Paginator
 from rest_framework import status, viewsets, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from course.serializers import CourseListSerializer, CourseRetrieveSerializer
+from course.serializers import CourseListSerializer, CourseDetailSerializer, CourseSerializer, PointSerializer
 from course.models import Course, Point
 from team12.exceptions import FieldError
 from course.const import DRIVE
@@ -12,7 +12,8 @@ from course.const import DRIVE
 
 class CourseViewSet(
         viewsets.GenericViewSet,
-        generics.RetrieveDestroyAPIView):
+        generics.RetrieveDestroyAPIView,
+        generics.CreateAPIView):
     """
     Generic ViewSet of Course Object.
     """
@@ -21,15 +22,21 @@ class CourseViewSet(
 
     def get_serializer_class(self):
         if self.action in ["retrieve", "play"]:
-            return CourseRetrieveSerializer
+            return CourseDetailSerializer
         elif self.action == "list":
             return CourseListSerializer
+        elif self.action == "create":
+            return CourseSerializer
 
     # POST /course
     @transaction.atomic
     def create(self, request):
         """Create Course"""
-        return Response({}, status=status.HTTP_200_OK)
+        context = {"points": request.data.get("points", [])}
+        serializer = self.get_serializer(data=request.data, context=context)
+        serializer.is_valid(raise_exception=True)
+        course = serializer.save()
+        return Response(CourseDetailSerializer(course).data, status=status.HTTP_200_OK)
 
 
     # DELETE /course/:courseId
@@ -76,7 +83,7 @@ class CourseViewSet(
     @action(methods=['PUT'], detail=True)
     @transaction.atomic
     def play(self, request, pk=None):
-        target = self.get_boject()
+        target = self.get_object()
         target.u_counts += 1
         target.save()
         return Response(self.get_serializer(target).data, status=status.HTTP_200_OK)
