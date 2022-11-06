@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import SearchTMap from "./SearchMap";
+import SearchMap from "./SearchMap";
 
 export default function SearchPage() {
   // 입력 폼 변화 감지하여 입력 값 관리
@@ -28,7 +28,7 @@ export default function SearchPage() {
       return;
     }
     setKeyword(value);
-    setValue("");
+    // setValue("");
   }
 
   return (
@@ -42,7 +42,7 @@ export default function SearchPage() {
         />
         <button>Search</button>
       </form>
-      <SearchTMap keyword={keyword} />
+      <SearchMap keyword={keyword} />
     </>
   )
 }
