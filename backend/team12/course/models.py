@@ -30,11 +30,15 @@ class Point(models.Model):
 
         # Fields
         course (Course): course
+        pid (char): ID of Points.
+        name (char): name of points. 
         longitude (int): longitude (ex. )
         latitude (int): latitude (ex. )
         idx (int): course points order
     """
     id = models.AutoField(primary_key=True)
+    pid = models.CharField(max_length=50, blank=True)
+    name = models.CharField(max_length=50, blank=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="points")
     longitude = models.DecimalField(decimal_places=7, max_digits=10)
     latitude = models.DecimalField(decimal_places=7, max_digits=9)
