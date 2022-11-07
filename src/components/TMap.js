@@ -8,7 +8,7 @@ import { dummyData } from './dummyData';
 
 const { Tmapv3 } = window;
 
-export default function TMap() {
+function TMap() {
   const [map, setMap] = useState();
   const [resultData, setResultData] = useState();
   const [resultFeatures, setResultFeatures] = useState([]);
@@ -156,3 +156,5 @@ export default function TMap() {
     </Map>
   );
 }
+
+export default React.memo(TMap);

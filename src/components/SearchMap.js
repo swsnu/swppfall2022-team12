@@ -3,11 +3,14 @@
 import React, { useEffect, useState } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 
+import TMap from './TMap';
+
 function SearchMap(keyword) {
   const [info, setInfo] = useState();
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState();
   const [selected, setSelected] = useState([]);
+  const [preview, setPreview] = useState(false);
 
   useEffect(() => {
     if (!map) return;
@@ -15,7 +18,7 @@ function SearchMap(keyword) {
 
     const { Keyword } = keyword;
 
-    if (Keyword !== '') {
+    if (Keyword && Keyword.length > 0) {
       ps.keywordSearch(Keyword, (data, status) => {
         if (status === kakao.maps.services.Status.OK) {
           // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
@@ -54,9 +57,11 @@ function SearchMap(keyword) {
   return (
     <>
       <div style={{ width: '30%', float: 'right' }}>
-        <div className="title">
-          <strong>Search</strong> Results
-        </div>
+        {!preview && (
+          <div className="title">
+            <strong>Search</strong> Results
+          </div>
+        )}
         <div className="rst_wrap">
           <div className="rst mCustomScrollbar">
             <ul id="searchResult" name="searchResult">
@@ -83,37 +88,46 @@ function SearchMap(keyword) {
               </li>
             ))}
         </div>
-        <button>경로 미리보기</button>
+        {preview ? (
+          <button onClick={() => setPreview(false)}>경로 만들기</button>
+        ) : (
+          <button onClick={() => setPreview(true)}>경로 미리보기</button>
+        )}
         <button>경로 완성</button>
       </div>
-      <Map // 로드뷰를 표시할 Container
-        center={{
-          lat: 37.566826,
-          lng: 126.9786567,
-        }}
-        style={{
-          width: '70%',
-          height: '100%',
-          position: 'fixed',
-        }}
-        level={3}
-        onCreate={setMap}
-      >
-        {markers.map((marker) => (
-          <MapMarker
-            key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
-            position={marker.position}
-            onMouseOver={() => setInfo(marker)}
-            onMouseOut={() => setInfo(null)}
-            onClick={() => addLocation(marker)}
-          >
-            {info && info?.content === marker.content && (
-              <div style={{ color: '#000' }}>{marker.content}</div>
-            )}
-          </MapMarker>
-        ))}
-      </Map>
+      {preview ? (
+        <TMap />
+      ) : (
+        <Map // 로드뷰를 표시할 Container
+          center={{
+            lat: 37.566826,
+            lng: 126.9786567,
+          }}
+          style={{
+            width: '70%',
+            height: '100%',
+            position: 'fixed',
+          }}
+          level={3}
+          onCreate={setMap}
+        >
+          {markers.map((marker) => (
+            <MapMarker
+              key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
+              position={marker.position}
+              onMouseOver={() => setInfo(marker)}
+              onMouseOut={() => setInfo(null)}
+              onClick={() => addLocation(marker)}
+            >
+              {info && info?.content === marker.content && (
+                <div style={{ color: '#000' }}>{marker.content}</div>
+              )}
+            </MapMarker>
+          ))}
+        </Map>
+      )}
     </>
   );
 }
+
 export default React.memo(SearchMap);
