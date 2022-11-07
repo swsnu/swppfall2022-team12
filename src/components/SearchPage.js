@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import SearchMap from "./SearchMap";
+import SearchTMap from "./SearchMap";
 
 export default function SearchPage() {
   // 입력 폼 변화 감지하여 입력 값 관리

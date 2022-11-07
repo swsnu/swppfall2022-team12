@@ -3,8 +3,6 @@
 import React, {useEffect, useState} from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 
-// const { kakao } = window;
-
 function SearchMap(keyword) {
   const [info, setInfo] = useState()
   const [markers, setMarkers] = useState([])
