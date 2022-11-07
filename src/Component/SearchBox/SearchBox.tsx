@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { fetchCoursesParams, fetchCourses } from "../../store/slices/course";
+import { AppDispatch } from "../../store";
 
 interface Iprop {
     searchKey: string;
@@ -7,6 +10,7 @@ interface Iprop {
 
 const SearchBox = (prop: Iprop) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
     const inputFocus = useRef<HTMLInputElement>(null);
 
     const { searchKey } = prop;
@@ -22,6 +26,14 @@ const SearchBox = (prop: Iprop) => {
         }
         else {
             localStorage.setItem("SEARCH_KEY", searchInput);
+            const params: fetchCoursesParams = {
+                page: 1,
+                category: localStorage.getItem("CATEGORY_KEY") ?? "drive",
+                search_keyword: localStorage.getItem("SEARCH_KEY") ?? null,
+                filter: null,
+            }
+            
+            dispatch(fetchCourses(params));
             navigate("/courses");
         }
     }

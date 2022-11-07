@@ -40,7 +40,6 @@ export const fetchCourses = createAsyncThunk(
     "course/fetchCourses",
     async (props: fetchCoursesParams) => {
         // const { page, category, search_keyword, filter } = props;
-        console.log(props.category);
         const response = await axios.get<CourseType[]>("/course/", {params: props});
         return response.data;
     }

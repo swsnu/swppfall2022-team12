@@ -12,11 +12,12 @@ const Header = () => {
         const prior = localStorage.getItem("CATEGORY_KEY");
         if (prior !== category) {
             localStorage.setItem("CATEGORY_KEY", category);
+            localStorage.removeItem("SEARCH_KEY");
 
             const params: fetchCoursesParams = {
                 page: 1,
                 category: localStorage.getItem("CATEGORY_KEY") ?? "drive",
-                search_keyword: localStorage.getItem("SEARCH_KEY") ?? null,
+                search_keyword: null,
                 filter: null,
             }
             
