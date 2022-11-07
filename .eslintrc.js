@@ -39,6 +39,7 @@ module.exports = {
         'consistent-return': 'off',
         'react/jsx-uses-react': 'off',
         'react/button-has-type': 'off',
+        'react/destructuring-assignment': 'off',
         'react/react-in-jsx-scope': 'off',
         'jsx-a11y/click-events-have-key-events': 'off',
         'func-names': 'off',

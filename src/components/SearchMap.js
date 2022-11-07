@@ -16,10 +16,8 @@ function SearchMap(keyword) {
     if (!map) return;
     const ps = new kakao.maps.services.Places();
 
-    const { Keyword } = keyword;
-
-    if (Keyword && Keyword.length > 0) {
-      ps.keywordSearch(Keyword, (data, status) => {
+    if (keyword.keyword !== '') {
+      ps.keywordSearch(keyword.keyword, (data, status) => {
         if (status === kakao.maps.services.Status.OK) {
           // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
           // LatLngBounds 객체에 좌표를 추가합니다
@@ -57,43 +55,45 @@ function SearchMap(keyword) {
   return (
     <>
       <div style={{ width: '30%', float: 'right' }}>
-        {!preview && (
-          <div className="title">
-            <strong>Search</strong> Results
-          </div>
-        )}
-        <div className="rst_wrap">
-          <div className="rst mCustomScrollbar">
-            <ul id="searchResult" name="searchResult">
-              {markers.map((marker) => (
-                <li
-                  key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
-                  onMouseEnter={() => setInfo(marker)}
-                  onMouseLeave={() => setInfo(null)}
-                >
-                  {marker.content}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <div className="selection">
-          <strong>Selected Locations</strong>
-          {selected &&
-            selected.map((location) => (
-              <li
-                key={`marker-${location.content}-${location.position.lat},${location.position.lng}`}
-              >
-                {location.content}
-              </li>
-            ))}
-        </div>
         {preview ? (
-          <button onClick={() => setPreview(false)}>경로 만들기</button>
+          <>
+            <button onClick={() => setPreview(false)}>경로 만들기</button>
+            <button>경로 완성</button>
+          </>
         ) : (
-          <button onClick={() => setPreview(true)}>경로 미리보기</button>
+          <>
+            <div className="title">
+              <strong>Search</strong> Results
+            </div>
+            <div className="rst_wrap">
+              <div className="rst mCustomScrollbar">
+                <ul id="searchResult" name="searchResult">
+                  {markers.map((marker) => (
+                    <li
+                      key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
+                      onMouseEnter={() => setInfo(marker)}
+                      onMouseLeave={() => setInfo(null)}
+                    >
+                      {marker.content}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <div className="selection">
+              <strong>Selected Locations</strong>
+              {selected &&
+                selected.map((location) => (
+                  <li
+                    key={`marker-${location.content}-${location.position.lat},${location.position.lng}`}
+                  >
+                    {location.content}
+                  </li>
+                ))}
+            </div>
+            <button onClick={() => setPreview(true)}>경로 미리보기</button>
+          </>
         )}
-        <button>경로 완성</button>
       </div>
       {preview ? (
         <TMap />
