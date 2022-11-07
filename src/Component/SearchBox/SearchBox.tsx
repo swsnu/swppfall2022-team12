@@ -1,15 +1,27 @@
-import { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
 
-const SearchBox = () => {
+interface Iprop {
+    searchKey: string;
+}
+
+const SearchBox = (prop: Iprop) => {
     const navigate = useNavigate();
     const inputFocus = useRef<HTMLInputElement>(null);
+
+    const { searchKey } = prop;
     const [searchInput, setSearchInput] = useState<string>("");
+
+    useEffect(() => {
+        setSearchInput(searchKey);
+    }, [searchKey]);
+
     const onClickSearch = () => {
         if (searchInput === "" && inputFocus.current != null) {
             inputFocus.current.focus();
         }
         else {
+            localStorage.setItem("SEARCH_KEY", searchInput);
             navigate("/courses");
         }
     }

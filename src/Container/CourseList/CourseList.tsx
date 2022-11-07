@@ -1,7 +1,11 @@
-import {useState, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import CourseListElement from "../../Component/CourseListElement.tsx/CourseListElement";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { selectCourse, fetchCoursesParams, fetchCourses } from "../../store/slices/course";
 import SearchBox from "../../Component/SearchBox/SearchBox";
+import Header from "../../Component/Header/Header";
+import { AppDispatch } from "../../store";
 
 // interface Iprops {
 //     searchKey: string | null;
@@ -10,6 +14,8 @@ import SearchBox from "../../Component/SearchBox/SearchBox";
 
 const CourseList = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
+    const courseState = useSelector(selectCourse);
 
     type CourseElemType = {
         id: number;
@@ -20,45 +26,35 @@ const CourseList = () => {
         f_counts: number;
     }
 
-    const [category, setCategory] = useState<string>("");
-    const [courseItems, setCourseItems] = useState<CourseElemType[]>([]);
+    const [categoryKey, setCategoryKey] = useState<string>("");
+    // const [courseItems, setCourseItems] = useState<CourseElemType[]>([]);
+    const [searchKey, setSearchKey] = useState<string>("");
 
-    const init = () => {
-        let category_key = localStorage.getItem("CATEGORY_KEY")
-        if (category_key !== null) setCategory(category_key);
-    };
+    // const init = () => {
+    //     setCategoryKey(localStorage.getItem("CATEGORY_KEY") ?? "drive");
+    //     setSearchKey(localStorage.getItem("SEARCH_KEY")?? "");
 
-    useEffect(() => {
-        setCourseItems([
-            {
-                id: 3,
-                title: "운전연습",
-                description: "양재, 사당 헬코스",
-                category: "drive",
-                grade: 3.2,
-                f_counts: 40,
-            },
-            {
-                id: 1,
-                title: "한강부터 남양주까지",
-                description: "한강~남양주 힐링코스",
-                category: "bike",
-                grade: 5,
-                f_counts: 100,
-            },
-            {
-                id: 2,
-                title: "동해안 바닷바람",
-                description: "한적한 강릉 해안도로 드라이브",
-                category: "drive",
-                grade: 4.5,
-                f_counts: 500,
-            },
-        ]);
-        init();
-    }, []);
+    //     const params: fetchCoursesParams = {
+    //         page: 1,
+    //         category: categoryKey.length > 0 ? categoryKey : "drive",
+    //         search_keyword: searchKey ?? null,
+    //         filter: null,
+    //     }
+    //     console.log(`cat = ${localStorage.getItem("CATEGORY_KEY")}`);
+    //     console.log(`init cat: ${categoryKey}, search: ${searchKey}`);
+    //     dispatch(fetchCourses(params));
+    // };
 
-    const getCategory = (ctgry: string) => {
+    // useEffect(() => {
+    //     init();
+    // }, []);
+
+    // useEffect(() => {
+    //     setCategoryKey(categoryKey);
+    //     console.log(categoryKey);
+    // }, [localStorage.getItem("CATEGORY_KEY")])
+
+    const korCategory = (ctgry: string) => {
         if (ctgry === "drive") return "드라이브";
         else if (ctgry === "bike") return "바이크 라이드";
         else if (ctgry === "cycle") return "자전거 라이드";
@@ -69,11 +65,13 @@ const CourseList = () => {
 
     return (
         <>
-            <h3>{getCategory(category)}</h3>
+            <h2>Courses List</h2>
+            <Header />
+            <h3>{korCategory(localStorage.getItem("CATEGORY_KEY") ?? "drive")}</h3>
             <div className="course-list">
-                <SearchBox />
-                {courseItems.filter(course => course.category === category).map((course) => {
-                    const { id, title, description, grade, f_counts } = course;
+                <SearchBox searchKey={searchKey}/>
+                {courseState.courses.map((course) => {
+                    const { id, title, description, u_counts, e_time, distance } = course;
 
                     const clickTitle = async (id: CourseElemType["id"]) => {
                         navigate(`/course/${id}`);
@@ -85,8 +83,9 @@ const CourseList = () => {
                             id={id}
                             title={title}
                             description={description}
-                            grade={grade}
-                            f_counts={f_counts}
+                            grade={4.5}
+                            u_counts={u_counts}
+                            e_time={e_time}
                             showDetail={() => clickTitle(id)}
                         />
                     )
