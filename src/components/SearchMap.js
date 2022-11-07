@@ -3,7 +3,7 @@
 import React, {useEffect, useState} from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 
-const { kakao } = window;
+// const { kakao } = window;
 
 function SearchMap(keyword) {
   const [info, setInfo] = useState()
@@ -43,7 +43,7 @@ function SearchMap(keyword) {
         }
         else if (status === kakao.maps.services.Status.ERROR) {
           alert('검색 결과 중 오류가 발생했습니다.');
-      }
+        }
       })
     }
   }, [map, keyword])
