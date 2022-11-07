@@ -16,9 +16,11 @@ const CourseListElement = (props: Iprops) => {
 
     return (
         <div id="course-list-element">
-            <h3 id="course-title" onClick={showDetail}>{title}</h3>
             <div>
+                <span id="course-title" onClick={showDetail} style={{fontSize: 18, fontWeight: 600}}>{title}</span>
                 <MuiRating rate={grade} /><span>{grade}</span>
+            </div>
+            <div>
                 <span>  played {u_counts} times</span>
                 <span>expected time: {e_time}</span>
             </div>

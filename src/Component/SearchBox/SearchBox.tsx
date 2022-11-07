@@ -17,10 +17,14 @@ const SearchBox = (prop: Iprop) => {
     const [searchInput, setSearchInput] = useState<string>("");
 
     useEffect(() => {
+        setSearchInput(localStorage.getItem("SEARCH_KEY") ?? "");
+    }, []);
+
+    useEffect(() => {
         setSearchInput(searchKey);
     }, [searchKey]);
 
-    const onClickSearch = () => {
+    const onClickSearch = async () => {
         if (searchInput === "" && inputFocus.current != null) {
             inputFocus.current.focus();
         }
@@ -30,10 +34,10 @@ const SearchBox = (prop: Iprop) => {
                 page: 1,
                 category: localStorage.getItem("CATEGORY_KEY") ?? "drive",
                 search_keyword: localStorage.getItem("SEARCH_KEY") ?? null,
-                filter: null,
+                filter: localStorage.getItem("FILTER") ?? null,
             }
             
-            dispatch(fetchCourses(params));
+            await dispatch(fetchCourses(params));
             navigate("/courses");
         }
     }

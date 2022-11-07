@@ -8,7 +8,7 @@ const Header = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
     
-    const onClickCategory = (category: string) => {
+    const onClickCategory = async (category: string) => {
         const prior = localStorage.getItem("CATEGORY_KEY");
         if (prior !== category) {
             localStorage.setItem("CATEGORY_KEY", category);
@@ -21,7 +21,7 @@ const Header = () => {
                 filter: null,
             }
             
-            dispatch(fetchCourses(params));
+            await dispatch(fetchCourses(params));
         }
         navigate("/courses");
     };

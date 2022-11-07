@@ -2,15 +2,11 @@ import React, {useState, useEffect} from "react";
 import CourseListElement from "../../Component/CourseListElement.tsx/CourseListElement";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { selectCourse, fetchCoursesParams, fetchCourses } from "../../store/slices/course";
+import { selectCourse, fetchCoursesParams, fetchCourses, fetchCourse } from "../../store/slices/course";
 import SearchBox from "../../Component/SearchBox/SearchBox";
 import Header from "../../Component/Header/Header";
 import { AppDispatch } from "../../store";
-
-// interface Iprops {
-//     searchKey: string | null;
-//     category: string | null;
-// }
+import ListFilter from "../../Component/ListFilter/ListFilter";
 
 const CourseList = () => {
     const navigate = useNavigate();
@@ -30,24 +26,22 @@ const CourseList = () => {
     // const [courseItems, setCourseItems] = useState<CourseElemType[]>([]);
     const [searchKey, setSearchKey] = useState<string>("");
 
-    // const init = () => {
-    //     setCategoryKey(localStorage.getItem("CATEGORY_KEY") ?? "drive");
-    //     setSearchKey(localStorage.getItem("SEARCH_KEY")?? "");
+    const init = () => {
+        // setCategoryKey(localStorage.getItem("CATEGORY_KEY") ?? "drive");
+        // setSearchKey(localStorage.getItem("SEARCH_KEY")?? "");
 
-    //     const params: fetchCoursesParams = {
-    //         page: 1,
-    //         category: categoryKey.length > 0 ? categoryKey : "drive",
-    //         search_keyword: searchKey ?? null,
-    //         filter: null,
-    //     }
-    //     console.log(`cat = ${localStorage.getItem("CATEGORY_KEY")}`);
-    //     console.log(`init cat: ${categoryKey}, search: ${searchKey}`);
-    //     dispatch(fetchCourses(params));
-    // };
+        const params: fetchCoursesParams = {
+            page: 1,
+            category: localStorage.getItem("CATEGORY_KEY") ?? "drive",
+            search_keyword: localStorage.getItem("SEARCH_KEY") ?? null,
+            filter: localStorage.getItem("FILTER") ?? null,
+        }
+        dispatch(fetchCourses(params));
+    };
 
-    // useEffect(() => {
-    //     init();
-    // }, []);
+    useEffect(() => {
+        init();
+    }, []);
 
     // useEffect(() => {
     //     setCategoryKey(categoryKey);
@@ -69,11 +63,15 @@ const CourseList = () => {
             <Header />
             <h3>{korCategory(localStorage.getItem("CATEGORY_KEY") ?? "drive")}</h3>
             <div className="course-list">
-                <SearchBox searchKey={searchKey}/>
+                <div style={{display: "flex", justifyContent: "center"}}>
+                    <SearchBox searchKey={searchKey}/>
+                    <ListFilter />
+                </div>
                 {courseState.courses.map((course) => {
                     const { id, title, description, u_counts, e_time, distance } = course;
 
                     const clickTitle = async (id: CourseElemType["id"]) => {
+                        await dispatch(fetchCourse(id));
                         navigate(`/course/${id}`);
                     };
 
