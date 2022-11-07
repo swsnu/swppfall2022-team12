@@ -1,26 +1,98 @@
 module.exports = {
-    "env": {
-        "browser": true,
-        "es2021": true,
-        "jest": true
+    env: {
+        browser: true,
+        node: true,
+        es2021: true,
     },
-    "extends": [
-        "eslint:recommended",
-        "plugin:react/recommended",
-        "plugin:@typescript-eslint/recommended"
-    ],
-    "overrides": [
-    ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaVersion": "latest",
-        "sourceType": "module",
-        "project": ['./tsconfig.json' ]
+    extends: ['airbnb', 'airbnb-typescript'],
+    settings: {
+      'import/resolver': {
+        node: {
+          paths: ['src'],
+          extensions: ['.ts', '.tsx', '.js'],
+        },
+      },
     },
-    "plugins": [
-        "react",
-        "@typescript-eslint"
+    overrides: [
+      {
+        files: ['*.tsx', '*.ts'],
+        parserOptions: {
+          project: './tsconfig.json',
+        },
+        extends: [
+          'plugin:import/recommended',
+          'plugin:prettier/recommended',
+          'plugin:import/errors',
+          'plugin:import/warnings',
+          'plugin:import/typescript',
+        ],
+        rules: {
+          'import/prefer-default-export': 'off',
+          'no-multi-str': 'off',
+          'no-new': 'off',
+          'consistent-return': 'off',
+          'react/jsx-uses-react': 'off',
+          'react/react-in-jsx-scope': 'off',
+          'jsx-a11y/click-events-have-key-events': 'off',
+          'func-names': 'off',
+          'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
+          'import/no-extraneous-dependencies': [
+            'error',
+            {
+              devDependencies: true,
+            },
+          ],
+          'prettier/prettier': [
+            'error',
+            {
+              endOfLine: 'auto',
+              usePrettierrc: true,
+            },
+          ],
+          'jsx-a11y/label-has-associated-control': [
+            'warn',
+            {
+              required: {
+                some: ['nesting', 'id'],
+              },
+            },
+          ],
+          'react/require-default-props': 'off',
+          'no-constant-condition': [
+            'error',
+            {
+              checkLoops: false,
+            },
+          ],
+          'import/order': [
+            'error',
+            {
+              groups: ['builtin', 'external', 'internal', ['parent', 'sibling'], 'index', 'object'],
+              alphabetize: {
+                order: 'asc',
+                caseInsensitive: true,
+              },
+              'newlines-between': 'always',
+            },
+          ],
+          'no-param-reassign': [
+            'error',
+            {
+              props: true,
+              ignorePropertyModificationsFor: ['state'],
+            },
+          ],
+          'import/extensions': [
+            'error',
+            'ignorePackages',
+            {
+              js: 'never',
+              jsx: 'never',
+              ts: 'never',
+              tsx: 'never',
+            },
+          ],
+        },
+      },
     ],
-    "rules": {
-    }
-}
+  };
