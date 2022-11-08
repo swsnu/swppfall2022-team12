@@ -34,6 +34,7 @@ module.exports = {
         'no-alert': 'off',
         'no-console': 'off',
         'no-restricted-syntax': 'off',
+        '@typescript-eslint/no-unused-vars': 'off',
         'guard-for-in': 'off',
         'new-cap': 'off',
         'consistent-return': 'off',

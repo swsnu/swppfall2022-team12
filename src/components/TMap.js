@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { Map, MapMarker, Polyline } from 'react-kakao-maps-sdk';
 
 import { dummyData } from './dummyData';
+import poisData from './poisData.json';
 
 const { Tmapv3 } = window;
 
@@ -41,20 +42,16 @@ function TMap() {
         }
       } else {
         let markerImg = '';
-        // let size = ''; // 아이콘 크기 설정합니다.
 
         if (properties.pointType === 'S') {
           // 출발지 마커
           markerImg = 'http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png';
-          // size = new kakao.maps.Size(24, 38);
         } else if (properties.pointType === 'E') {
           // 도착지 마커
           markerImg = 'http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png';
-          // size = new kakao.maps.Size(24, 38);
         } else {
           // 각 포인트 마커
           markerImg = `http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_${viaPoint}.png`;
-          // size = new kakao.maps.Size(8, 8);
           viaPoint += 1;
         }
 
@@ -73,9 +70,8 @@ function TMap() {
         });
         bounds.extend(new kakao.maps.LatLng(convertPoint._lat, convertPoint._lng));
       }
-      // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
-      // map.setBounds(bounds)
     }
+    // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
     map.setBounds(bounds);
     setPath(drawInfoArr);
     setMarkers(resultMarkerArr);
@@ -101,7 +97,9 @@ function TMap() {
         console.log('Error >>', err);
       }
     };
-    fetchData().then();
+    // fetchData().then();
+    setResultData(poisData.properties);
+    setResultFeatures(poisData.features);
   }, []);
 
   useEffect(() => {
