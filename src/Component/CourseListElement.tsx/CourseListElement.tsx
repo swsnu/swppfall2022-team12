@@ -22,7 +22,7 @@ const CourseListElement = (props: Iprops) => {
             </div>
             <div>
                 <span>  played {u_counts} times</span>
-                <span>expected time: {e_time}</span>
+                <span>  expected time: {e_time}</span>
             </div>
             
             <p>{description}</p>
