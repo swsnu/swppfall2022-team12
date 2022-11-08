@@ -10,11 +10,11 @@ const MainPage = () => {
     }, []);
 
     return (
-        <>
+        <div style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
             <h2>Main Page</h2>
             <Header />
             <SearchBox searchKey={localStorage.getItem("SEARCH_KEY") ?? ""} />
-        </>
+        </div>
     );
 };
 // 

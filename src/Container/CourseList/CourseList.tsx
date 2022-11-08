@@ -46,7 +46,7 @@ const CourseList = () => {
     }
 
     return (
-        <>
+        <div style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
             <h2>Courses List</h2>
             <Header />
             <h3>{korCategory(localStorage.getItem("CATEGORY_KEY") ?? "drive")}</h3>
@@ -77,7 +77,7 @@ const CourseList = () => {
                     )
                 })}
             </div>
-        </>
+        </div>
     )
 };
 
