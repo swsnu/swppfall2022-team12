@@ -26,20 +26,17 @@ export interface fetchCoursesParams {
 
 export interface CourseState {
     courses: CourseType[];
-    // filteredCourses: CourseType[];
     selectedCourse: CourseType | null;
 }
 
 const initialCourseState: CourseState = {
     courses: [],
-    // filteredCourses: [],
     selectedCourse: null,
 }
 
 export const fetchCourses = createAsyncThunk(
     "course/fetchCourses",
     async (props: fetchCoursesParams) => {
-        // const { page, category, search_keyword, filter } = props;
         const response = await axios.get<CourseType[]>("/course/", {params: props});
         return response.data;
     }

@@ -56,7 +56,7 @@ const CourseList = () => {
                     <ListFilter />
                 </div>
                 {courseState.courses.map((course) => {
-                    const { id, title, description, u_counts, e_time, distance } = course;
+                    const { id, title, description, u_counts, e_time } = course;
 
                     const clickTitle = async (id: CourseElemType["id"]) => {
                         await dispatch(fetchCourse(id));

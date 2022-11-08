@@ -12,7 +12,7 @@ export interface Iprops {
 }
 
 const CourseListElement = (props: Iprops) => {
-    const { id, title, description, grade, u_counts, e_time, showDetail } = props;
+    const { title, description, grade, u_counts, e_time, showDetail } = props;
 
     return (
         <div id="course-list-element">
