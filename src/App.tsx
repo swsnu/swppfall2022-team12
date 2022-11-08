@@ -1,9 +1,9 @@
 import React from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import "./App.css";
-import CourseDetail from "./Container/CourseDetail/CourseDetail";
-import CourseList from "./Container/CourseList/CourseList";
-import MainPage from "./Container/MainPage/MainPage";
+import CourseDetail from "./containers/CourseDetail/CourseDetail";
+import CourseList from "./containers/CourseList/CourseList";
+import MainPage from "./containers/MainPage/MainPage";
 
 function App() {
 
