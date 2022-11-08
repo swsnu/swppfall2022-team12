@@ -5,7 +5,7 @@ import { fetchCoursesParams, fetchCourses } from "../../store/slices/course";
 import { AppDispatch } from "../../store";
 
 interface Iprop {
-    searchKey: string;
+    searchKey: string | null;
 }
 
 const SearchBox = (prop: Iprop) => {
@@ -17,11 +17,7 @@ const SearchBox = (prop: Iprop) => {
     const [searchInput, setSearchInput] = useState<string>("");
 
     useEffect(() => {
-        setSearchInput(localStorage.getItem("SEARCH_KEY") ?? "");
-    }, []);
-
-    useEffect(() => {
-        setSearchInput(searchKey);
+        setSearchInput(searchKey ?? "");
     }, [searchKey]);
 
     const onClickSearch = async () => {

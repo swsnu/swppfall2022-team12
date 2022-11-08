@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useEffect} from "react";
 import CourseListElement from "../../Component/CourseListElement.tsx/CourseListElement";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -22,14 +22,7 @@ const CourseList = () => {
         f_counts: number;
     }
 
-    const [categoryKey, setCategoryKey] = useState<string>("");
-    // const [courseItems, setCourseItems] = useState<CourseElemType[]>([]);
-    const [searchKey, setSearchKey] = useState<string>("");
-
     const init = () => {
-        // setCategoryKey(localStorage.getItem("CATEGORY_KEY") ?? "drive");
-        // setSearchKey(localStorage.getItem("SEARCH_KEY")?? "");
-
         const params: fetchCoursesParams = {
             page: 1,
             category: localStorage.getItem("CATEGORY_KEY") ?? "drive",
@@ -42,11 +35,6 @@ const CourseList = () => {
     useEffect(() => {
         init();
     }, []);
-
-    // useEffect(() => {
-    //     setCategoryKey(categoryKey);
-    //     console.log(categoryKey);
-    // }, [localStorage.getItem("CATEGORY_KEY")])
 
     const korCategory = (ctgry: string) => {
         if (ctgry === "drive") return "드라이브";
@@ -64,7 +52,7 @@ const CourseList = () => {
             <h3>{korCategory(localStorage.getItem("CATEGORY_KEY") ?? "drive")}</h3>
             <div className="course-list">
                 <div style={{display: "flex", justifyContent: "center"}}>
-                    <SearchBox searchKey={searchKey}/>
+                    <SearchBox searchKey={localStorage.getItem("SEARCH_KEY")}/>
                     <ListFilter />
                 </div>
                 {courseState.courses.map((course) => {

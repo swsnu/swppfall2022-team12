@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { fetchCoursesParams, fetchCourses } from "../../store/slices/course";

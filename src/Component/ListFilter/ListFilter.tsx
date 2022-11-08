@@ -11,9 +11,10 @@ import { fetchCourses, fetchCoursesParams } from "../../store/slices/course";
 const ListFilter = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
+    const filterKey = localStorage.getItem("FILTER") ?? "-";
 
     const handleFilter = async (e: SelectChangeEvent) => {
-        if (e.target.value === "") {
+        if (e.target.value === "-") {
             localStorage.removeItem("FILTER");
         } else {
             localStorage.setItem("FILTER", e.target.value as string)
@@ -36,9 +37,10 @@ const ListFilter = () => {
                 labelId="list-filter-label"
                 id="list-filter-select"
                 label="Filter"
+                defaultValue={filterKey}
                 onChange={handleFilter}
             >
-                <MenuItem value={""}> - </MenuItem>
+                <MenuItem value={"-"} disabled><em>정렬</em></MenuItem>
                 <MenuItem value={"use"}>인기 순</MenuItem>
                 <MenuItem value={"time_asc"}>최근 순▼</MenuItem>
                 <MenuItem value={"time_desc"}>최근 순▲</MenuItem>
