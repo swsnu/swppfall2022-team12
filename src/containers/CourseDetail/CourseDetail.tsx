@@ -1,21 +1,21 @@
-import React from "react";
-import { useNavigate } from "react-router";
-import { useSelector } from "react-redux";
-import { selectCourse } from "../../store/slices/course";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 
-const CourseDetail = () => {
-    const courseState = useSelector(selectCourse);
-    const navigate = useNavigate();
+import { selectCourse } from '../../store/slices/course';
 
-    if (!courseState.selectedCourse) navigate("/");
+function CourseDetail() {
+  const courseState = useSelector(selectCourse);
+  const navigate = useNavigate();
 
-    return (
-        <>
-            <div>This is detail page</div>
-            <div>Title : {courseState.selectedCourse?.title}</div>
-        </>
-        
-    )
+  if (!courseState.selectedCourse) navigate('/');
+
+  return (
+    <>
+      <div>This is detail page</div>
+      <div>Title : {courseState.selectedCourse?.title}</div>
+    </>
+  );
 }
 
 export default CourseDetail;

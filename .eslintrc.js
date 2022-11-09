@@ -28,6 +28,7 @@ module.exports = {
       ],
       rules: {
         'import/prefer-default-export': 'off',
+        'import/no-cycle': 'off',
         'no-multi-str': 'off',
         'no-new': 'off',
         'no-underscore-dangle': 'off',

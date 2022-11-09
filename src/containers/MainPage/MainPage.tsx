@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
+
 import Header from '../../components/Header/Header';
 import SearchBox from '../../components/SearchBox/SearchBox';
 
-const MainPage = () => {
+function MainPage() {
   useEffect(() => {
     localStorage.removeItem('CATEGORY_KEY');
     localStorage.removeItem('SEARCH_KEY');
@@ -23,6 +24,6 @@ const MainPage = () => {
       <SearchBox searchKey={localStorage.getItem('SEARCH_KEY') ?? ''} />
     </div>
   );
-};
+}
 //
 export default MainPage;
