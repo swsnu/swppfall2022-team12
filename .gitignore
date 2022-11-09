@@ -107,4 +107,6 @@ build
 .idea
 .DS_Store
 out/
-node_modules
+
+*.pyc
+__pycache__/

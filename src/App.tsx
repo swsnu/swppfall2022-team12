@@ -1,7 +1,10 @@
 import React from 'react';
-import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
+import './App.css';
+import CourseDetail from './containers/CourseDetail/CourseDetail';
+import CourseList from './containers/CourseList/CourseList';
+import MainPage from './containers/MainPage/MainPage';
 import SearchPage from './components/SearchPage';
 import TMap from './components/TMap';
 import CourseDetail from './DetailPage';
@@ -12,11 +15,13 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="*" element={<h1>Not Found</h1>} />
+          <Route path="/courses" element={<CourseList />} />
+          <Route path="/course/:id" element={<CourseDetail />} />
           <Route path="map" element={<TMap />} />
           <Route path="search" element={<SearchPage />} />
-          <Route path="/course/:id/" element={<CourseDetail />} />
           <Route path="/register/" element={<Register />} />
+          <Route path="/" element={<MainPage />} />
+          <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
       </BrowserRouter>
     </div>
