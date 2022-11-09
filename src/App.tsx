@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
-
-function App() {
-  return (
-    <div>Drive Course Live</div>
-=======
 import React from 'react';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -29,9 +20,7 @@ function App() {
         </Routes>
       </BrowserRouter>
     </div>
->>>>>>> 0b0c7de544ac758bb712f53c9e1ff35a5366e9d2
   );
 }
 
 export default App;
-
