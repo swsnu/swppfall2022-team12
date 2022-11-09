@@ -1,69 +1,65 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { RootState } from "..";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
+
+import { RootState } from '..';
 
 export interface CourseType {
-    id: number;
-    title: string;
-    description: string;
-    created_at: string;
-    // grade: number;
-    // f_count: number;
-    u_counts: number;
-    distance: number;
-    e_time: string;
-    start_pos: number | null;
-    pass_pos: number[] | null;
-    end_pos: number | null;
+  id: number;
+  title: string;
+  description: string;
+  created_at: string;
+  // grade: number;
+  // f_count: number;
+  u_counts: number;
+  distance: number;
+  e_time: string;
+  startPos: number | null;
+  passPos: number[] | null;
+  endPos: number | null;
 }
 
-export interface fetchCoursesParams {
-    page: number;
-    category: string;
-    search_keyword: string | null;
-    filter: string | null;
+export interface FetchCoursesParams {
+  page: number;
+  category: string;
+  searchKeyword: string | null;
+  filter: string | null;
 }
 
 export interface CourseState {
-    courses: CourseType[];
-    selectedCourse: CourseType | null;
+  courses: CourseType[];
+  selectedCourse: CourseType | null;
 }
 
 const initialCourseState: CourseState = {
-    courses: [],
-    selectedCourse: null,
-}
+  courses: [],
+  selectedCourse: null,
+};
 
 export const fetchCourses = createAsyncThunk(
-    "course/fetchCourses",
-    async (props: fetchCoursesParams) => {
-        const response = await axios.get<CourseType[]>("/course/", {params: props});
-        return response.data;
-    }
+  'course/fetchCourses',
+  async (props: FetchCoursesParams) => {
+    const response = await axios.get<CourseType[]>('/course/', { params: props });
+    return response.data;
+  },
 );
 
-export const fetchCourse = createAsyncThunk(
-    "coures/fetchCourse",
-    async (id: CourseType["id"]) => {
-        const response = await axios.get<CourseType>(`/course/${id}/`);
-        return response.data;
-    }
-);
+export const fetchCourse = createAsyncThunk('coures/fetchCourse', async (id: CourseType['id']) => {
+  const response = await axios.get<CourseType>(`/course/${id}/`);
+  return response.data;
+});
 
 export const courseSlice = createSlice({
-    name: "course",
-    initialState: initialCourseState,
-    reducers: {
-
-    },
-    extraReducers: (builder) => {
-        builder.addCase(fetchCourses.fulfilled, (state, action) => {
-            state.courses = action.payload;
-        });
-        builder.addCase(fetchCourse.fulfilled, (state, action) => {
-            state.selectedCourse = action.payload;
-        });
-    }
+  name: 'course',
+  initialState: initialCourseState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(fetchCourses.fulfilled, (state, action) => {
+      state.courses = action.payload;
+    });
+    builder.addCase(fetchCourse.fulfilled, (state, action) => {
+      state.selectedCourse = action.payload;
+    });
+  },
 });
 
 export const courseAction = courseSlice.actions;
