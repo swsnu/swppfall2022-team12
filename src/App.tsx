@@ -15,8 +15,8 @@ function App() {
           <Route path="*" element={<h1>Not Found</h1>} />
           <Route path="map" element={<TMap />} />
           <Route path="search" element={<SearchPage />} />
-          <Route path="/course/:id/" element={<CourseDetail />}/>
-          <Route path="/register/" element={<Register />}/>
+          <Route path="/course/:id/" element={<CourseDetail />} />
+          <Route path="/register/" element={<Register />} />
         </Routes>
       </BrowserRouter>
     </div>

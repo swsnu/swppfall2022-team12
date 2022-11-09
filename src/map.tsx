@@ -203,7 +203,7 @@ const mapScript = `
         }
     });
     initTmap();
-`
+`;
 
 const initMap = `
     var map,marker;
@@ -234,12 +234,8 @@ const initMap = `
       });
     }     
   initTmap();
-`
+`;
 export default function TMap() {
-
-  
-
-
   //
   // // 2. 시작, 도착 심볼 찍기
   // addMarker("llStart",127.02810900563199,37.519892712436906,1);
@@ -250,7 +246,7 @@ export default function TMap() {
   // addMarker("llPass",127.13346617572014,37.52127761904626,4);
 
   useEffect(() => {
-    const script = document.createElement("script");
+    const script = document.createElement('script');
     script.innerHTML = `         
         function initTmap() {
             var map = new Tmapv2.Map("TMapApp", {
@@ -263,18 +259,18 @@ export default function TMap() {
         
         initTmap();
    `;
-    script.type = "text/javascript";
+    script.type = 'text/javascript';
     script.async = true;
     document.head.appendChild(script);
   }, []);
-  
+
   return (
     <div
       id="TMapApp"
       style={{
-        height: "100%",
-        width: "100%",
-        position: "fixed",
+        height: '100%',
+        width: '100%',
+        position: 'fixed',
       }}
     />
   );
