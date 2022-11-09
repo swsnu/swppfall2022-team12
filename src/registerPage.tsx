@@ -7,7 +7,8 @@ export default function Register() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [points, setPoints] = useState([]);
-  const [expectedTime, setTime] = useState(0);
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  const [e_time, setTime] = useState(0);
 
   const [pageOne, setPage] = useState(true);
 
@@ -35,7 +36,7 @@ export default function Register() {
       expected time :{' '}
       <input
         type="text"
-        value={expectedTime}
+        value={e_time}
         onChange={(e) => {
           setTime(Number(e.target.value));
         }}

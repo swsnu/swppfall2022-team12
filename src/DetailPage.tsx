@@ -11,10 +11,12 @@ export default function CourseDetail() {
   const [description, setDescription] = useState('dummy description');
   const [points, setPoints] = useState([]);
   const [destination, setDestination] = useState('dummy destination');
-  const [usageCounts, setCounts] = useState(45);
-  const [expectedTime, setTime] = useState(50);
-  const [createdAt, setCreateAt] = useState("");
-  const [link, setLink] = useState("");
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  const [u_counts, setCounts] = useState(45);
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  const [e_time, setTime] = useState(50);
+  // const [created_at, setCreateAt] = useState("");
+  // const [link, setLink] = useState("");
   const [element, setElement] = useState({
     pid: 'test01',
     name: 'test01',
@@ -36,7 +38,7 @@ export default function CourseDetail() {
   }, []);
 
   const onPlay = () => {
-    console.log(l);
+    // console.log(l);
     console.log(`point length : ${points.length}`);
     const tempArray = ['nmap://navigation?'];
     for (let index = 0; index < points.length; index += 1) {
@@ -64,11 +66,11 @@ export default function CourseDetail() {
     <div>
       <h1>{title}</h1>
       <h5>{description}</h5>
-      <h6>{usageCounts} people used this course!</h6>
+      <h6>{u_counts} people used this course!</h6>
       <h6>
         rating : {rating}({rateNum})
       </h6>
-      <h6>expected time : {expectedTime}</h6>
+      <h6>expected time : {e_time}</h6>
       <button onClick={onPlay}>go to navigation</button>
     </div>
   );
