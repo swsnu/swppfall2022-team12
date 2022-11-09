@@ -4,11 +4,11 @@ import { useDispatch } from "react-redux";
 import { fetchCoursesParams, fetchCourses } from "../../store/slices/course";
 import { AppDispatch } from "../../store";
 
-interface Iprop {
+interface SearchProp {
     searchKey: string | null;
 }
 
-const SearchBox = (prop: Iprop) => {
+const SearchBox = (prop: SearchProp) => {
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
     const inputFocus = useRef<HTMLInputElement>(null);

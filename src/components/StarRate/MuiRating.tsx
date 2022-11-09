@@ -1,11 +1,11 @@
 import React from "react";
 import Rating from "@mui/material/Rating";
 
-interface Iprops {
+interface RateProp {
     rate: number;
 }
 
-const MuiRating = (prop: Iprops) => {
+const MuiRating = (prop: RateProp) => {
     const { rate } = prop;
 
     return <Rating 
