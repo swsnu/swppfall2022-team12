@@ -4,7 +4,7 @@ from django.core.paginator import Paginator
 from rest_framework import status, viewsets, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from course.serializers import CourseListSerializer, CourseRetrieveSerializer
+from course.serializers import CourseListSerializer, CourseDetailSerializer, CourseSerializer, PointSerializer
 from course.models import Course, Point
 from team12.exceptions import FieldError
 from course.const import DRIVE
@@ -12,7 +12,8 @@ from course.const import DRIVE
 
 class CourseViewSet(
         viewsets.GenericViewSet,
-        generics.RetrieveDestroyAPIView):
+        generics.RetrieveDestroyAPIView,
+        generics.CreateAPIView):
     """
     Generic ViewSet of Course Object.
     """
@@ -21,15 +22,21 @@ class CourseViewSet(
 
     def get_serializer_class(self):
         if self.action in ["retrieve", "play"]:
-            return CourseRetrieveSerializer
+            return CourseDetailSerializer
         elif self.action == "list":
             return CourseListSerializer
+        elif self.action == "create":
+            return CourseSerializer
 
     # POST /course
     @transaction.atomic
     def create(self, request):
         """Create Course"""
-        return Response({}, status=status.HTTP_200_OK)
+        context = {"points": request.data.get("points", [])}
+        serializer = self.get_serializer(data=request.data, context=context)
+        serializer.is_valid(raise_exception=True)
+        course = serializer.save()
+        return Response(CourseDetailSerializer(course).data, status=status.HTTP_200_OK)
 
 
     # DELETE /course/:courseId
@@ -63,9 +70,10 @@ class CourseViewSet(
                 Q(description__icontains=search_keyword))
         courses = courses.order_by(F("created_at").desc())
         if f_param:
+            print(f_param)
             if f_param == "use": courses = courses.order_by(F("u_counts").desc())
-            elif f_param == "time_asc": courses = courses.order_by(F("e_times").asc(nulls_last=True))
-            elif f_param == "time_desc": courses = courses.order_by(F("e_times").desc(nulls_last=True))
+            elif f_param == "time_asc": courses = courses.order_by(F("e_time").asc(nulls_last=True))
+            elif f_param == "time_desc": courses = courses.order_by(F("e_time").desc(nulls_last=True))
             elif f_param == "distance_asc": courses = courses.order_by(F("distance").asc(nulls_last=True))
             elif f_param == "distance_desc": courses = courses.order_by(F("distance").desc(nulls_last=True))
         
@@ -76,7 +84,7 @@ class CourseViewSet(
     @action(methods=['PUT'], detail=True)
     @transaction.atomic
     def play(self, request, pk=None):
-        target = self.get_boject()
+        target = self.get_object()
         target.u_counts += 1
         target.save()
         return Response(self.get_serializer(target).data, status=status.HTTP_200_OK)

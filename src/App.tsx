@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
@@ -5,6 +6,28 @@ import { useEffect } from "react";
 function App() {
   return (
     <div>Drive Course Live</div>
+=======
+import React from 'react';
+import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import SearchPage from './components/SearchPage';
+import TMap from './components/TMap';
+import CourseDetail from './contatiners/CourseDetail';
+
+function App() {
+  return (
+    <div className="App">
+      <BrowserRouter>
+        <Routes>
+          <Route path="*" element={<h1>Not Found</h1>} />
+          <Route path="map" element={<TMap />} />
+          <Route path="search" element={<SearchPage />} />
+          <Route path="detail" element={<CourseDetail courseID={1} />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
+>>>>>>> 0b0c7de544ac758bb712f53c9e1ff35a5366e9d2
   );
 }
 
