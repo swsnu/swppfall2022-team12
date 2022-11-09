@@ -11,8 +11,8 @@ export default function CourseDetail() {
   const [description, setDescription] = useState('dummy description');
   const [points, setPoints] = useState([]);
   const [destination, setDestination] = useState('dummy destination');
-  const [userCounts, setCounts] = useState(45);
-  const [estimatedTime, setTime] = useState(50);
+  const [usageCounts, setCounts] = useState(45);
+  const [expectedTime, setTime] = useState(50);
   const [createdAt, setCreateAt] = useState();
   const [l, setLink] = useState();
   const [element, setElement] = useState({
@@ -64,11 +64,11 @@ export default function CourseDetail() {
     <div>
       <h1>{title}</h1>
       <h5>{description}</h5>
-      <h6>{userCounts} people used this course!</h6>
+      <h6>{usageCounts} people used this course!</h6>
       <h6>
         rating : {rating}({rateNum})
       </h6>
-      <h6>estimated time : {estimatedTime}</h6>
+      <h6>expected time : {expectedTime}</h6>
       <button onClick={onPlay}>go to navigation</button>
     </div>
   );
