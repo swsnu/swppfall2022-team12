@@ -7,7 +7,7 @@ export default function Register() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [points, setPoints] = useState([]);
-  const [e_time, setTime] = useState(0);
+  const [estimatedTime, setTime] = useState(0);
 
   const [pageOne, setPage] = useState(true);
 
@@ -35,7 +35,7 @@ export default function Register() {
       estimated time :{' '}
       <input
         type="text"
-        value={e_time}
+        value={estimatedTime}
         onChange={(e) => {
           setTime(Number(e.target.value));
         }}

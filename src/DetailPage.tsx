@@ -11,10 +11,9 @@ export default function CourseDetail() {
   const [description, setDescription] = useState('dummy description');
   const [points, setPoints] = useState([]);
   const [destination, setDestination] = useState('dummy destination');
-  const [u_counts, setCounts] = useState(45);
-  const [e_time, setTime] = useState(50);
-  const [created_at, setCreateAt] = useState();
-  const [p_counts, setP] = useState(0);
+  const [userCounts, setCounts] = useState(45);
+  const [estimatedTime, setTime] = useState(50);
+  const [createdAt, setCreateAt] = useState();
   const [l, setLink] = useState();
   const [element, setElement] = useState({
     pid: 'test01',
@@ -32,7 +31,6 @@ export default function CourseDetail() {
       setDescription(res.data.description);
       setTime(res.data.e_time);
       setCounts(res.data.u_counts);
-      setP(res.data.p_counts);
       setPoints(res.data.points);
     });
   }, []);
@@ -66,11 +64,11 @@ export default function CourseDetail() {
     <div>
       <h1>{title}</h1>
       <h5>{description}</h5>
-      <h6>{u_counts} people used this course!</h6>
+      <h6>{userCounts} people used this course!</h6>
       <h6>
         rating : {rating}({rateNum})
       </h6>
-      <h6>estimated time : {e_time}</h6>
+      <h6>estimated time : {estimatedTime}</h6>
       <button onClick={onPlay}>go to navigation</button>
     </div>
   );
