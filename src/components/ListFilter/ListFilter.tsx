@@ -45,8 +45,8 @@ export default function ListFilter() {
           <em>정렬</em>
         </MenuItem>
         <MenuItem value="use">인기 순</MenuItem>
-        <MenuItem value="time_asc">최근 순▼</MenuItem>
-        <MenuItem value="time_desc">최근 순▲</MenuItem>
+        <MenuItem value="time_asc">시간 순▼</MenuItem>
+        <MenuItem value="time_desc">시간 순▲</MenuItem>
         <MenuItem value="distance_asc">거리 순▼</MenuItem>
         <MenuItem value="distance_desc">거리 순▲</MenuItem>
       </Select>
