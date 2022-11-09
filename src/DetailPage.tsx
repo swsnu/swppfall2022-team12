@@ -41,7 +41,6 @@ export default function CourseDetail(){
                 setCounts(res.data.u_counts);
                 setP(res.data.p_counts);
                 setPoints(res.data.points);
-                
             }
             );
         },
