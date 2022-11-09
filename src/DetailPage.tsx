@@ -13,8 +13,8 @@ export default function CourseDetail() {
   const [destination, setDestination] = useState('dummy destination');
   const [usageCounts, setCounts] = useState(45);
   const [expectedTime, setTime] = useState(50);
-  const [createdAt, setCreateAt] = useState();
-  const [l, setLink] = useState();
+  const [createdAt, setCreateAt] = useState("");
+  const [l, setLink] = useState("");
   const [element, setElement] = useState({
     pid: 'test01',
     name: 'test01',
