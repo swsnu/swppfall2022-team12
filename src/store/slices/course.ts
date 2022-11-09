@@ -21,7 +21,7 @@ export interface CourseType {
 export interface FetchCoursesParams {
   page: number;
   category: string;
-  searchKeyword: string | null;
+  search_keyword: string | null;
   filter: string | null;
 }
 

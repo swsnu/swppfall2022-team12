@@ -23,7 +23,7 @@ export default function ListFilter() {
     const params: FetchCoursesParams = {
       page: 1,
       category: localStorage.getItem('CATEGORY_KEY') ?? 'drive',
-      searchKeyword: localStorage.getItem('SEARCH_KEY') ?? null,
+      search_keyword: localStorage.getItem('SEARCH_KEY') ?? null,
       filter: localStorage.getItem('FILTER') ?? null,
     };
 
@@ -38,17 +38,17 @@ export default function ListFilter() {
         labelId="list-filter-label"
         id="list-filter-select"
         label="Filter"
-        defaultValue={filterKey}
+        defaultValue={filterKey ?? '-'}
         onChange={handleFilter}
       >
         <MenuItem value="-" disabled>
           <em>정렬</em>
         </MenuItem>
         <MenuItem value="use">인기 순</MenuItem>
-        <MenuItem value="time_asc">시간 순▼</MenuItem>
-        <MenuItem value="time_desc">시간 순▲</MenuItem>
-        <MenuItem value="distance_asc">거리 순▼</MenuItem>
-        <MenuItem value="distance_desc">거리 순▲</MenuItem>
+        <MenuItem value="time_desc">시간 순▼</MenuItem>
+        <MenuItem value="time_asc">시간 순▲</MenuItem>
+        <MenuItem value="distance_desc">거리 순▼</MenuItem>
+        <MenuItem value="distance_asc">거리 순▲</MenuItem>
       </Select>
     </FormControl>
   );

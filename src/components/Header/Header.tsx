@@ -18,7 +18,7 @@ export default function Header() {
       const params: FetchCoursesParams = {
         page: 1,
         category: localStorage.getItem('CATEGORY_KEY') ?? 'drive',
-        searchKeyword: null,
+        search_keyword: null,
         filter: null,
       };
 
