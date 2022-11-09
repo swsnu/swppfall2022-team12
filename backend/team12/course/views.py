@@ -70,7 +70,6 @@ class CourseViewSet(
                 Q(description__icontains=search_keyword))
         courses = courses.order_by(F("created_at").desc())
         if f_param:
-            print(f_param)
             if f_param == "use": courses = courses.order_by(F("u_counts").desc())
             elif f_param == "time_asc": courses = courses.order_by(F("e_time").asc(nulls_last=True))
             elif f_param == "time_desc": courses = courses.order_by(F("e_time").desc(nulls_last=True))
