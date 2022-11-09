@@ -14,7 +14,7 @@ export default function CourseDetail() {
   const [usageCounts, setCounts] = useState(45);
   const [expectedTime, setTime] = useState(50);
   const [createdAt, setCreateAt] = useState("");
-  const [l, setLink] = useState("");
+  const [link, setLink] = useState("");
   const [element, setElement] = useState({
     pid: 'test01',
     name: 'test01',
