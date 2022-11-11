@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-import { RootState } from '..';
+import { RootState } from '../index';
 
 export interface CourseType {
   id: number;
