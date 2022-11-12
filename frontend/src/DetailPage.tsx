@@ -41,29 +41,30 @@ export default function CourseDetail() {
     // console.log(l);
     console.log(`point length : ${points.length}`);
     const tempArray = ['nmap://navigation?'];
-    const elementArray = [{
+    const elementArray = [
+      {
         pid: 'test01',
         name: 'test01',
         latitude: '37.513272317072',
         longitude: '127.09431687965',
         idx: 0,
-      }];
-    for (let index = 0; index < points.length; index++) {
-        elementArray.push(points[index]);
+      },
+    ];
+    for (let index = 0; index < points.length; index += 1) {
+      elementArray.push(points[index]);
     }
-    for (let index = 0; index < points.length; index++) {
-        
-        console.log(elementArray[index+1]);
+    for (let index = 0; index < points.length; index += 1) {
+      console.log(elementArray[index + 1]);
       if (index === points.length - 1) {
-        const a = `dlat=${elementArray[index+1].latitude}&dlng=${elementArray[index+1].longitude}&dname=${encodeURI(
-            elementArray[index+1].name,
-        )}`;
+        const a = `dlat=${elementArray[index + 1].latitude}&dlng=${
+          elementArray[index + 1].longitude
+        }&dname=${encodeURI(elementArray[index + 1].name)}`;
         tempArray.splice(1, 0, a);
       } else {
         tempArray.push(
-          `&v${index + 1}lat=${elementArray[index+1].latitude}&v${index + 1}lng=${elementArray[index+1].longitude}&v${
-            index + 1
-          }name=${encodeURI(elementArray[index+1].name)}`,
+          `&v${index + 1}lat=${elementArray[index + 1].latitude}&v${index + 1}lng=${
+            elementArray[index + 1].longitude
+          }&v${index + 1}name=${encodeURI(elementArray[index + 1].name)}`,
         );
       }
     }
