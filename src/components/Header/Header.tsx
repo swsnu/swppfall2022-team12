@@ -14,6 +14,7 @@ export default function Header() {
     if (prior !== category) {
       localStorage.setItem('CATEGORY_KEY', category);
       localStorage.removeItem('SEARCH_KEY');
+      localStorage.removeItem('FILTER');
 
       const params: FetchCoursesParams = {
         page: 1,
@@ -31,7 +32,7 @@ export default function Header() {
     <div className="header" style={{ width: '50%' }}>
       <div style={{ height: '30px' }} />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignContent: 'center' }}>
-        <span>Course Lab</span>
+        <span>Course Adviser</span>
         <button onClick={() => onClickCategory('drive')}>드라이브</button>
         <button onClick={() => onClickCategory('bike')}>바이크</button>
         <button onClick={() => onClickCategory('cycle')}>자전거</button>
