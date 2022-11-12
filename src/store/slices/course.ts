@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 import { RootState } from '..';
@@ -51,7 +51,11 @@ export const fetchCourse = createAsyncThunk('coures/fetchCourse', async (id: Cou
 export const courseSlice = createSlice({
   name: 'course',
   initialState: initialCourseState,
-  reducers: {},
+  reducers: {
+    // fetchCourses: (state, action) => {
+    //   state.courses = action.payload;
+    // }
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchCourses.fulfilled, (state, action) => {
       state.courses = action.payload;

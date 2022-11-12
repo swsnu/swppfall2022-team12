@@ -4,13 +4,13 @@ import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router';
+// import { useNavigate } from 'react-router';
 
 import { AppDispatch } from '../../store';
 import { fetchCourses, FetchCoursesParams } from '../../store/slices/course';
 
 export default function ListFilter() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const filterKey = localStorage.getItem('FILTER') ?? '-';
 
@@ -28,21 +28,22 @@ export default function ListFilter() {
     };
 
     await dispatch(fetchCourses(params));
-    navigate('/courses');
+    // navigate('/courses');
   };
 
   return (
     <FormControl sx={{ minWidth: 150 }} size="small">
       <InputLabel id="list-filter-label">Filter</InputLabel>
       <Select
+        data-testid="list-filter-testId"
         labelId="list-filter-label"
         id="list-filter-select"
         label="Filter"
         defaultValue={filterKey ?? '-'}
         onChange={handleFilter}
       >
-        <MenuItem value="-" disabled>
-          <em>정렬</em>
+        <MenuItem value="-">
+          <em>-</em>
         </MenuItem>
         <MenuItem value="use">인기 순</MenuItem>
         <MenuItem value="time_desc">시간 순▼</MenuItem>
