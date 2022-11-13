@@ -27,6 +27,10 @@ jest.mock("react-router", () => ({
 }));
 
 describe("<Header />", () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
     it("should render without errors", () => {
         render(<Provider store={mockStore}><Header /></Provider>);
         screen.getByText("Course Adviser");
@@ -66,6 +70,8 @@ describe("<Header />", () => {
 
         const bikeButton = screen.getByText("바이크");
         fireEvent.click(bikeButton);
+        // expect(localStorage.getItem("SEARCH_KEY")).toEqual(null);
+        // expect(localStorage.getItem("FILTER")).toEqual(null);
         // await waitFor(() => expect(axios, "get").toHaveBeenCalled());
         await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("/courses"));
         expect(localStorage.getItem("CATEGORY_KEY")).toEqual("bike");
@@ -81,6 +87,16 @@ describe("<Header />", () => {
         expect(localStorage.getItem("CATEGORY_KEY")).toEqual("run");
     });
 
+    it("should handle onClickCategory", async () => {
+        localStorage.setItem("CATEGORY_KEY", "bike");
+        render(<Provider store={mockStore}><Header /></Provider>);
 
+        const driveButton = screen.getByText("드라이브");
+        fireEvent.click(driveButton);
+        expect(localStorage.getItem("SEARCH_KEY")).toEqual(null);
+        expect(localStorage.getItem("FILTER")).toEqual(null);
+
+        await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("/courses"));
+    });
 
 });

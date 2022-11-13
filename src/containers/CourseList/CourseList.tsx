@@ -46,8 +46,7 @@ export default function CourseList() {
     if (ctgry === 'bike') return '바이크 라이드';
     if (ctgry === 'cycle') return '자전거 라이드';
     if (ctgry === 'run') return '런닝/산책';
-    if (ctgry === '') return '';
-    return '';
+    return 'Invalid';
   };
 
   const clickTitle = async (id: CourseElemType['id']) => {
@@ -67,11 +66,11 @@ export default function CourseList() {
       <h2>Courses List</h2>
       <Header />
       <h3>{korCategory(localStorage.getItem('CATEGORY_KEY') ?? 'drive')}</h3>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <SearchBox searchKey={localStorage.getItem('SEARCH_KEY')} />
+        <ListFilter />
+      </div>
       <div className="course-list">
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <SearchBox searchKey={localStorage.getItem('SEARCH_KEY')} />
-          <ListFilter />
-        </div>
         {courseState.courses.map((course) => {
           // eslint-disable-next-line
           const { id, title, description, u_counts, e_time } = course;
