@@ -45,7 +45,7 @@ export const fetchCourses = createAsyncThunk(
 
 export const fetchCourse = createAsyncThunk('coures/fetchCourse', async (id: CourseType['id']) => {
   const response = await axios.get<CourseType>(`/course/${id}/`);
-  return response.data;
+  return response.data ?? null;
 });
 
 export const courseSlice = createSlice({
