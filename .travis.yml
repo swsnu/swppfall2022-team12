@@ -2,22 +2,25 @@ dist: bionic
 
 jobs:
   include:
-  - language: python
-    python: "3.9.6"
-    install:
-      - cd backend
-      - pip install -r requirements.txt
-    script:
-      - pylint **/*.py --load-plugins pylint_django
-      - coverage run --source='.' manage.py test
-      - coverage xml
-
-  - language: node_js
-    node_js: 14
-    install:
-      - cd frontend
-      - yarn install
-    scripts:
-      - ./node_modules/.bin/eslint src
-      - yarn test --coverage --watchAll=false
+    - language: node_js
+      node_js: 14
+      python: "3.7.9"
+      install:
+        - source ~/virtualenv/python3.7/bin/activate
+        - pip install -r requirements.txt
+        - yarn install
+        - pip install coveralls
+        - yarn global add coveralls
+        - gem install coveralls-lcov
+      script:
+        - cd frontend
+        - ./node_modules/.bin/eslint src
+        - yarn test --coverage --watchAll=false
+        - coveralls-lcov -v -n coverage/lcov.info > coverage.json
+        - cd ../backend/team12
+        - pylint **/*.py --load-plugins pylint_django
+        - coverage run --source='.' manage.py test
+        - coverage xml
+        - sonar-scanner
+        - coveralls --merge=../frontend/coverage.json
       
