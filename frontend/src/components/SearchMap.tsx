@@ -1,23 +1,29 @@
 /* global kakao */
 
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 
-import TMap from './TMap';
+import KakaoMap, { MarkerProps } from './Map/KakaoMap';
 
-function SearchMap(keyword) {
-  const [info, setInfo] = useState();
-  const [markers, setMarkers] = useState([]);
-  const [map, setMap] = useState();
-  const [selected, setSelected] = useState([]);
-  const [preview, setPreview] = useState(false);
+type KeywordProp = {
+  keyword: string;
+};
+
+export default function SearchMap({ keyword }: KeywordProp) {
+  const [info, setInfo] = useState<MarkerProps | null>();
+  const [markers, setMarkers] = useState<MarkerProps[]>([]);
+  const [map, setMap] = useState<kakao.maps.Map>();
+  const [selected, setSelected] = useState<MarkerProps[]>([]);
+  const [preview, setPreview] = useState<boolean>(false);
 
   useEffect(() => {
     if (!map) return;
     const ps = new kakao.maps.services.Places();
 
-    if (keyword.keyword !== '') {
-      ps.keywordSearch(keyword.keyword, (data, status) => {
+    console.log('key:', keyword);
+
+    if (keyword.length) {
+      ps.keywordSearch(keyword, (data, status) => {
         if (status === kakao.maps.services.Status.OK) {
           // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
           // LatLngBounds 객체에 좌표를 추가합니다
@@ -27,12 +33,12 @@ function SearchMap(keyword) {
           for (let i = 0; i < data.length; i += 1) {
             markerArr.push({
               position: {
-                lat: data[i].y,
-                lng: data[i].x,
+                lat: Number(data[i].y),
+                lng: Number(data[i].x),
               },
               content: data[i].place_name,
             });
-            bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
+            bounds.extend(new kakao.maps.LatLng(Number(data[i].y), Number(data[i].x)));
           }
           setMarkers(markerArr);
 
@@ -47,7 +53,7 @@ function SearchMap(keyword) {
     }
   }, [map, keyword]);
 
-  const addLocation = (marker) => {
+  const addLocation = (marker: MarkerProps) => {
     selected.push(marker);
     setSelected(selected);
   };
@@ -67,7 +73,7 @@ function SearchMap(keyword) {
             </div>
             <div className="rst_wrap">
               <div className="rst mCustomScrollbar">
-                <ul id="searchResult" name="searchResult">
+                <ul id="searchResult">
                   {markers.map((marker) => (
                     <li
                       key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
@@ -96,7 +102,7 @@ function SearchMap(keyword) {
         )}
       </div>
       {preview ? (
-        <TMap />
+        <KakaoMap preview={preview} />
       ) : (
         <Map // 로드뷰를 표시할 Container
           center={{
@@ -130,4 +136,4 @@ function SearchMap(keyword) {
   );
 }
 
-export default React.memo(SearchMap);
+// export default React.memo(SearchMap);

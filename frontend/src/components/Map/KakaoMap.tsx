@@ -1,21 +1,61 @@
 /* global kakao */
 
-import axios from 'axios';
+import axios, { AxiosRequestHeaders } from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Map, MapMarker, Polyline } from 'react-kakao-maps-sdk';
 
-import { dummyData } from './dummyData';
-import poisData from './poisData.json';
+import { dummyData } from '../dummyData';
+import poisData from '../poisData.json';
 
-const { Tmapv3 } = window;
+const { Tmapv3 } = window as any;
 
-function TMap() {
-  const [map, setMap] = useState();
-  const [resultData, setResultData] = useState();
-  const [resultFeatures, setResultFeatures] = useState([]);
-  const [path, setPath] = useState([]);
-  const [markers, setMarkers] = useState([]);
-  const [info, setInfo] = useState();
+interface FeatureProps {
+  type: string;
+  geometry: {
+    type: string;
+    coordinates: any;
+  };
+  properties: {
+    index: string;
+    viaPointId: string;
+    viaPointName: string;
+    arriveTime: string;
+    completeTime: string;
+    distance: string;
+    deliveryTime: string;
+    waitTime: string;
+    pointType: string;
+  };
+}
+
+interface DataProps {
+  totalDistance: string;
+  totalTime: string;
+  totalFare: string;
+}
+
+interface PositionProps {
+  lat: number;
+  lng: number;
+}
+
+export interface MarkerProps {
+  position: PositionProps;
+  content: string;
+  image?: string;
+}
+
+type MapProps = {
+  preview?: boolean;
+};
+
+function KakaoMap({ preview }: MapProps) {
+  const [map, setMap] = useState<kakao.maps.Map>();
+  const [resultData, setResultData] = useState<DataProps>();
+  const [resultFeatures, setResultFeatures] = useState<FeatureProps[]>([]);
+  const [path, setPath] = useState<PositionProps[]>([]);
+  const [markers, setMarkers] = useState<MarkerProps[]>([]);
+  const [info, setInfo] = useState<MarkerProps | null>();
 
   const processData = () => {
     const drawInfoArr = [];
@@ -72,7 +112,7 @@ function TMap() {
       }
     }
     // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
-    map.setBounds(bounds);
+    map?.setBounds(bounds);
     setPath(drawInfoArr);
     setMarkers(resultMarkerArr);
   };
@@ -80,8 +120,8 @@ function TMap() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const headers = {
-          appKey: process.env.REACT_APP_TMAP_API_KEY,
+        const headers: AxiosRequestHeaders = {
+          appKey: process.env.REACT_APP_TMAP_API_KEY ?? '',
           'Content-Type': 'application/json',
         };
         const response = await axios.post(
@@ -89,18 +129,19 @@ function TMap() {
           dummyData,
           { headers },
         );
-        // console.log("resultData:", response.data.properties);
-        // console.log("resultFeatures:", response.data.features);
         setResultData(response.data.properties);
         setResultFeatures(response.data.features);
       } catch (err) {
         console.log('Error >>', err);
       }
     };
-    // fetchData().then();
-    setResultData(poisData.properties);
-    setResultFeatures(poisData.features);
-  }, []);
+    if (preview) {
+      setResultData(poisData.properties);
+      setResultFeatures(poisData.features);
+    } else {
+      fetchData().then();
+    }
+  }, [preview]);
 
   useEffect(() => {
     if (resultData && resultFeatures) {
@@ -136,7 +177,7 @@ function TMap() {
           key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
           position={marker.position}
           image={{
-            src: marker.image,
+            src: marker.image ?? '',
             size: {
               width: 24,
               height: 38,
@@ -145,7 +186,7 @@ function TMap() {
           onMouseOver={() => setInfo(marker)}
           onMouseOut={() => setInfo(null)}
         >
-          {info && info?.content === marker.content && (
+          {info && info.content === marker.content && (
             <div style={{ color: '#000' }}>{marker.content.substring(4)}</div>
           )}
         </MapMarker>
@@ -154,4 +195,4 @@ function TMap() {
   );
 }
 
-export default React.memo(TMap);
+export default React.memo(KakaoMap);
