@@ -138,9 +138,8 @@ function KakaoMap({ preview }: MapProps) {
     if (preview) {
       setResultData(poisData.properties);
       setResultFeatures(poisData.features);
-    } else {
-      fetchData().then();
     }
+    // fetchData().then();
   }, [preview]);
 
   useEffect(() => {

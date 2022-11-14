@@ -20,8 +20,6 @@ export default function SearchMap({ keyword }: KeywordProp) {
     if (!map) return;
     const ps = new kakao.maps.services.Places();
 
-    console.log('key:', keyword);
-
     if (keyword.length) {
       ps.keywordSearch(keyword, (data, status) => {
         if (status === kakao.maps.services.Status.OK) {
