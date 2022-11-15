@@ -3,7 +3,6 @@ import axios from "axios";
 import { ThunkMiddleware } from "redux-thunk";
 
 import reducer, { CourseState, CourseType, fetchCourses, fetchCourse} from "./course";
-import {  } from "./course";
 
 describe("course reducer", () => {
     let store: EnhancedStore<

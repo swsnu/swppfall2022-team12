@@ -4,13 +4,11 @@ import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-// import { useNavigate } from 'react-router';
 
 import { AppDispatch } from '../../store';
 import { fetchCourses, FetchCoursesParams } from '../../store/slices/course';
 
 export default function ListFilter() {
-  // const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const filterKey = localStorage.getItem('FILTER') ?? '-';
 
@@ -28,7 +26,6 @@ export default function ListFilter() {
     };
 
     await dispatch(fetchCourses(params));
-    // navigate('/courses');
   };
 
   return (

@@ -33,24 +33,8 @@ describe("<Header />", () => {
     });
 
     it("should handle onClickCategory when button is clicked", async () => {
-        // jest.spyOn(axios, "get").mockRejectedValueOnce({
-        //     data: [{
-        //         id: 1,
-        //         title: "COURSE_TEST_TITLE1",
-        //     description: "COURSE_TEST_DESCRIPTION1",
-        // created_at: "00:00",
-        // u_counts: 100,
-        // distance: 10,
-        // e_time: "1:30",
-        // startPos: null,
-        // passPos: null,
-        // endPos: null,
-        //     },]
-        // });
-        
         renderWithProviders(<Header />);
         localStorage.clear();
-        // const mockFetchCourses = jest.spyOn(courseSlice, "fetchCourses");
 
         const driveButton = screen.getByText("드라이브");
         fireEvent.click(driveButton);
