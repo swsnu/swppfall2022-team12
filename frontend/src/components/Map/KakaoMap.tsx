@@ -1,61 +1,52 @@
 /* global kakao */
 
-import axios, { AxiosRequestHeaders } from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Map, MapMarker, Polyline } from 'react-kakao-maps-sdk';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { dummyData } from '../dummyData';
+import {
+  PositionProps,
+  MarkerProps,
+  DataProps,
+  FeatureProps,
+} from '../../containers/CourseCreate/CourseCreate';
+import { AppDispatch } from '../../store';
+import { fetchPathFromTMap, selectCourse } from '../../store/slices/course';
 import poisData from '../poisData.json';
 
 const { Tmapv3 } = window as any;
 
-interface FeatureProps {
-  type: string;
-  geometry: {
-    type: string;
-    coordinates: any;
-  };
-  properties: {
-    index: string;
-    viaPointId: string;
-    viaPointName: string;
-    arriveTime: string;
-    completeTime: string;
-    distance: string;
-    deliveryTime: string;
-    waitTime: string;
-    pointType: string;
-  };
-}
-
-interface DataProps {
-  totalDistance: string;
-  totalTime: string;
-  totalFare: string;
-}
-
-interface PositionProps {
-  lat: number;
-  lng: number;
-}
-
-export interface MarkerProps {
-  position: PositionProps;
-  content: string;
-  image?: string;
-}
-
 type MapProps = {
-  preview?: boolean;
+  map: kakao.maps.Map | undefined;
+  setMap: (map: kakao.maps.Map) => void;
+  // path: PositionProps[];
+  markers: MarkerProps[];
+  setMarkers: (marker: MarkerProps[]) => void;
+  info: MarkerProps | null;
+  setInfo: (marker: MarkerProps | null) => void;
+  addLocation: (marker: MarkerProps) => void;
+  preview: boolean;
 };
 
-function KakaoMap({ preview }: MapProps) {
-  const [map, setMap] = useState<kakao.maps.Map>();
-  const [resultData, setResultData] = useState<DataProps>();
-  const [resultFeatures, setResultFeatures] = useState<FeatureProps[]>([]);
+function KakaoMap({
+  map,
+  setMap,
+  markers,
+  setMarkers,
+  info,
+  setInfo,
+  addLocation,
+  preview,
+}: MapProps) {
+  // const [map, setMap] = useState<kakao.maps.Map>();
+  // const [markers, setMarkers] = useState<MarkerProps[]>([]);
+  const [routeMarkers, setRouteMarkers] = useState<MarkerProps[]>([]);
   const [path, setPath] = useState<PositionProps[]>([]);
-  const [markers, setMarkers] = useState<MarkerProps[]>([]);
-  const [info, setInfo] = useState<MarkerProps | null>();
+  const [resultData, setResultData] = useState<DataProps | null>();
+  const [resultFeatures, setResultFeatures] = useState<FeatureProps[]>([]);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const courseState = useSelector(selectCourse);
 
   const processData = () => {
     const drawInfoArr = [];
@@ -102,95 +93,114 @@ function KakaoMap({ preview }: MapProps) {
 
         resultMarkerArr.push({
           position: {
-            lat: convertPoint._lat,
-            lng: convertPoint._lng,
+            lat: Number(convertPoint._lat),
+            lng: Number(convertPoint._lng),
           },
           content: properties.viaPointName,
           image: markerImg,
         });
-        bounds.extend(new kakao.maps.LatLng(convertPoint._lat, convertPoint._lng));
+        bounds.extend(new kakao.maps.LatLng(Number(convertPoint._lat), Number(convertPoint._lng)));
       }
     }
     // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
     map?.setBounds(bounds);
     setPath(drawInfoArr);
-    setMarkers(resultMarkerArr);
+    setRouteMarkers(resultMarkerArr);
+    // setMarkers(resultMarkerArr);
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const headers: AxiosRequestHeaders = {
-          appKey: process.env.REACT_APP_TMAP_API_KEY ?? '',
-          'Content-Type': 'application/json',
-        };
-        const response = await axios.post(
-          'https://apis.openapi.sk.com/tmap/routes/routeSequential30?version=1&format=json',
-          dummyData,
-          { headers },
-        );
-        setResultData(response.data.properties);
-        setResultFeatures(response.data.features);
-      } catch (err) {
-        console.log('Error >>', err);
-      }
-    };
+    if (!map) return;
+    console.log(preview);
     if (preview) {
       setResultData(poisData.properties);
       setResultFeatures(poisData.features);
     }
-    // fetchData().then();
-  }, [preview]);
+  }, [preview, map]);
 
   useEffect(() => {
     if (resultData && resultFeatures) {
-      console.log('Process');
       processData();
     }
-  }, [resultData, resultFeatures]);
+  }, [resultFeatures, resultData]);
 
   return (
-    <Map // 지도를 표시할 Container
-      center={{
-        // 지도의 중심좌표
-        lat: 37.405278291509404,
-        lng: 127.12074279785197,
-      }}
-      style={{
-        // 지도의 크기
-        width: '100%',
-        height: '450px',
-      }}
-      level={3} // 지도의 확대 레벨
-      onCreate={setMap}
-    >
-      <Polyline
-        path={[path]}
-        strokeWeight={5} // 선의 두께 입니다
-        strokeColor="red" // 선의 색깔입니다
-        strokeOpacity={1} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-        strokeStyle="solid" // 선의 스타일입니다
-      />
-      {markers.map((marker) => (
-        <MapMarker
-          key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
-          position={marker.position}
-          image={{
-            src: marker.image ?? '',
-            size: {
-              width: 24,
-              height: 38,
-            },
+    <div>
+      {preview ? (
+        <Map // 지도를 표시할 Container
+          center={{
+            // 지도의 중심좌표
+            lat: 37.405278291509404,
+            lng: 127.12074279785197,
           }}
-          onMouseOver={() => setInfo(marker)}
-          onMouseOut={() => setInfo(null)}
+          style={{
+            // 지도의 크기
+            width: '100%',
+            height: '100%',
+            right: '0px',
+            position: 'fixed',
+          }}
+          level={3} // 지도의 확대 레벨
+          onCreate={setMap}
         >
-          {info && info.content === marker.content && (
-            <div style={{ color: '#000' }}>{marker.content.substring(4)}</div>
-          )}
-        </MapMarker>
-      ))}
-    </Map>
+          <Polyline
+            path={[path]}
+            strokeWeight={5} // 선의 두께 입니다
+            strokeColor="red" // 선의 색깔입니다
+            strokeOpacity={1} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+            strokeStyle="solid" // 선의 스타일입니다
+          />
+          {routeMarkers.map((marker) => (
+            <MapMarker
+              key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
+              position={marker.position}
+              image={{
+                src: marker.image ?? '',
+                size: {
+                  width: 24,
+                  height: 38,
+                },
+              }}
+              onMouseOver={() => setInfo(marker)}
+              onMouseOut={() => setInfo(null)}
+            >
+              {info && info.content === marker.content && (
+                <div style={{ color: '#000' }}>{marker.content.substring(4)}</div>
+              )}
+            </MapMarker>
+          ))}
+        </Map>
+      ) : (
+        <Map
+          center={{
+            lat: 37.566826,
+            lng: 126.9786567,
+          }}
+          style={{
+            width: '100%',
+            height: '100%',
+            right: '0px',
+            position: 'fixed',
+          }}
+          level={3}
+          onCreate={setMap}
+        >
+          {markers.map((marker) => (
+            <MapMarker
+              key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
+              position={marker.position}
+              onMouseOver={() => setInfo(marker)}
+              onMouseOut={() => setInfo(null)}
+              onClick={() => addLocation(marker)}
+            >
+              {info && info?.content === marker.content && (
+                <div style={{ color: '#000' }}>{marker.content}</div>
+              )}
+            </MapMarker>
+          ))}
+        </Map>
+      )}
+    </div>
   );
 }
 
