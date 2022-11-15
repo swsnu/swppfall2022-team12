@@ -1,12 +1,8 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
-import { MemoryRouter, Route, Routes, Navigate } from "react-router";
-import axios from "axios";
-import { Button } from '@mui/material';
 
 import CourseList from "./CourseList";
 import { CourseProps } from "../../components/CourseListElement/CourseListElement";
-import MuiRating from "../../components/MuiRate/MuiRating";
 import { CourseState } from "../../store/slices/course";
 import { getMockStore } from "../../test-utils/mocks";
 
