@@ -1,21 +1,7 @@
-import { getByRole, fireEvent, render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import axios from "axios";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import SearchBox from "./SearchBox";
 
-import { store } from '../../store';
-import { Provider } from 'react-redux';
-import { getMockStore, renderWithProviders } from '../../test-utils/mocks';
-import { courseSlice } from "../../store/slices/course";
-
-// const initialState = {
-//     course: {
-//         courses: [],
-//         selectedCourse: null,
-//     }
-// };
-
-// const mockStore = getMockStore({ ...initialState });
+import { renderWithProviders } from '../../test-utils/mocks';
 
 const mockNavigate = jest.fn();
 jest.mock("react-router", () => ({

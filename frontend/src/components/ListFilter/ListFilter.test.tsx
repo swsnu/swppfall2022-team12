@@ -1,12 +1,9 @@
 import { getByRole, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import axios from "axios";
 import ListFilter from "./ListFilter";
 
-import { store } from '../../store';
 import { Provider } from 'react-redux';
 import { getMockStore } from '../../test-utils/mocks';
-import { courseSlice } from "../../store/slices/course";
 
 const initialState = {
     course: {

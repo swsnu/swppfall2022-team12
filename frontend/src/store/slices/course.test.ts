@@ -1,9 +1,8 @@
 import { AnyAction, configureStore, EnhancedStore } from "@reduxjs/toolkit";
-import { waitFor } from "@testing-library/react";
 import axios from "axios";
 import { ThunkMiddleware } from "redux-thunk";
 
-import reducer, { CourseState, CourseType, FetchCoursesParams, fetchCourses, fetchCourse} from "./course";
+import reducer, { CourseState, CourseType, fetchCourses, fetchCourse} from "./course";
 import {  } from "./course";
 
 describe("course reducer", () => {

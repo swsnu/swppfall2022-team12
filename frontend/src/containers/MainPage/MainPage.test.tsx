@@ -1,9 +1,6 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { Provider } from "react-redux";
-import { MemoryRouter, Route, Routes, Navigate } from "react-router";
-import axios from "axios";
+import { fireEvent, screen } from "@testing-library/react";
 import MainPage from "./MainPage";
-import { getMockStore, renderWithProviders } from "../../test-utils/mocks";
+import { renderWithProviders } from "../../test-utils/mocks";
 
 const mockNavigate = jest.fn();
 jest.mock("react-router", () => ({
