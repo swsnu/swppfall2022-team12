@@ -10,21 +10,20 @@ export default function Header() {
   const dispatch = useDispatch<AppDispatch>();
 
   const onClickCategory = async (category: string) => {
-    const prior = localStorage.getItem('CATEGORY_KEY');
-    if (prior !== category) {
-      localStorage.setItem('CATEGORY_KEY', category);
-      localStorage.removeItem('SEARCH_KEY');
-      localStorage.removeItem('FILTER');
+    // const prior = localStorage.getItem('CATEGORY_KEY');
+    // if (prior !== category) 
+    localStorage.setItem('CATEGORY_KEY', category);
+    localStorage.removeItem('SEARCH_KEY');
+    localStorage.removeItem('FILTER');
 
-      const params: FetchCoursesParams = {
-        page: 1,
-        category: localStorage.getItem('CATEGORY_KEY') ?? 'drive',
-        search_keyword: null,
-        filter: null,
-      };
+    const params: FetchCoursesParams = {
+      page: 1,
+      category: localStorage.getItem('CATEGORY_KEY')!,
+      search_keyword: null,
+      filter: null,
+    };
 
-      await dispatch(fetchCourses(params));
-    }
+    await dispatch(fetchCourses(params));
     navigate('/courses');
   };
 

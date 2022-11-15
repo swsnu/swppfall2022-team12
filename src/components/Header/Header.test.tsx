@@ -4,17 +4,8 @@ import Header from "./Header";
 
 import { store } from '../../store';
 import { Provider } from 'react-redux';
-import { getMockStore } from '../../test-utils/mocks';
+import { getMockStore, renderWithProviders } from '../../test-utils/mocks';
 import { courseSlice } from "../../store/slices/course";
-
-const initialState = {
-    course: {
-        courses: [],
-        selectedCourse: null,
-    }
-};
-
-const mockStore = getMockStore({ ...initialState });
 
 const mockNavigate = jest.fn();
 jest.mock("react-router", () => ({
@@ -27,12 +18,13 @@ jest.mock("react-router", () => ({
 }));
 
 describe("<Header />", () => {
+    beforeAll(() => console.error = jest.fn());
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
     it("should render without errors", () => {
-        render(<Provider store={mockStore}><Header /></Provider>);
+        renderWithProviders(<Header />);
         screen.getByText("Course Adviser");
         const driveButton = screen.getByText("드라이브");
         const bikeButton = screen.getByText("바이크");
@@ -44,7 +36,7 @@ describe("<Header />", () => {
         expect(runButton).toBeInTheDocument();
     });
 
-    it("should navigate to list page when each category button is clicked", async () => {
+    it("should handle onClickCategory when button is clicked", async () => {
         // jest.spyOn(axios, "get").mockRejectedValueOnce({
         //     data: [{
         //         id: 1,
@@ -60,43 +52,30 @@ describe("<Header />", () => {
         //     },]
         // });
         
-        render(<Provider store={mockStore}><Header /></Provider>);
+        renderWithProviders(<Header />);
+        localStorage.clear();
         // const mockFetchCourses = jest.spyOn(courseSlice, "fetchCourses");
 
         const driveButton = screen.getByText("드라이브");
         fireEvent.click(driveButton);
+        await waitFor(() => expect(localStorage.getItem("CATEGORY_KEY")).toEqual("drive"));
+        await waitFor(() => expect(localStorage.getItem("SEARCH_KEY")).toEqual(null));
+        await waitFor(() => expect(localStorage.getItem("FILTER")).toEqual(null));
         await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("/courses"));
-        expect(localStorage.getItem("CATEGORY_KEY")).toEqual("drive");
 
         const bikeButton = screen.getByText("바이크");
         fireEvent.click(bikeButton);
-        // expect(localStorage.getItem("SEARCH_KEY")).toEqual(null);
-        // expect(localStorage.getItem("FILTER")).toEqual(null);
-        // await waitFor(() => expect(axios, "get").toHaveBeenCalled());
+        await waitFor(() => expect(localStorage.getItem("CATEGORY_KEY")).toEqual("bike"));
         await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("/courses"));
-        expect(localStorage.getItem("CATEGORY_KEY")).toEqual("bike");
 
         const cycleButton = screen.getByText("자전거");
         fireEvent.click(cycleButton);
+        await waitFor(() => expect(localStorage.getItem("CATEGORY_KEY")).toEqual("cycle"));
         await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("/courses"));
-        expect(localStorage.getItem("CATEGORY_KEY")).toEqual("cycle");
 
         const runButton = screen.getByText("런닝");
         fireEvent.click(runButton);
-        await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("/courses"));
-        expect(localStorage.getItem("CATEGORY_KEY")).toEqual("run");
-    });
-
-    it("should handle onClickCategory", async () => {
-        localStorage.setItem("CATEGORY_KEY", "bike");
-        render(<Provider store={mockStore}><Header /></Provider>);
-
-        const driveButton = screen.getByText("드라이브");
-        fireEvent.click(driveButton);
-        expect(localStorage.getItem("SEARCH_KEY")).toEqual(null);
-        expect(localStorage.getItem("FILTER")).toEqual(null);
-
+        await waitFor(() => expect(localStorage.getItem("CATEGORY_KEY")).toEqual("run"));
         await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith("/courses"));
     });
-
 });
