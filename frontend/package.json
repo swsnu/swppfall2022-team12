@@ -2,11 +2,12 @@
   "name": "skeleton",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8000",
+  "proxy": "http://127.0.0.1:8000",
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
-    "@mui/material": "^5.10.12",
+    "@mui/icons-material": "^5.10.9",
+    "@mui/material": "^5.10.13",
     "@reduxjs/toolkit": "^1.8.5",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "13.4.0",
@@ -17,6 +18,7 @@
     "@types/react-dom": "18.0.6",
     "axios": "^0.27.2",
     "enzyme": "3.11.0",
+    "node-sass": "^8.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-kakao-maps-sdk": "^1.1.5",
@@ -34,8 +36,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint './src/**/*.{ts,tsx,js,jsx}'",
-    "lint:fix": "eslint --fix './src/**/*.{ts,tsx,js,jsx}'"
+    "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}'",
+    "lint:fix": "eslint --fix 'src/**/*.{ts,tsx,js,jsx}'"
   },
   "eslintConfig": {
     "extends": [

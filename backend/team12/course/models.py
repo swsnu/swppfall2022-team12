@@ -1,5 +1,5 @@
 from django.db import models
-from course.const import CATEGORY, DRIVE
+from course.const import *
 
 
 class Course(models.Model):
@@ -30,15 +30,15 @@ class Point(models.Model):
 
         # Fields
         course (Course): course
-        pid (char): ID of Points.
         name (char): name of points. 
         longitude (int): longitude (ex. )
         latitude (int): latitude (ex. )
         idx (int): course points order
     """
     id = models.AutoField(primary_key=True)
-    pid = models.CharField(max_length=50, blank=True)
+    category = models.CharField(choices=P_CATEGORY, default=MARKER, max_length=10)
     name = models.CharField(max_length=50, blank=True)
+    image = models.CharField(max_length=100, blank=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="points")
     longitude = models.CharField(max_length=30, blank=True)
     latitude = models.CharField(max_length=30, blank=True)
