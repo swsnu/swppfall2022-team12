@@ -108,5 +108,5 @@ build
 .DS_Store
 out/
 
-*.pyc
-__pycache__/
+# *.pyc
+# __pycache__/
