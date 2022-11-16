@@ -5,7 +5,7 @@ from rest_framework import status, viewsets, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from course.serializers import CourseListSerializer, CourseDetailSerializer, CourseSerializer
-from course.models import Course, Point
+from course.models import Course
 from team12.exceptions import FieldError
 from course.const import DRIVE
 
@@ -62,9 +62,6 @@ class CourseViewSet(
         category = request.query_params.get("category", DRIVE)
         search_keyword = request.query_params.get("search_keyword", "")
         f_param = request.query_params.get("filter", False)
-        
-        if not category:
-            raise FieldError('query parameter missing [category]')
         
         courses = Course.objects.filter(category=category)
         if search_keyword:

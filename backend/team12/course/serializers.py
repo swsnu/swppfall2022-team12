@@ -52,15 +52,12 @@ class CourseSerializer(serializers.ModelSerializer):
             'e_time',
             'distance'
         )
-        extra_kwargs = {"e_time":{'format':'%H:%M'}}
+        extra_kwargs = {"e_time": {'format':'%H:%M'}}
 
     def validate(self, data):
         title = data.get('title')
         missing_fields = []
-        if title:
-            if not len(title) > 0:
-                raise FieldError("title required.")
-        else:
+        if not title:
             missing_fields.append("title")
         
         description = data.get('description')
