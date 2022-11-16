@@ -64,7 +64,7 @@ export default function CourseDetail() {
 
     tempArray.push('&appname=com.example.myapp');
 
-    window.location.href = tempArray.toString().replaceAll(',', '');
+    window.location.href = tempArray.toString().replace(/,/g, '');
   };
 
   return (
