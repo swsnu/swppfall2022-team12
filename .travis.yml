@@ -9,7 +9,7 @@ jobs:
         sonarcloud:
           organization: "swsnu"
           token:
-            secure: "uYTKi2cA3BsO04RZms+SJ1DFFvACIVODGzekspSg7EtXPKtRSXo8DszQimSokSH3pkE7V2OaoQhFJ46iueN4/QydAPFI8upJk7y27GzLoDbvtE4186BLxKH34wceFVw2Ve/ZQSV89zS68yxrLRQLWKKCvanOYhz4+CjJQW8RRggdQiVzsWCAfVhvVJaBfmnGMhHMcZXbp15OPqfYnpAZrbZD5ZppkPFsVwAAGt+C9ZU2Ij6nT9AtgKmpaUXvQ5k9VhxKomsRNe8eUdzSa2wlx9ERZkLKxAjLuftDi5Jx24Ct7EXI79kpZsW+AzR0M5lhqFKkmM11MAajd3jPOED9NC2JQee7drLklqAp61KC/d2vr/5pUwgWeIhPSAG/rd/aBDLORYHWUJ64FWsCKpM8iSxlIYM/lBiOeC4rsRT1T8DaNet5bVqQwKgglTMeDN2QUv0jazDnzJmftFbWaDOQJOi/JSQrFH++J6AGipAA8l9L3xsF8447VPkWHH/OJetA6LTHgSRyOVtOLrtDz6sP+mXFIYLOb0IhxZx23sGTl1H9/wT2aH3z51S4AjJUSbFzMck/dqgIA0LaeRnhVNsQ"
+            secure: $SONAR_TOKEN
       install:
         - source ~/virtualenv/python3.7/bin/activate
         - cd backend/team12
