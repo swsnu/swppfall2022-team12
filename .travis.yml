@@ -5,6 +5,11 @@ jobs:
     - language: node_js
       node_js: 14
       python: "3.7.9"
+      # addons:
+      #   sonarcloud:
+      #     organization: "your SonarCloud organization key (e.g. swsnu)"
+      #     token:
+      #       secure: "encrypted value that you just copied"
       install:
         - source ~/virtualenv/python3.7/bin/activate
         - cd backend/team12
@@ -23,6 +28,6 @@ jobs:
         # - pylint **/*.py --load-plugins pylint_django
         - coverage run --source='.' manage.py test
         - coverage xml
-        - sonar-scanner
+        # - sonar-scanner
         - coveralls --merge=../../frontend/coverage.json
       
