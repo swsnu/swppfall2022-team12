@@ -1,10 +1,11 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import React from 'react';
+import { Provider } from 'react-redux';
 
 import App from './App';
-import { renderWithProviders } from './test-utils/mocks';
+import { store } from './store';
 
 test('renders App without errors', () => {
-  renderWithProviders(<App />);
+  render(<Provider store={store}><App /></Provider>);
   screen.getByText("Main Page");
 });
