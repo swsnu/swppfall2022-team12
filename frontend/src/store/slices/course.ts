@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios, { AxiosRequestHeaders } from 'axios';
 
+import { dummyData } from '../../components/dummyData';
+import poisData from '../../components/poisData.json';
+import { DataProps, FeatureProps } from '../../containers/CourseCreate/CourseCreate';
 import { RootState } from '../index';
 
 export interface CourseType {
@@ -28,11 +31,15 @@ export interface FetchCoursesParams {
 export interface CourseState {
   courses: CourseType[];
   selectedCourse: CourseType | null;
+  tMapData: DataProps | null;
+  tMapFeatures: FeatureProps[];
 }
 
 const initialCourseState: CourseState = {
   courses: [],
   selectedCourse: null,
+  tMapData: null,
+  tMapFeatures: [],
 };
 
 export const fetchCourses = createAsyncThunk(
@@ -43,9 +50,23 @@ export const fetchCourses = createAsyncThunk(
   },
 );
 
-export const fetchCourse = createAsyncThunk('coures/fetchCourse', async (id: CourseType['id']) => {
+export const fetchCourse = createAsyncThunk('course/fetchCourse', async (id: CourseType['id']) => {
   const response = await axios.get<CourseType>(`/course/${id}/`);
   return response.data ?? null;
+});
+
+export const fetchPathFromTMap = createAsyncThunk('course/fetchCoursePath', async () => {
+  const headers: AxiosRequestHeaders = {
+    appKey: process.env.REACT_APP_TMAP_API_KEY ?? '',
+    'Content-Type': 'application/json',
+  };
+  // const response = await axios.post<{ features: FeatureProps[]; properties: DataProps }>(
+  //   'https://apis.openapi.sk.com/tmap/routes/routeSequential30?version=1&format=json',
+  //   dummyData,
+  //   { headers },
+  // );
+  // return response.data;
+  return { features: poisData.features, properties: poisData.properties };
 });
 
 export const courseSlice = createSlice({
@@ -62,6 +83,10 @@ export const courseSlice = createSlice({
     });
     builder.addCase(fetchCourse.fulfilled, (state, action) => {
       state.selectedCourse = action.payload;
+    });
+    builder.addCase(fetchPathFromTMap.fulfilled, (state, action) => {
+      state.tMapData = action.payload.properties;
+      state.tMapFeatures = action.payload.features;
     });
   },
 });

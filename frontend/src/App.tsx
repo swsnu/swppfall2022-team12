@@ -2,8 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
 import './App.css';
-import SearchPage from './components/SearchPage';
-import TMap from './components/TMap';
+import CourseCreate from './containers/CourseCreate/CourseCreate';
 import CourseList from './containers/CourseList/CourseList';
 import MainPage from './containers/MainPage/MainPage';
 import CourseDetail from './DetailPage';
@@ -16,8 +15,7 @@ function App() {
         <Routes>
           <Route path="/courses" element={<CourseList />} />
           <Route path="/course/:id" element={<CourseDetail />} />
-          <Route path="map" element={<TMap />} />
-          <Route path="search" element={<SearchPage />} />
+          <Route path="search" element={<CourseCreate />} />
           <Route path="/register/" element={<Register />} />
           <Route path="/" element={<MainPage />} />
           <Route path="*" element={<Navigate replace to="/" />} />
