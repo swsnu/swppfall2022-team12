@@ -72,7 +72,7 @@ export default function CourseDetail() {
       <h1>{title}</h1>
       <h5>{description}</h5>
       <h6>{u_counts} people used this course!</h6>
-      <h6 id >
+      <h6>
         rating : {rating}({rateNum})
       </h6>
       <h6>expected time : {e_time}</h6>
