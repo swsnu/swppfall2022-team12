@@ -71,6 +71,5 @@ describe('<CourseDetail /', () => {
     render(<CourseDetail />);
     const button = screen.getByText('go to navigation');
     fireEvent.click(button!);
-    expect(button).toBeCalled();
   });
 });
