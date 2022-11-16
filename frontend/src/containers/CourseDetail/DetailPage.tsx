@@ -49,15 +49,14 @@ export default function CourseDetail() {
     for (let index = 0; index < points.length; index += 1) {
       elementArray.push(points[index]);
     }
-    for (let index = 0; index < points.length-1; index += 1) {
-        tempArray.push(
-          `&v${index + 1}lat=${elementArray[index + 1].latitude}&v${index + 1}lng=${
-            elementArray[index + 1].longitude
-          }&v${index + 1}name=${encodeURI(elementArray[index + 1].name)}`,
-        );
-      
+    for (let index = 0; index < points.length - 1; index += 1) {
+      tempArray.push(
+        `&v${index + 1}lat=${elementArray[index + 1].latitude}&v${index + 1}lng=${
+          elementArray[index + 1].longitude
+        }&v${index + 1}name=${encodeURI(elementArray[index + 1].name)}`,
+      );
     }
-    
+
     const a = `dlat=${elementArray[points.length].latitude}&dlng=${
       elementArray[points.length].longitude
     }&dname=${encodeURI(elementArray[points.length].name)}`;
