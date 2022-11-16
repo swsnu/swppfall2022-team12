@@ -6,7 +6,7 @@ import SearchPage from './components/SearchPage';
 import TMap from './components/TMap';
 import CourseList from './containers/CourseList/CourseList';
 import MainPage from './containers/MainPage/MainPage';
-import CourseDetail from './DetailPage';
+import CourseDetail from './containers/CourseDetail/DetailPage';
 import Register from './registerPage';
 
 function App() {

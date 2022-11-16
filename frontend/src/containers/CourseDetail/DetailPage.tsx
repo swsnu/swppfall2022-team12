@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 
 export default function CourseDetail() {
-  const { id } = useParams(); // get the id of the course
+  const id = useParams(); // get the id of the course
   const [title, setTitle] = useState('dummy title');
   const [rating, setRating] = useState(4.7);
   const [rateNum, setRateNum] = useState(19);
@@ -26,9 +26,7 @@ export default function CourseDetail() {
   });
 
   useEffect(() => {
-    console.log(id);
     axios.get(`/course/${id}/`).then((res) => {
-      console.log(res.data);
       setTitle(res.data.title);
       setDescription(res.data.description);
       setTime(res.data.e_time);
@@ -38,8 +36,6 @@ export default function CourseDetail() {
   }, []);
 
   const onPlay = () => {
-    // console.log(l);
-    console.log(`point length : ${points.length}`);
     const tempArray = ['nmap://navigation?'];
     const elementArray = [
       {
@@ -53,24 +49,22 @@ export default function CourseDetail() {
     for (let index = 0; index < points.length; index += 1) {
       elementArray.push(points[index]);
     }
-    for (let index = 0; index < points.length; index += 1) {
-      console.log(elementArray[index + 1]);
-      if (index === points.length - 1) {
-        const a = `dlat=${elementArray[index + 1].latitude}&dlng=${
-          elementArray[index + 1].longitude
-        }&dname=${encodeURI(elementArray[index + 1].name)}`;
-        tempArray.splice(1, 0, a);
-      } else {
+    for (let index = 0; index < points.length-1; index += 1) {
         tempArray.push(
           `&v${index + 1}lat=${elementArray[index + 1].latitude}&v${index + 1}lng=${
             elementArray[index + 1].longitude
           }&v${index + 1}name=${encodeURI(elementArray[index + 1].name)}`,
         );
-      }
+      
     }
+    
+    const a = `dlat=${elementArray[points.length].latitude}&dlng=${
+      elementArray[points.length].longitude
+    }&dname=${encodeURI(elementArray[points.length].name)}`;
+    tempArray.splice(1, 0, a);
+
     tempArray.push('&appname=com.example.myapp');
-    console.log(tempArray);
-    console.log(tempArray.toString().replaceAll(',', ''));
+
     window.location.href = tempArray.toString().replaceAll(',', '');
   };
 
