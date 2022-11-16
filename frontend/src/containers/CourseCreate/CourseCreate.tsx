@@ -221,7 +221,7 @@ export default function CourseCreate() {
 
       {/* Display Map */}
       <KakaoMap
-        map={map}
+        // map={map}
         setMap={setMap}
         path={path}
         searchMarkers={searchMarkers}

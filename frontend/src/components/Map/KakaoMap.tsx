@@ -6,7 +6,7 @@ import { Map, MapMarker, Polyline } from 'react-kakao-maps-sdk';
 import { PositionProps, MarkerProps } from '../../containers/CourseCreate/CourseCreate';
 
 type MapProps = {
-  map: kakao.maps.Map | undefined;
+  // map: kakao.maps.Map | undefined;
   setMap: (map: kakao.maps.Map) => void;
   path: PositionProps[];
   searchMarkers: MarkerProps[];
@@ -53,24 +53,26 @@ function KakaoMap({
             strokeOpacity={1} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
             strokeStyle="solid" // 선의 스타일입니다
           />
-          {previewMarkers.map((marker) => (
-            <MapMarker
-              key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
-              position={marker.position}
-              image={{
-                src: marker.image ?? '',
-                size: {
-                  width: 24,
-                  height: 38,
-                },
-              }}
-              onMouseOver={() => setInfo(marker)}
-              onMouseOut={() => setInfo(null)}
-            >
-              {info && info.content === marker.content && (
-                <div style={{ color: '#000' }}>{marker.content.substring(4)}</div>
-              )}
-            </MapMarker>
+          {previewMarkers.map((marker, idx) => (
+            <div className={`marker${idx}`}>
+              <MapMarker
+                key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
+                position={marker.position}
+                image={{
+                  src: marker.image ?? '',
+                  size: {
+                    width: 24,
+                    height: 38,
+                  },
+                }}
+                onMouseOver={() => setInfo(marker)}
+                onMouseOut={() => setInfo(null)}
+              >
+                {info && info.content === marker.content && (
+                  <div style={{ color: '#000' }}>{marker.content}</div>
+                )}
+              </MapMarker>
+            </div>
           ))}
         </Map>
       ) : (
