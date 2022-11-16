@@ -22,15 +22,14 @@ export default function SearchBar({
 
   const valueChecker = () => {
     if (keyword === '') {
-      alert('검색어를 입력해주세요.');
-      return false;
+      return true;
     }
   };
 
   const submitKeyword = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (valueChecker()) {
-      return;
+      alert('검색어를 입력해주세요.');
     }
     searchPlaces(keyword);
   };
@@ -55,7 +54,7 @@ export default function SearchBar({
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
         />
-        <button>Search</button>
+        <button>검색</button>
       </form>
 
       {/* Selected Location List */}
@@ -95,6 +94,7 @@ export default function SearchBar({
             {markers.map((marker) => (
               <li
                 key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
+                id={marker.content}
                 style={{
                   padding: '18px 20px 20px',
                   outline: '1px solid blue',
