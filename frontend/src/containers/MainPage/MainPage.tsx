@@ -29,12 +29,14 @@ function MainPage() {
     >
       <h2>Main Page</h2>
       <Header />
+      <div style={{ height: '20px' }}> </div>
       <SearchBox searchKey={localStorage.getItem('SEARCH_KEY') ?? ''} />
+      <div style={{ height: '20px' }}> </div>
       <Button variant="outlined" onClick={onClickCreateCourse}>
         Create New Course
       </Button>
     </div>
   );
 }
-//
+
 export default MainPage;

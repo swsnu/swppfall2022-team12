@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 // eslint-disable-next-line
 import React from 'react';
-import MuiRating from '../StarRate/MuiRating';
+import MuiRating from '../MuiRate/MuiRating';
 
 export interface CourseProps {
   id: number;

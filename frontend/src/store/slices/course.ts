@@ -21,7 +21,7 @@ export interface CourseType {
 export interface FetchCoursesParams {
   page: number;
   category: string;
-  searchKeyword: string | null;
+  search_keyword: string | null;
   filter: string | null;
 }
 
@@ -45,13 +45,17 @@ export const fetchCourses = createAsyncThunk(
 
 export const fetchCourse = createAsyncThunk('coures/fetchCourse', async (id: CourseType['id']) => {
   const response = await axios.get<CourseType>(`/course/${id}/`);
-  return response.data;
+  return response.data ?? null;
 });
 
 export const courseSlice = createSlice({
   name: 'course',
   initialState: initialCourseState,
-  reducers: {},
+  reducers: {
+    // fetchCourses: (state, action) => {
+    //   state.courses = action.payload;
+    // }
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchCourses.fulfilled, (state, action) => {
       state.courses = action.payload;
