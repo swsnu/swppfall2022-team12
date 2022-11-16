@@ -9,7 +9,7 @@ jobs:
         sonarcloud:
           organization: "swsnu"
           token:
-            secure: $SONAR_TOKEN
+            secure: 
       install:
         - source ~/virtualenv/python3.7/bin/activate
         - cd backend/team12
