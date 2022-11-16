@@ -29,7 +29,7 @@ export default function SearchBox(prop: SearchProp) {
       const params: FetchCoursesParams = {
         page: 1,
         category: localStorage.getItem('CATEGORY_KEY') ?? 'drive',
-        searchKeyword: localStorage.getItem('SEARCH_KEY') ?? null,
+        search_keyword: localStorage.getItem('SEARCH_KEY') ?? null,
         filter: localStorage.getItem('FILTER') ?? null,
       };
 
