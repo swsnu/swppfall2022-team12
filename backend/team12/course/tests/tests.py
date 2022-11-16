@@ -34,7 +34,7 @@ class CourseTestCase(TestCase):
             "markers":[
                 {
                     "content":"[0] 출발지",
-                    "image":"http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
+                    "image":"https://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
                     "position":{
                         "lat": 37.40268656668587,
                         "lng": 127.10325874620656
@@ -42,7 +42,7 @@ class CourseTestCase(TestCase):
                 },
                 {
                     "content":"[0] name01",
-                    "image":"http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
+                    "image":"https://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
                     "position":{
                         "lat": 37.40268656668587,
                         "lng": 127.10325874620656
@@ -50,7 +50,7 @@ class CourseTestCase(TestCase):
                 },
                 {
                     "content":"[0] 도착지",
-                    "image":"http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
+                    "image":"https://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
                     "position":{
                         "lat": 37.40268656668587,
                         "lng": 127.10325874620656
