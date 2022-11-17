@@ -4,11 +4,14 @@ import ListFilter from "./ListFilter";
 
 import { Provider } from 'react-redux';
 import { getMockStore } from '../../test-utils/mocks';
+import { CourseType } from "../../store/slices/course";
 
 const initialState = {
     course: {
         courses: [],
         selectedCourse: null,
+        tMapData: null,
+        tMapFeatures: [],
     }
 };
 

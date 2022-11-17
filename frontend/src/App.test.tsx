@@ -8,4 +8,5 @@ import { store } from './store';
 test('renders App without errors', () => {
   render(<Provider store={store}><App /></Provider>);
   screen.getByText("Main Page");
+  
 });

@@ -5,8 +5,7 @@ import './App.css';
 import CourseCreate from './containers/CourseCreate/CourseCreate';
 import CourseList from './containers/CourseList/CourseList';
 import MainPage from './containers/MainPage/MainPage';
-import CourseDetail from './DetailPage';
-import Register from './registerPage';
+import CourseDetail from './containers/CourseDetail/DetailPage';
 
 function App() {
   return (
@@ -16,7 +15,7 @@ function App() {
           <Route path="/courses" element={<CourseList />} />
           <Route path="/course/:id" element={<CourseDetail />} />
           <Route path="search" element={<CourseCreate />} />
-          <Route path="/register/" element={<Register />} />
+          {/* <Route path="/register/" element={<Register />} /> */}
           <Route path="/" element={<MainPage />} />
           <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>

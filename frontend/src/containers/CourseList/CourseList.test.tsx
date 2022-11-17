@@ -47,6 +47,8 @@ const courseInitState: CourseState = {
         }
     ],
     selectedCourse: null,
+    tMapData: null,
+    tMapFeatures: [],
 }
 
 const mockStore = getMockStore({
