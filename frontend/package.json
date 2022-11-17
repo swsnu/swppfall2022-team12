@@ -61,7 +61,10 @@
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
       "!src/index.tsx",
-      "!src/test-utils/*"
+      "!src/test-utils/*",
+      "!src/components/dummyData.js",
+      "!src/components/Map/KakaoMap.tsx",
+      "!global.d.ts"
     ]
   },
   "devDependencies": {
