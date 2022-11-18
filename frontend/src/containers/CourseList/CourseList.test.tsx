@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 import { CourseProps } from '../../components/CourseListElement/CourseListElement';
 import { CourseState } from '../../store/slices/course';
 import { getMockStore } from '../../test-utils/mocks';
-import { DataProps, FeatureProps } from '../CourseCreate/CourseCreate';
 import CourseList from './CourseList';
 
 jest.mock(
