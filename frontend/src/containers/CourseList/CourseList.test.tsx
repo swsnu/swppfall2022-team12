@@ -128,8 +128,8 @@ describe('<CourseList />', () => {
       </Provider>,
     );
     const courses = screen.getAllByTestId('spyCourseElement');
-    expect(courses[0]).toHaveTextContent('MOCK_TITLE1');
-    expect(courses[1]).toHaveTextContent('MOCK_TITLE2');
+    expect(courses[0]).toHaveTextContent('COURSE_TITLE1');
+    expect(courses[1]).toHaveTextContent('COURSE_TITLE2');
   });
 
   it('should handle clickTitle', async () => {
