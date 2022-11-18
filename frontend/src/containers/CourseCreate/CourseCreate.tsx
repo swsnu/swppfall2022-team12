@@ -164,13 +164,16 @@ export default function CourseCreate() {
   useEffect(() => {
     if (!map) return;
     if (preview) {
-      dispatch(fetchPathFromTMap());
-      setResultData(courseState.tMapData);
-      setResultFeatures(courseState.tMapFeatures);
-      // setResultData(poisData.properties);
-      // setResultFeatures(poisData.features);
+      dispatch(fetchPathFromTMap(selected));
     }
-  }, [preview, map, courseState]);
+  }, [preview]);
+
+  useEffect(() => {
+    setResultData(courseState.tMapData);
+    setResultFeatures(courseState.tMapFeatures);
+    // setResultData(poisData.properties);
+    // setResultFeatures(poisData.features);
+  }, [courseState]);
 
   useEffect(() => {
     if (resultData && resultFeatures) {
@@ -219,7 +222,6 @@ export default function CourseCreate() {
       />
       {/* Display Map */}
       <KakaoMap
-        // map={map}
         setMap={setMap}
         path={path}
         searchMarkers={searchMarkers}

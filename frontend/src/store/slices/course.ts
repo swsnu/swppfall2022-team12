@@ -3,7 +3,7 @@ import axios, { AxiosRequestHeaders } from 'axios';
 
 import { dummyData } from '../../components/dummyData';
 import poisData from '../../components/poisData.json';
-import { DataProps, FeatureProps } from '../../containers/CourseCreate/CourseCreate';
+import { DataProps, FeatureProps, MarkerProps } from '../../containers/CourseCreate/CourseCreate';
 import { RootState } from '../index';
 
 export interface CourseType {
@@ -24,18 +24,18 @@ export interface CourseType {
 interface ViaPointType {
   viaPointId: string;
   viaPointName: string;
-  viaX: string;
-  viaY: string;
+  viaX: string | number;
+  viaY: string | number;
 }
 
 interface TMapCourseType {
   startName: string;
-  startX: string;
-  startY: string;
+  startX: string | number;
+  startY: string | number;
   startTime: string;
   endName: string;
-  endX: string;
-  endY: string;
+  endX: string | number;
+  endY: string | number;
   viaPoints: ViaPointType[];
   reqCoordType: string;
   resCoordType: string;
@@ -76,19 +76,59 @@ export const fetchCourse = createAsyncThunk('course/fetchCourse', async (id: Cou
   return response.data ?? null;
 });
 
-export const fetchPathFromTMap = createAsyncThunk('course/fetchCoursePath', async () => {
-  const headers: AxiosRequestHeaders = {
-    appKey: process.env.REACT_APP_TMAP_API_KEY ?? '',
-    'Content-Type': 'application/json',
-  };
-  // const response = await axios.post<{ features: FeatureProps[]; properties: DataProps }>(
-  //   'https://apis.openapi.sk.com/tmap/routes/routeSequential30?version=1&format=json',
-  //   dummyData,
-  //   { headers },
-  // );
-  // return response.data;
-  return { features: poisData.features, properties: poisData.properties };
-});
+export const fetchPathFromTMap = createAsyncThunk(
+  'course/fetchCoursePath',
+  async (markers: MarkerProps[]) => {
+    let data = {};
+    const viaPoints: ViaPointType[] = [];
+    const len = markers.length;
+    for (let i = 0; i < len; i += 1) {
+      let viaCount = 1;
+      if (i === 0) {
+        data = {
+          ...data,
+          startName: String(markers[i].content),
+          startX: String(markers[i].position.lng),
+          startY: String(markers[i].position.lat),
+          startTime: '201708081102',
+        };
+      } else if (i === len - 1) {
+        data = {
+          ...data,
+          endName: String(markers[i].content),
+          endX: String(markers[i].position.lng),
+          endY: String(markers[i].position.lat),
+        };
+      } else {
+        viaPoints.push({
+          viaPointId: String(viaCount),
+          viaPointName: String(markers[i].content),
+          viaX: String(markers[i].position.lng),
+          viaY: String(markers[i].position.lat),
+        });
+        viaCount += 1;
+      }
+    }
+    data = {
+      ...data,
+      viaPoints,
+      reqCoordType: 'WGS84GEO',
+      resCoordType: 'EPSG3857',
+      searchOption: '0',
+    };
+    const headers: AxiosRequestHeaders = {
+      appKey: process.env.REACT_APP_TMAP_API_KEY ?? '',
+      'Content-Type': 'application/json',
+    };
+    const response = await axios.post<{ features: FeatureProps[]; properties: DataProps }>(
+      'https://apis.openapi.sk.com/tmap/routes/routeSequential30?version=1&format=json',
+      JSON.stringify(data),
+      { headers },
+    );
+    return response.data;
+    // return { features: poisData.features, properties: poisData.properties };
+  },
+);
 
 export const courseSlice = createSlice({
   name: 'course',

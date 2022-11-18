@@ -6,7 +6,6 @@ import { Map, MapMarker, Polyline } from 'react-kakao-maps-sdk';
 import { PositionProps, MarkerProps } from '../../containers/CourseCreate/CourseCreate';
 
 type MapProps = {
-  // map: kakao.maps.Map | undefined;
   setMap: (map: kakao.maps.Map) => void;
   path: PositionProps[];
   searchMarkers: MarkerProps[];
@@ -28,7 +27,7 @@ function KakaoMap({
   preview,
 }: MapProps) {
   return (
-    <div>
+    <div key="uniqueID">
       {preview ? (
         <Map // 지도를 표시할 Container
           key="kakao-map"
