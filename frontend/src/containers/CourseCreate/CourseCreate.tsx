@@ -163,7 +163,6 @@ export default function CourseCreate() {
 
   useEffect(() => {
     if (!map) return;
-    console.log(preview);
     if (preview) {
       dispatch(fetchPathFromTMap());
       setResultData(courseState.tMapData);
@@ -218,7 +217,6 @@ export default function CourseCreate() {
         setInfo={setInfo}
         // addLocation={addLocation}
       />
-
       {/* Display Map */}
       <KakaoMap
         // map={map}

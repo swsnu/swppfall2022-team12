@@ -31,6 +31,7 @@ function KakaoMap({
     <div>
       {preview ? (
         <Map // 지도를 표시할 Container
+          key="kakao-map"
           center={{
             // 지도의 중심좌표
             lat: 37.405278291509404,
@@ -77,6 +78,7 @@ function KakaoMap({
         </Map>
       ) : (
         <Map
+          key="kakao-map"
           center={{
             lat: 37.566826,
             lng: 126.9786567,

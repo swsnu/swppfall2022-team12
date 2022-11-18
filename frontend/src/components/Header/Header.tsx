@@ -11,7 +11,7 @@ export default function Header() {
 
   const onClickCategory = async (category: string) => {
     // const prior = localStorage.getItem('CATEGORY_KEY');
-    // if (prior !== category) 
+    // if (prior !== category)
     localStorage.setItem('CATEGORY_KEY', category);
     localStorage.removeItem('SEARCH_KEY');
     localStorage.removeItem('FILTER');

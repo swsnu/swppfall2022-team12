@@ -33,6 +33,7 @@ module.exports = {
         'no-new': 'off',
         'no-underscore-dangle': 'off',
         'no-alert': 'off',
+        'no-return-assign': 'off',
         'no-console': 'off',
         'no-restricted-syntax': 'off',
         '@typescript-eslint/no-unused-vars': 'off',

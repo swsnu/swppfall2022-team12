@@ -21,6 +21,27 @@ export interface CourseType {
   endPos: number | null;
 }
 
+interface ViaPointType {
+  viaPointId: string;
+  viaPointName: string;
+  viaX: string;
+  viaY: string;
+}
+
+interface TMapCourseType {
+  startName: string;
+  startX: string;
+  startY: string;
+  startTime: string;
+  endName: string;
+  endX: string;
+  endY: string;
+  viaPoints: ViaPointType[];
+  reqCoordType: string;
+  resCoordType: string;
+  searchOption: string;
+}
+
 export interface FetchCoursesParams {
   page: number;
   category: string;

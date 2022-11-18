@@ -6,32 +6,31 @@ import { MemoryRouter, Route, Routes, Navigate } from 'react-router';
 
 import CourseDetail from './DetailPage';
 
-
 describe('<CourseDetail /', () => {
-    const d = {
-        data: {
-          title: 'MOCK Title',
-          description: 'MOCK Description',
-          e_time: 40,
-          u_counts: 15,
-          points: [
-            {
-              pid: 'test01',
-              name: 'test01',
-              latitude: '37.513272317072',
-              longitude: '127.09431687965',
-              idx: 0,
-            },
-            {
-              pid: 'test02',
-              name: 'test02',
-              latitude: '37.413272317072',
-              longitude: '127.19431687965',
-              idx: 0,
-            },
-          ],
+  const d = {
+    data: {
+      title: 'MOCK Title',
+      description: 'MOCK Description',
+      e_time: 40,
+      u_counts: 15,
+      points: [
+        {
+          pid: 'test01',
+          name: 'test01',
+          latitude: '37.513272317072',
+          longitude: '127.09431687965',
+          idx: 0,
         },
-      };
+        {
+          pid: 'test02',
+          name: 'test02',
+          latitude: '37.413272317072',
+          longitude: '127.19431687965',
+          idx: 0,
+        },
+      ],
+    },
+  };
   it('should render CourseDetail without error', () => {
     jest.spyOn(axios, 'get').mockImplementation(() => {
       return Promise.resolve(d);
@@ -50,6 +49,6 @@ describe('<CourseDetail /', () => {
     render(<CourseDetail />);
     const button = screen.getByText('go to navigation');
     fireEvent.click(button!);
-    //expect(button).toBeCalled();
+    // expect(button).toBeCalled();
   });
 });
