@@ -28,14 +28,14 @@ interface ViaPointType {
   viaY: string | number;
 }
 
-interface TMapCourseType {
+export interface TMapCourseType {
   startName: string;
-  startX: string | number;
-  startY: string | number;
+  startX: string;
+  startY: string;
   startTime: string;
   endName: string;
-  endX: string | number;
-  endY: string | number;
+  endX: string;
+  endY: string;
   viaPoints: ViaPointType[];
   reqCoordType: string;
   resCoordType: string;
@@ -117,7 +117,7 @@ export const fetchPathFromTMap = createAsyncThunk(
       searchOption: '0',
     };
     const headers: AxiosRequestHeaders = {
-      appKey: process.env.REACT_APP_TMAP_API_KEY ?? '',
+      appKey: process.env.REACT_APP_TMAP_API_KEY!,
       'Content-Type': 'application/json',
     };
     const response = await axios.post<{ features: FeatureProps[]; properties: DataProps }>(
