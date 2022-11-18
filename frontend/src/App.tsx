@@ -15,6 +15,7 @@ function App() {
           <Route path="/courses" element={<CourseList />} />
           <Route path="/course/:id" element={<CourseDetail />} />
           <Route path="search" element={<CourseCreate />} />
+          {/* <Route path="/register/" element={<Register />} /> */}
           <Route path="/" element={<MainPage />} />
           <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
