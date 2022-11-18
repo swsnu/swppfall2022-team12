@@ -82,8 +82,8 @@ export const fetchPathFromTMap = createAsyncThunk(
     let data = {};
     const viaPoints: ViaPointType[] = [];
     const len = markers.length;
+    let viaCount = 1;
     for (let i = 0; i < len; i += 1) {
-      let viaCount = 1;
       if (i === 0) {
         data = {
           ...data,
