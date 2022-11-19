@@ -7,6 +7,7 @@ import SearchBar from '../../components/SearchBar/SearchBar';
 import { AppDispatch } from '../../store';
 import { fetchPathFromTMap, selectCourse } from '../../store/slices/course';
 import styles from './CourseCreate.module.scss';
+import SearchCourse from './SearchCourse';
 
 const { Tmapv3 } = window as any;
 
@@ -182,55 +183,18 @@ export default function CourseCreate() {
   }, [resultFeatures, resultData]);
 
   return (
-    <div className="Container" style={{ display: 'flex', position: 'fixed' }}>
-      {/* Buttons */}
-      <div
-        className="buttons"
-        style={{
-          zIndex: 1,
-          position: 'fixed',
-          right: '10px',
-          margin: '10px',
-        }}
-      >
-        {preview ? (
-          <button
-            style={{ backgroundColor: 'white', marginRight: '10px' }}
-            onClick={() => setPreview(false)}
-          >
-            <h3>경로 만들기</h3>
-          </button>
-        ) : (
-          <button
-            style={{ backgroundColor: 'white', marginRight: '10px' }}
-            onClick={() => setPreview(true)}
-          >
-            <h3>경로 미리보기</h3>
-          </button>
-        )}
-
-        <button style={{ backgroundColor: 'white' }}>
-          <h3>경로 완성</h3>
-        </button>
-      </div>
-      <SearchBar
-        markers={searchMarkers}
-        selected={selected}
-        searchPlaces={searchPlaces}
-        setInfo={setInfo}
-        // addLocation={addLocation}
-      />
-      {/* Display Map */}
-      <KakaoMap
-        setMap={setMap}
-        path={path}
-        searchMarkers={searchMarkers}
-        previewMarkers={previewMarkers}
-        info={info}
-        setInfo={setInfo}
-        addLocation={addLocation}
-        preview={preview}
-      />
-    </div>
+    <SearchCourse
+      preview={preview}
+      setPreview={setPreview}
+      selected={selected}
+      searchMarkers={searchMarkers}
+      previewMarkers={previewMarkers}
+      path={path}
+      searchPlaces={searchPlaces}
+      addLocation={addLocation}
+      info={info}
+      setInfo={setInfo}
+      setMap={setMap}
+    />
   );
 }
