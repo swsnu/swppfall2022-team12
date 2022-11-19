@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import KakaoMap from '../../components/Map/KakaoMap';
-import poisData from '../../components/poisData.json';
-import SearchBar from '../../components/SearchBar/SearchBar';
 import { AppDispatch } from '../../store';
-import { fetchPathFromTMap, selectCourse } from '../../store/slices/course';
+import { storeCreatedCourse, fetchPathFromTMap, selectCourse } from '../../store/slices/course';
 import styles from './CourseCreate.module.scss';
+import PostCourse from './PostCourse';
 import SearchCourse from './SearchCourse';
 
 const { Tmapv3 } = window as any;
@@ -61,6 +59,15 @@ export default function CourseCreate() {
 
   const dispatch = useDispatch<AppDispatch>();
   const courseState = useSelector(selectCourse);
+
+  const storeCourse = () => {
+    if (previewMarkers.length && path.length) {
+      dispatch(storeCreatedCourse({ previewMarkers, path }));
+      setOnSearch(false);
+    } else {
+      alert('경로를 작성해주세요');
+    }
+  };
 
   const searchPlaces = (keyword: string) => {
     if (!map) return;
@@ -165,13 +172,17 @@ export default function CourseCreate() {
   useEffect(() => {
     if (!map) return;
     if (preview) {
+      if (selected.length < 3) {
+        alert('장소를 적어도 3개 이상 선택해주세요');
+        setPreview(false);
+      }
       dispatch(fetchPathFromTMap(selected));
     }
   }, [preview]);
 
   useEffect(() => {
-    setResultData(courseState.tMapData);
-    setResultFeatures(courseState.tMapFeatures);
+    setResultData(courseState.tMapCourse.tMapData);
+    setResultFeatures(courseState.tMapCourse.tMapFeatures);
     // setResultData(poisData.properties);
     // setResultFeatures(poisData.features);
   }, [courseState]);
@@ -182,19 +193,51 @@ export default function CourseCreate() {
     }
   }, [resultFeatures, resultData]);
 
-  return (
-    <SearchCourse
-      preview={preview}
-      setPreview={setPreview}
-      selected={selected}
-      searchMarkers={searchMarkers}
-      previewMarkers={previewMarkers}
-      path={path}
-      searchPlaces={searchPlaces}
-      addLocation={addLocation}
-      info={info}
-      setInfo={setInfo}
-      setMap={setMap}
-    />
+  return onSearch ? (
+    <>
+      {/* Buttons */}
+      <div
+        className="buttons"
+        style={{
+          zIndex: 1,
+          position: 'fixed',
+          right: '10px',
+          margin: '10px',
+        }}
+      >
+        {preview ? (
+          <button
+            style={{ backgroundColor: 'white', marginRight: '10px' }}
+            onClick={() => setPreview(false)}
+          >
+            <h3>경로 만들기</h3>
+          </button>
+        ) : (
+          <button
+            style={{ backgroundColor: 'white', marginRight: '10px' }}
+            onClick={() => setPreview(true)}
+          >
+            <h3>경로 미리보기</h3>
+          </button>
+        )}
+        <button style={{ backgroundColor: 'white' }} onClick={storeCourse}>
+          <h3>경로 완성</h3>
+        </button>
+      </div>
+      <SearchCourse
+        preview={preview}
+        selected={selected}
+        searchMarkers={searchMarkers}
+        previewMarkers={previewMarkers}
+        path={path}
+        searchPlaces={searchPlaces}
+        addLocation={addLocation}
+        info={info}
+        setInfo={setInfo}
+        setMap={setMap}
+      />
+    </>
+  ) : (
+    <PostCourse />
   );
 }

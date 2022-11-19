@@ -72,8 +72,7 @@ describe('course reducer', () => {
     expect(reducer(undefined, { type: 'unknown ' })).toEqual({
       courses: [],
       selectedCourse: null,
-      tMapData: null,
-      tMapFeatures: [],
+      tMapCourse: { tMapData: null, tMapFeatures: [] },
     });
   });
 
@@ -93,8 +92,8 @@ describe('course reducer', () => {
   it('should handle fetchPathFromTMap', async () => {
     axios.post = jest.fn().mockResolvedValue({ data: mockTMapCourse });
     await store.dispatch(fetchPathFromTMap(mockMarkers));
-    expect(store.getState().course.tMapData).toEqual(mockTMapCourse.properties);
-    expect(store.getState().course.tMapFeatures).toEqual(mockTMapCourse.features);
+    expect(store.getState().course.tMapCourse.tMapData).toEqual(mockTMapCourse.properties);
+    expect(store.getState().course.tMapCourse.tMapFeatures).toEqual(mockTMapCourse.features);
   });
 
   it('should handle fetchCourse', async () => {

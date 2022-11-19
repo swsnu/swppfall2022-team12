@@ -53,13 +53,13 @@ module.exports = {
             devDependencies: true,
           },
         ],
-        'prettier/prettier': [
-          'error',
-          {
-            endOfLine: 'auto',
-            usePrettierrc: true,
-          },
-        ],
+        // 'prettier/prettier': [
+        //   'error',
+        //   {
+        //     endOfLine: 'auto',
+        //     usePrettierrc: true,
+        //   },
+        // ],
         'jsx-a11y/label-has-associated-control': [
           'warn',
           {

@@ -1,9 +1,14 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios, { AxiosRequestHeaders } from 'axios';
 
 import { dummyData } from '../../components/dummyData';
 import poisData from '../../components/poisData.json';
-import { DataProps, FeatureProps, MarkerProps } from '../../containers/CourseCreate/CourseCreate';
+import {
+  DataProps,
+  FeatureProps,
+  MarkerProps,
+  PositionProps,
+} from '../../containers/CourseCreate/CourseCreate';
 import { RootState } from '../index';
 
 export interface CourseType {
@@ -52,16 +57,35 @@ export interface FetchCoursesParams {
 export interface CourseState {
   courses: CourseType[];
   selectedCourse: CourseType | null;
-  tMapData: DataProps | null;
-  tMapFeatures: FeatureProps[];
+  tMapCourse: { tMapData: DataProps | null; tMapFeatures: FeatureProps[] };
+  createdCourse: { createdMarkers: MarkerProps[]; createdPath: PositionProps[] };
 }
 
 const initialCourseState: CourseState = {
   courses: [],
   selectedCourse: null,
-  tMapData: null,
-  tMapFeatures: [],
+  tMapCourse: { tMapData: null, tMapFeatures: [] },
+  createdCourse: { createdMarkers: [], createdPath: [] },
 };
+
+// export const storeCreatedCourse = ((markers: MarkerProps[]) => {
+//     initialCourseState.createdCourse.createdMarkers = markers;
+//     // initialCourseState.createdCourse = {
+//     //   createdMarkers: createdCourse.markers,
+//     //   createdPath: createdCourse.path,
+//     // };
+//   },
+// );
+
+export const storeCreatedCourse = createAsyncThunk(
+  'course/fetchCourses',
+  async (createdCourse: { previewMarkers: MarkerProps[]; path: PositionProps[] }) => {
+    initialCourseState.createdCourse = {
+      createdMarkers: createdCourse.previewMarkers,
+      createdPath: createdCourse.path,
+    };
+  },
+);
 
 export const fetchCourses = createAsyncThunk(
   'course/fetchCourses',
@@ -137,6 +161,9 @@ export const courseSlice = createSlice({
     // fetchCourses: (state, action) => {
     //   state.courses = action.payload;
     // }
+    // storeCreatedCourse: (state, action: PayloadAction<{ markers: MarkerProps[] }>) => {
+    //   state.createdCourse.createdMarkers = action.payload.markers;
+    // },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCourses.fulfilled, (state, action) => {
@@ -146,8 +173,8 @@ export const courseSlice = createSlice({
       state.selectedCourse = action.payload;
     });
     builder.addCase(fetchPathFromTMap.fulfilled, (state, action) => {
-      state.tMapData = action.payload.properties;
-      state.tMapFeatures = action.payload.features;
+      state.tMapCourse.tMapData = action.payload.properties;
+      state.tMapCourse.tMapFeatures = action.payload.features;
     });
   },
 });

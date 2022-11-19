@@ -33,8 +33,8 @@ const courseInitState: CourseState = {
     },
   ],
   selectedCourse: null,
-  tMapData: null,
-  tMapFeatures: [],
+  tMapCourse: { tMapData: null, tMapFeatures: [] },
+  createdCourse: { createdMarkers: [], createdPath: [] },
 };
 
 const mockStore = getMockStore({
