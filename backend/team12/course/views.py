@@ -6,14 +6,14 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from course.serializers import CourseListSerializer, CourseDetailSerializer, CourseSerializer
 from course.models import Course
-from team12.exceptions import FieldError
 from course.const import DRIVE
+from django.shortcuts import get_object_or_404
 
 
 class CourseViewSet(
         viewsets.GenericViewSet,
         generics.RetrieveDestroyAPIView,
-        generics.CreateAPIView):
+    ):
     """
     Generic ViewSet of Course Object.
     """
@@ -36,7 +36,9 @@ class CourseViewSet(
             "markers": request.data.get("markers", []),
             "path": request.data.get("path", [])
         }
-        serializer = self.get_serializer(data=request.data, context=context)
+        data = request.data.copy()
+        data['author'] = request.user.id
+        serializer = self.get_serializer(data=data, context=context)
         serializer.is_valid(raise_exception=True)
         course = serializer.save()
         return Response(CourseDetailSerializer(course).data, status=status.HTTP_200_OK)
@@ -52,6 +54,13 @@ class CourseViewSet(
     def retrieve(self, request, pk=None):
         """Retrieve Course"""
         return super().retrieve(request, pk=None)
+    
+    # PUT /course/:courseId
+    def update(self, request, pk=None):
+        """Update Course"""
+        course = get_object_or_404(Course, id=pk)
+        course.delete()
+        return self.create(request)
 
     # GET /course/?category=(string)
     # &search_keyword=(string)

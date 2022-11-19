@@ -1,5 +1,7 @@
 from django.db import models
 from course.const import *
+from user.models import User
+from tag.models import Tag
 
 
 class Course(models.Model):
@@ -7,6 +9,7 @@ class Course(models.Model):
     Course Model
 
         # Fields
+        author (User): author of Course.
         category (str): category of Course (DRIVE, BIKE, WALK).
         title (str): title of Course.
         description (str): description of Course.
@@ -16,6 +19,7 @@ class Course(models.Model):
         distance (int): Course's total distance (km)
     """
     id = models.AutoField(primary_key=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     category = models.CharField(choices=CATEGORY, default=DRIVE, max_length=10)
     title = models.CharField(max_length=100, blank=True)
     description = models.CharField(max_length=1000, blank=True)
@@ -23,14 +27,19 @@ class Course(models.Model):
     u_counts = models.PositiveIntegerField(default=0)
     e_time = models.TimeField(null=True)
     distance = models.PositiveIntegerField(default=0)
+    rate = models.PositiveSmallIntegerField(default=0)
+    tag = models.ManyToManyField(Tag)
 
+    
 class Point(models.Model):
     """
     Point Model
 
         # Fields
+        category (char): category of Point (PATH, MARKER).
         course (Course): course
         name (char): name of points. 
+        image (char): image url.
         longitude (int): longitude (ex. )
         latitude (int): latitude (ex. )
         idx (int): course points order

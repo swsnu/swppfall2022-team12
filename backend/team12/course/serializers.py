@@ -2,6 +2,7 @@ from rest_framework import serializers
 from course.models import *
 from team12.exceptions import FieldError
 
+
 class MarkerSerializer(serializers.ModelSerializer):
     """
     Point Marker Model Serializer
@@ -45,6 +46,7 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course 
         fields = (
+            'author',
             'title',
             'description',
             'category',
