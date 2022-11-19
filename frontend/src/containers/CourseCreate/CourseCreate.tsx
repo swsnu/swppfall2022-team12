@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 
+import KakaoMap from '../../components/Map/KakaoMap';
+import SearchBar from '../../components/SearchBar/SearchBar';
 import { AppDispatch } from '../../store';
-import { storeCreatedCourse, fetchPathFromTMap, selectCourse } from '../../store/slices/course';
+import { fetchPathFromTMap, selectCourse } from '../../store/slices/course';
 import styles from './CourseCreate.module.scss';
-import PostCourse from './PostCourse';
-import SearchCourse from './SearchCourse';
 
 const { Tmapv3 } = window as any;
 
@@ -53,21 +54,13 @@ export default function CourseCreate() {
   const [info, setInfo] = useState<MarkerProps | null>(null);
   const [selected, setSelected] = useState<MarkerProps[]>([]);
   const [preview, setPreview] = useState<boolean>(false);
-  const [onSearch, setOnSearch] = useState<boolean>(true);
-  const [resultData, setResultData] = useState<DataProps | null>();
+  const [resultData, setResultData] = useState<DataProps | null>(null);
   const [resultFeatures, setResultFeatures] = useState<FeatureProps[]>([]);
+  const [mapBound, setMapBound] = useState<kakao.maps.LatLngBounds>();
 
   const dispatch = useDispatch<AppDispatch>();
   const courseState = useSelector(selectCourse);
-
-  const storeCourse = () => {
-    if (previewMarkers.length && path.length) {
-      dispatch(storeCreatedCourse({ previewMarkers, path }));
-      setOnSearch(false);
-    } else {
-      alert('경로를 작성해주세요');
-    }
-  };
+  const navigate = useNavigate();
 
   const searchPlaces = (keyword: string) => {
     if (!map) return;
@@ -162,11 +155,23 @@ export default function CourseCreate() {
     map?.setBounds(bounds);
     setPath(drawInfoArr);
     setPreviewMarkers(resultMarkerArr);
+    setMapBound(bounds);
   };
 
   const addLocation = (marker: MarkerProps) => {
     selected.push(marker);
     setSelected(selected);
+  };
+
+  const storeCourse = () => {
+    console.log('store');
+    if (selected.length) {
+      // dispatch(storeCreatedCourse({ selected, path }));
+      navigate('/course-create/post', { state: { selected, path, mapBound } });
+    } else {
+      alert('경로를 작성해주세요');
+    }
+    // navigate('/course-create/post');
   };
 
   useEffect(() => {
@@ -193,7 +198,7 @@ export default function CourseCreate() {
     }
   }, [resultFeatures, resultData]);
 
-  return onSearch ? (
+  return (
     <>
       {/* Buttons */}
       <div
@@ -224,20 +229,26 @@ export default function CourseCreate() {
           <h3>경로 완성</h3>
         </button>
       </div>
-      <SearchCourse
-        preview={preview}
-        selected={selected}
-        searchMarkers={searchMarkers}
-        previewMarkers={previewMarkers}
-        path={path}
-        searchPlaces={searchPlaces}
-        addLocation={addLocation}
-        info={info}
-        setInfo={setInfo}
-        setMap={setMap}
-      />
+      <div className="Container" style={{ display: 'flex', position: 'fixed' }}>
+        <SearchBar
+          markers={searchMarkers}
+          selected={selected}
+          searchPlaces={searchPlaces}
+          setInfo={setInfo}
+          // addLocation={addLocation}
+        />
+        {/* Display Map */}
+        <KakaoMap
+          setMap={setMap}
+          path={path}
+          searchMarkers={searchMarkers}
+          previewMarkers={previewMarkers}
+          info={info}
+          setInfo={setInfo}
+          addLocation={addLocation}
+          preview={preview}
+        />
+      </div>
     </>
-  ) : (
-    <PostCourse />
   );
 }

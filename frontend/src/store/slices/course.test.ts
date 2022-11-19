@@ -8,7 +8,6 @@ import reducer, {
   CourseType,
   fetchCourses,
   fetchCourse,
-  TMapCourseType,
   fetchPathFromTMap,
 } from './course';
 

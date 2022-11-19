@@ -58,34 +58,13 @@ export interface CourseState {
   courses: CourseType[];
   selectedCourse: CourseType | null;
   tMapCourse: { tMapData: DataProps | null; tMapFeatures: FeatureProps[] };
-  createdCourse: { createdMarkers: MarkerProps[]; createdPath: PositionProps[] };
 }
 
 const initialCourseState: CourseState = {
   courses: [],
   selectedCourse: null,
   tMapCourse: { tMapData: null, tMapFeatures: [] },
-  createdCourse: { createdMarkers: [], createdPath: [] },
 };
-
-// export const storeCreatedCourse = ((markers: MarkerProps[]) => {
-//     initialCourseState.createdCourse.createdMarkers = markers;
-//     // initialCourseState.createdCourse = {
-//     //   createdMarkers: createdCourse.markers,
-//     //   createdPath: createdCourse.path,
-//     // };
-//   },
-// );
-
-export const storeCreatedCourse = createAsyncThunk(
-  'course/fetchCourses',
-  async (createdCourse: { previewMarkers: MarkerProps[]; path: PositionProps[] }) => {
-    initialCourseState.createdCourse = {
-      createdMarkers: createdCourse.previewMarkers,
-      createdPath: createdCourse.path,
-    };
-  },
-);
 
 export const fetchCourses = createAsyncThunk(
   'course/fetchCourses',
