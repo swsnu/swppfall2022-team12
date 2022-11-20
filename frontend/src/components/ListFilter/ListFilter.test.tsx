@@ -12,6 +12,11 @@ const initialState = {
         selectedCourse: null,
         tMapData: null,
         tMapFeatures: [],
+    },
+    user: {
+        users: [],
+        loggedInUser: null,
+        selectedUser: null,
     }
 };
 

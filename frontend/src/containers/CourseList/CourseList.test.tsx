@@ -53,6 +53,11 @@ const courseInitState: CourseState = {
 
 const mockStore = getMockStore({
     course: courseInitState,
+    user: {
+        users: [],
+        loggedInUser: null,
+        selectedUser: null,
+    }
 });
 
 const mockNavigate = jest.fn();
