@@ -52,6 +52,7 @@ class ReviewViewSet(
         return super().retrieve(request, pk=None)
 
     
+    # PUT /review/:reviewId
     def update(self, request, pk=None):
         """Update Review"""
         review = self.get_object(id=pk)
@@ -85,7 +86,7 @@ class ReviewViewSet(
     @transaction.atomic
     @action(methods=['PUT'], detail=True)
     def like(self, request, pk=None):
-        review = get_object_or_404(Review, id=pk)
+        review = self.get_object(id=pk)
         user = request.user
         if review.author == user:
             return NotAllowed("Author can't like the review.")

@@ -20,16 +20,16 @@ class MarkerSerializer(serializers.ModelSerializer):
     
     def get_position(self, instance):
         return {
-            'lat': instance.latitude,
-            'lng': instance.longitude
+            'lat': float(instance.latitude),
+            'lng': float(instance.longitude)
         }
 
 class PathSerializer(serializers.ModelSerializer):
     """
     Point Path Model Serializer
     """
-    lat = serializers.CharField(source='latitude')
-    lng = serializers.CharField(source='longitude')
+    lat = serializers.SerializerMethodField()
+    lng = serializers.SerializerMethodField()
     class Meta:
         model = Point
         fields = (
@@ -37,6 +37,11 @@ class PathSerializer(serializers.ModelSerializer):
             'lng',
             'idx'
         )
+
+    def get_lat(self, instance):
+        return float(instance.latitude)
+    def get_lng(self, instance):
+        return float(instance.longitude)
     
 
 class CourseSerializer(serializers.ModelSerializer):
