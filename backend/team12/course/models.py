@@ -26,7 +26,7 @@ class Course(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     u_counts = models.PositiveIntegerField(default=0)
     e_time = models.PositiveIntegerField(default=0)
-    distance = models.PositiveIntegerField(default=0)
+    distance = models.FloatField(default=0)
     rate = models.PositiveSmallIntegerField(default=0)
     tag = models.ManyToManyField(Tag)
 
@@ -49,6 +49,6 @@ class Point(models.Model):
     name = models.CharField(max_length=50, blank=True)
     image = models.CharField(max_length=100, blank=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="points")
-    longitude = models.FloatField(max_length=30, blank=True)
+    longitude = models.CharField(max_length=30, blank=True)
     latitude = models.CharField(max_length=30, blank=True)
     idx = models.SmallIntegerField()

@@ -84,10 +84,6 @@ class CourseSerializer(serializers.ModelSerializer):
         if markers:
             if not len(markers) > 1:
                 raise FieldError("markers should be more than 2.")
-            else:
-                if set(map(lambda x: tuple(x.keys()), markers)) != {('content', 'image', 'position')} or \
-                    set(map(lambda x: tuple(x["position"].keys()), markers)) != {('lat', 'lng')}:
-                    raise FieldError("markers keys must have 'content', 'image', 'position['lat' or 'lng']'.")
         else:
             missing_fields.append("markers")
 
@@ -107,7 +103,7 @@ class CourseSerializer(serializers.ModelSerializer):
                 Point(
                     category=MARKER,
                     name=marker['content'],
-                    image=marker['image'],
+                    image=marker.get('image', ""),
                     course=course,
                     longitude=marker['position']['lng'],
                     latitude=marker['position']['lat'],
