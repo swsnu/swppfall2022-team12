@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router';
 
 import KakaoMap from '../../components/Map/KakaoMap';
 import { AppDispatch } from '../../store';
-import { postCourse, selectCourse } from '../../store/slices/course';
+import { postCourse } from '../../store/slices/course';
 import { MarkerProps, PositionProps } from './SearchCourse';
 
 export default function PostCourse() {
