@@ -55,7 +55,6 @@ export default function SearchCourse() {
   const [preview, setPreview] = useState<boolean>(false);
   const [resultData, setResultData] = useState<DataProps | null>(null);
   const [resultFeatures, setResultFeatures] = useState<FeatureProps[]>([]);
-  const [mapBound, setMapBound] = useState<kakao.maps.LatLngBounds>();
 
   const dispatch = useDispatch<AppDispatch>();
   const courseState = useSelector(selectCourse);
@@ -152,7 +151,6 @@ export default function SearchCourse() {
     map?.setBounds(bounds, 200, 0, 270, 500);
     setPath(drawInfoArr);
     setPreviewMarkers(resultMarkerArr);
-    setMapBound(bounds);
   };
 
   const addLocation = (marker: MarkerProps) => {
@@ -181,7 +179,7 @@ export default function SearchCourse() {
   const storeCourse = () => {
     if (selected.length) {
       setMarkerImage(selected);
-      navigate('/course-create/post', { state: { selected, path, resultData, mapBound } });
+      navigate('/course-create/post', { state: { selected, path, resultData } });
     } else {
       alert('경로를 작성해주세요');
     }

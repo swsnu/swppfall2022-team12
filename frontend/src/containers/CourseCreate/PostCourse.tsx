@@ -7,7 +7,7 @@ import { AppDispatch } from '../../store';
 import { postCourse } from '../../store/slices/course';
 import { MarkerProps, PositionProps } from './SearchCourse';
 
-function PostCourse() {
+export default function PostCourse() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [distance, setDistance] = useState<number>(0); // km
@@ -112,5 +112,3 @@ function PostCourse() {
     </div>
   );
 }
-
-export default React.memo(PostCourse);
