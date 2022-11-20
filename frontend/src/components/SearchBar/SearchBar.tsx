@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 import { MarkerProps } from '../../containers/CourseCreate/SearchCourse';
-import styles from '../../containers/CourseCreate/SearchCourse.module.scss';
 
 type SearchProps = {
   markers: MarkerProps[];

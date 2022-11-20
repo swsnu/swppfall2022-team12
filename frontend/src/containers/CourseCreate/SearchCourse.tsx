@@ -149,7 +149,7 @@ export default function SearchCourse() {
       }
     }
     // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
-    map?.setBounds(bounds);
+    map?.setBounds(bounds, 200, 0, 270, 500);
     setPath(drawInfoArr);
     setPreviewMarkers(resultMarkerArr);
     setMapBound(bounds);
