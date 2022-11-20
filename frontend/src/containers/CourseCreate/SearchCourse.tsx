@@ -122,13 +122,13 @@ export default function SearchCourse() {
 
         if (properties.pointType === 'S') {
           // 출발지 마커
-          markerImg = 'http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png';
+          markerImg = 'https://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png';
         } else if (properties.pointType === 'E') {
           // 도착지 마커
-          markerImg = 'http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png';
+          markerImg = 'https://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png';
         } else {
           // 각 포인트 마커
-          markerImg = `http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_${viaPoint}.png`;
+          markerImg = `https://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_${viaPoint}.png`;
           viaPoint += 1;
         }
 
