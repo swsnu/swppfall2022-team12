@@ -157,8 +157,7 @@ export default function SearchCourse() {
   };
 
   const addLocation = (marker: MarkerProps) => {
-    selected.push(marker);
-    setSelected(selected);
+    setSelected([...selected, marker]);
   };
 
   const storeCourse = () => {
