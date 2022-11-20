@@ -159,8 +159,28 @@ export default function SearchCourse() {
     setSelected([...selected, marker]);
   };
 
+  const setMarkerImage = (markers: MarkerProps[]) => {
+    const points = markers;
+    const processedMarkers: MarkerProps[] = [];
+    let count = 1;
+
+    for (let i = 0; i < points.length; i += 1) {
+      if (i === 0) {
+        points[i].image = 'https://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png';
+      } else if (i === points.length - 1) {
+        points[i].image = 'https://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png';
+      } else {
+        points[i].image = `https://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_${count}.png`;
+        count += 1;
+      }
+      processedMarkers.push(points[i]);
+    }
+    setSelected(processedMarkers);
+  };
+
   const storeCourse = () => {
     if (selected.length) {
+      setMarkerImage(selected);
       navigate('/course-create/post', { state: { selected, path, resultData, mapBound } });
     } else {
       alert('경로를 작성해주세요');

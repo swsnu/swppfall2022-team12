@@ -7,7 +7,7 @@ import { AppDispatch } from '../../store';
 import { postCourse } from '../../store/slices/course';
 import { MarkerProps, PositionProps } from './SearchCourse';
 
-export default function PostCourse() {
+function PostCourse() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [distance, setDistance] = useState<number>(0); // km
@@ -55,6 +55,7 @@ export default function PostCourse() {
       path,
       markers,
     };
+    console.log(data);
     const result = await dispatch(postCourse(data));
     if (result.type === `${postCourse.typePrefix}/fulfilled`) {
       navigate('/courses');
@@ -111,3 +112,5 @@ export default function PostCourse() {
     </div>
   );
 }
+
+export default React.memo(PostCourse);

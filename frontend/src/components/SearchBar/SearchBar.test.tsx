@@ -1,6 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import { PositionProps } from '../../containers/CourseCreate/SearchCourse';
 import SearchBar from './SearchBar';
 
 describe('<SearchBar />', () => {
@@ -92,5 +91,30 @@ describe('<SearchBar />', () => {
     expect(setInfo).toHaveBeenCalled();
     fireEvent.mouseLeave(result);
     expect(setInfo).toHaveBeenCalled();
+  });
+  it('should work addLocation', () => {
+    const markers = [
+      {
+        position: { lat: 1, lng: 1 },
+        content: 'TEST1',
+      },
+      {
+        position: { lat: 2, lng: 2 },
+        content: 'TEST2',
+      },
+    ];
+    const addLocation = jest.fn();
+    render(
+      <SearchBar
+        markers={markers}
+        selected={[]}
+        searchPlaces={jest.fn()}
+        setInfo={jest.fn()}
+        addLocation={addLocation}
+      />,
+    );
+    const result = screen.getByText('TEST1');
+    fireEvent.click(result);
+    expect(addLocation).toHaveBeenCalled();
   });
 });
