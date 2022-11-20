@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import { PositionProps } from '../../containers/CourseCreate/CourseCreate';
+import { PositionProps } from '../../containers/CourseCreate/SearchCourse';
 import SearchBar from './SearchBar';
 
 describe('<SearchBar />', () => {

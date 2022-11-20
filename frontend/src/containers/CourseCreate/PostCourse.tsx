@@ -1,17 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Map, MapMarker, Polyline } from 'react-kakao-maps-sdk';
-import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
 
-import KakaoMap from '../../components/Map/KakaoMap';
-import { AppDispatch } from '../../store';
-import {
-  courseSlice,
-  fetchCourses,
-  FetchCoursesParams,
-  selectCourse,
-} from '../../store/slices/course';
-import { MarkerProps, PositionProps } from './CourseCreate';
+import { MarkerProps, PositionProps } from './SearchCourse';
 
 export default function PostCourse() {
   const [title, setTitle] = useState('');

@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import ReactDOM from 'react-dom/client';
 import { MapMarker } from 'react-kakao-maps-sdk';
 
-import { MarkerProps } from '../../containers/CourseCreate/CourseCreate';
+import { MarkerProps } from '../../containers/CourseCreate/SearchCourse';
 import KakaoMap from './KakaoMap';
 
 describe('<KakaoMap />', () => {

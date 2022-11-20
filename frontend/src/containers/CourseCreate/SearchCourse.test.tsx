@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 
 import { CourseState } from '../../store/slices/course';
 import { getMockStore } from '../../test-utils/mocks';
-import CourseCreate from './CourseCreate';
+import SearchCourse from './SearchCourse';
 
 const courseInitState: CourseState = {
   courses: [
@@ -40,11 +40,11 @@ const mockStore = getMockStore({
   course: courseInitState,
 });
 
-describe('<CourseCreate />', () => {
+describe('<SearchCourse />', () => {
   it('should render without error', () => {
     const { container } = render(
       <Provider store={mockStore}>
-        <CourseCreate />
+        <SearchCourse />
       </Provider>,
     );
     expect(container).toBeTruthy();

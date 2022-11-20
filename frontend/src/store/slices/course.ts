@@ -8,7 +8,7 @@ import {
   FeatureProps,
   MarkerProps,
   PositionProps,
-} from '../../containers/CourseCreate/CourseCreate';
+} from '../../containers/CourseCreate/SearchCourse';
 import { RootState } from '../index';
 
 export interface CourseType {

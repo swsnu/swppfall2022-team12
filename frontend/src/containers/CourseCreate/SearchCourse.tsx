@@ -6,7 +6,7 @@ import KakaoMap from '../../components/Map/KakaoMap';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import { AppDispatch } from '../../store';
 import { fetchPathFromTMap, selectCourse } from '../../store/slices/course';
-import styles from './CourseCreate.module.scss';
+import styles from './SearchCourse.module.scss';
 
 const { Tmapv3 } = window as any;
 
@@ -46,7 +46,7 @@ export interface MarkerProps {
   image?: string;
 }
 
-export default function CourseCreate() {
+export default function SearchCourse() {
   const [map, setMap] = useState<kakao.maps.Map>();
   const [searchMarkers, setSearchMarkers] = useState<MarkerProps[]>([]);
   const [previewMarkers, setPreviewMarkers] = useState<MarkerProps[]>([]);
@@ -113,10 +113,8 @@ export default function CourseCreate() {
           const latlng = new Tmapv3.Point(geometry.coordinates[j][0], geometry.coordinates[j][1]);
           // 포인트 객체를 받아 좌표값으로 변환
           const convertPoint = new Tmapv3.Projection.convertEPSG3857ToWGS84GEO(latlng);
-          // console.log("convertPoint:", convertPoint);
           // 포인트객체의 정보로 좌표값 변환 객체로 저장
           const convertChange = { lat: convertPoint._lat, lng: convertPoint._lng };
-          // console.log("convertChange:", convertChange);
 
           drawInfoArr.push(convertChange);
         }
@@ -164,14 +162,11 @@ export default function CourseCreate() {
   };
 
   const storeCourse = () => {
-    console.log('store');
     if (selected.length) {
-      // dispatch(storeCreatedCourse({ selected, path }));
       navigate('/course-create/post', { state: { selected, path, mapBound } });
     } else {
       alert('경로를 작성해주세요');
     }
-    // navigate('/course-create/post');
   };
 
   useEffect(() => {

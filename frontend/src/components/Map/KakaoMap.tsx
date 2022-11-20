@@ -3,7 +3,7 @@
 import React from 'react';
 import { Map, MapMarker, Polyline } from 'react-kakao-maps-sdk';
 
-import { PositionProps, MarkerProps } from '../../containers/CourseCreate/CourseCreate';
+import { PositionProps, MarkerProps } from '../../containers/CourseCreate/SearchCourse';
 
 type MapProps = {
   setMap: (map: kakao.maps.Map) => void;
