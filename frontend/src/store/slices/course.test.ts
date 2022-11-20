@@ -2,7 +2,12 @@ import { AnyAction, configureStore, EnhancedStore } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { ThunkMiddleware } from 'redux-thunk';
 
-import { DataProps, FeatureProps, MarkerProps } from '../../containers/CourseCreate/SearchCourse';
+import {
+  DataProps,
+  FeatureProps,
+  MarkerProps,
+  PositionProps,
+} from '../../containers/CourseCreate/SearchCourse';
 import reducer, {
   CourseState,
   CourseType,
@@ -21,13 +26,13 @@ describe('course reducer', () => {
     id: 1,
     title: 'MOCK_TITLE1',
     description: 'MOCK_DESCRIPTION1',
+    category: 'DRIVE',
     created_at: '00:00',
     u_counts: 10,
     distance: 1,
-    e_time: '1:00',
-    startPos: null,
-    passPos: null,
-    endPos: null,
+    e_time: 300,
+    path: [],
+    markers: [],
   };
   const mockMarkers: MarkerProps[] = [
     { position: { lat: 10, lng: 20 }, content: 'TEST1' },

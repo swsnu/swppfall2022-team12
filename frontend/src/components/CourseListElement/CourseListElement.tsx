@@ -9,7 +9,7 @@ export interface CourseProps {
   description: string;
   grade: number;
   usageCounts: number;
-  expectedTime: string;
+  expectedTime: number;
   showDetail: () => void;
 }
 

@@ -1,7 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useLocation } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router';
 
 import KakaoMap from '../../components/Map/KakaoMap';
+import { AppDispatch } from '../../store';
+import { postCourse, selectCourse } from '../../store/slices/course';
 import { MarkerProps, PositionProps } from './SearchCourse';
 
 export default function PostCourse() {
@@ -14,6 +17,10 @@ export default function PostCourse() {
   const [info, setInfo] = useState<MarkerProps | null>(null);
   const [markers, setMarkers] = useState<MarkerProps[]>([]);
   const [path, setPath] = useState<PositionProps[]>([]);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const courseState = useSelector(selectCourse);
+  const navigate = useNavigate();
 
   const { state } = useLocation();
 
@@ -38,8 +45,38 @@ export default function PostCourse() {
     if (map) map.setBounds(mapBounds, 400, 50, 100, 50);
   });
 
+  const handleSubmitCourse = async (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    const data = {
+      title,
+      description,
+      category: 'drive',
+      e_time: expectedTime,
+      distance,
+      path,
+      markers,
+    };
+    const result = await dispatch(postCourse(data));
+    if (result.type === `${postCourse.typePrefix}/fulfilled`) {
+      navigate('/courses');
+    }
+  };
+
   return (
     <div>
+      <div
+        className="buttons"
+        style={{
+          zIndex: 1,
+          position: 'fixed',
+          right: '10px',
+          margin: '10px',
+        }}
+      >
+        <button style={{ backgroundColor: 'white' }} onClick={handleSubmitCourse}>
+          <h3>경로 완성</h3>
+        </button>
+      </div>
       <div>
         Title :{' '}
         <input

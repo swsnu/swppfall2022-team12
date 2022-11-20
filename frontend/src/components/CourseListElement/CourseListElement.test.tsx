@@ -11,7 +11,7 @@ describe('<CourseListElement />', () => {
         description="CLE_TEST_DESCRIPTION"
         grade={3}
         usageCounts={50}
-        expectedTime="1:30"
+        expectedTime={12000}
         showDetail={() => null}
       />,
     );

@@ -15,15 +15,15 @@ export interface CourseType {
   id: number;
   title: string;
   description: string;
+  category: string;
   created_at: string;
   // grade: number;
   // f_count: number;
   u_counts: number;
+  e_time: number;
   distance: number;
-  e_time: string;
-  startPos: number | null;
-  passPos: number[] | null;
-  endPos: number | null;
+  path: PositionProps[];
+  markers: MarkerProps[];
 }
 
 interface ViaPointType {
@@ -79,10 +79,35 @@ export const fetchCourse = createAsyncThunk('course/fetchCourse', async (id: Cou
   return response.data ?? null;
 });
 
+export const postCourse = createAsyncThunk(
+  'course/postCourse',
+  async (
+    course: Pick<
+      CourseType,
+      'title' | 'description' | 'category' | 'e_time' | 'distance' | 'path' | 'markers'
+    >,
+  ) => {
+    const response = await axios.post<CourseType>(`/course/`, course);
+    return response.data ?? null;
+  },
+);
+
 export const fetchPathFromTMap = createAsyncThunk(
   'course/fetchCoursePath',
   async (markers: MarkerProps[]) => {
-    let data = {};
+    let data: TMapCourseType = {
+      startName: '',
+      startX: '',
+      startY: '',
+      startTime: '',
+      endName: '',
+      endX: '',
+      endY: '',
+      viaPoints: [],
+      reqCoordType: 'WGS84GEO',
+      resCoordType: 'EPSG3857',
+      searchOption: '0',
+    };
     const viaPoints: ViaPointType[] = [];
     const len = markers.length;
     let viaCount = 1;
@@ -115,9 +140,6 @@ export const fetchPathFromTMap = createAsyncThunk(
     data = {
       ...data,
       viaPoints,
-      reqCoordType: 'WGS84GEO',
-      resCoordType: 'EPSG3857',
-      searchOption: '0',
     };
     const headers: AxiosRequestHeaders = {
       appKey: process.env.REACT_APP_TMAP_API_KEY!,
@@ -136,19 +158,16 @@ export const fetchPathFromTMap = createAsyncThunk(
 export const courseSlice = createSlice({
   name: 'course',
   initialState: initialCourseState,
-  reducers: {
-    // fetchCourses: (state, action) => {
-    //   state.courses = action.payload;
-    // }
-    // storeCreatedCourse: (state, action: PayloadAction<{ markers: MarkerProps[] }>) => {
-    //   state.createdCourse.createdMarkers = action.payload.markers;
-    // },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchCourses.fulfilled, (state, action) => {
       state.courses = action.payload;
     });
     builder.addCase(fetchCourse.fulfilled, (state, action) => {
+      state.selectedCourse = action.payload;
+    });
+    builder.addCase(postCourse.fulfilled, (state, action) => {
+      state.courses.push(action.payload);
       state.selectedCourse = action.payload;
     });
     builder.addCase(fetchPathFromTMap.fulfilled, (state, action) => {
