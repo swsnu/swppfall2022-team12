@@ -11,7 +11,7 @@ describe('<CourseListElement />', () => {
         description="CLE_TEST_DESCRIPTION"
         grade={3}
         usageCounts={50}
-        expectedTime={12000}
+        expectedTime={100}
         showDetail={() => null}
       />,
     );
@@ -21,7 +21,7 @@ describe('<CourseListElement />', () => {
     expect(titleButton).toBeInTheDocument();
     screen.getByText('3');
     screen.getByText('played 50 times');
-    screen.getByText('expected time: 1:30');
+    screen.getByText('expected time: 100');
     screen.getByText('CLE_TEST_DESCRIPTION');
   });
 });

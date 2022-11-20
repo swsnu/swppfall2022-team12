@@ -1,5 +1,6 @@
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 
 import { CourseState } from '../../store/slices/course';
 import { getMockStore } from '../../test-utils/mocks';
@@ -43,9 +44,11 @@ const mockStore = getMockStore({
 describe('<SearchCourse />', () => {
   it('should render without error', () => {
     const { container } = render(
-      <Provider store={mockStore}>
-        <SearchCourse />
-      </Provider>,
+      <BrowserRouter>
+        <Provider store={mockStore}>
+          <SearchCourse />
+        </Provider>
+      </BrowserRouter>,
     );
     expect(container).toBeTruthy();
   });

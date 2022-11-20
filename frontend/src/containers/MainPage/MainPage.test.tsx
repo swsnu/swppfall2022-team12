@@ -22,6 +22,6 @@ describe('<MainPage />', () => {
     renderWithProviders(<MainPage />);
     const createNewCourseButton = screen.getByText('Create New Course');
     fireEvent.click(createNewCourseButton);
-    expect(mockNavigate).toHaveBeenCalledWith('search');
+    expect(mockNavigate).toHaveBeenCalledWith('/course-create/search');
   });
 });

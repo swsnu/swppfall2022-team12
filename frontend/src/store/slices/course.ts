@@ -86,7 +86,7 @@ export const postCourse = createAsyncThunk(
     >,
   ) => {
     const response = await axios.post<CourseType>(`/course/`, course);
-    return response.data ?? null;
+    return response.data;
   },
 );
 

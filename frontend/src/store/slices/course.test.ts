@@ -9,6 +9,7 @@ import reducer, {
   fetchCourses,
   fetchCourse,
   fetchPathFromTMap,
+  postCourse,
 } from './course';
 
 describe('course reducer', () => {
@@ -105,5 +106,12 @@ describe('course reducer', () => {
     axios.get = jest.fn().mockResolvedValue({ data: null });
     await store.dispatch(fetchCourse(100));
     expect(store.getState().course.selectedCourse).toEqual(null);
+  });
+
+  it('should handle postCourse', async () => {
+    axios.post = jest.fn().mockResolvedValue({ data: mockCourse });
+    await store.dispatch(postCourse(mockCourse));
+    expect(store.getState().course.selectedCourse).toEqual(mockCourse);
+    // expect(store.getState().course.courses).toEqual([mockCourse]);
   });
 });
