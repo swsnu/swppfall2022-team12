@@ -1,14 +1,60 @@
 from django.db.models import Q, F
 from django.db import transaction
 from django.core.paginator import Paginator
+from django.http import HttpResponse, HttpResponseNotAllowed, JsonResponse
 from rest_framework import status, viewsets, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from course.serializers import CourseListSerializer, CourseDetailSerializer, CourseSerializer
 from course.models import Course
+from django.contrib.auth.models import User
+from django.contrib.auth import login, logout, authenticate
 from team12.exceptions import FieldError
 from course.const import DRIVE
+import json
 
+def getUserDataFromReq(request):
+    req_data = json.loads(request.body.decode())
+    username = req_data['username']
+    password = req_data['password']
+    return username, password
+
+def checkUnauthenticatedReq(request):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+def signup(request):
+    if request.method == 'POST':
+        username, password = getUserDataFromReq(request)
+        User.objects.create_user(username=username, password=password)
+        return HttpResponse(status=201)
+    else:
+        return HttpResponseNotAllowed(['POST'])
+
+def signin(request):
+    if request.method == 'POST':
+        username, password = getUserDataFromReq(request)
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return HttpResponse(status=204)
+        else:
+            return HttpResponse(status=401)
+
+    else:
+        return HttpResponseNotAllowed(['POST'])
+
+def signout(request):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            logout(request)
+            return HttpResponse(status=204)
+        else:
+            return HttpResponse(status=401)
+
+    else:
+        return HttpResponseNotAllowed(['GET'])
 
 class CourseViewSet(
         viewsets.GenericViewSet,
