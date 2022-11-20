@@ -5,10 +5,26 @@ import SearchBar from './SearchBar';
 
 describe('<SearchBar />', () => {
   it('should render without errors', () => {
-    render(<SearchBar markers={[]} selected={[]} searchPlaces={jest.fn()} setInfo={jest.fn()} />);
+    render(
+      <SearchBar
+        markers={[]}
+        selected={[]}
+        searchPlaces={jest.fn()}
+        setInfo={jest.fn()}
+        addLocation={jest.fn()}
+      />,
+    );
   });
   it('should searchPlaces when click search with keyword ', () => {
-    render(<SearchBar markers={[]} selected={[]} searchPlaces={jest.fn()} setInfo={jest.fn()} />);
+    render(
+      <SearchBar
+        markers={[]}
+        selected={[]}
+        searchPlaces={jest.fn()}
+        setInfo={jest.fn()}
+        addLocation={jest.fn()}
+      />,
+    );
     const keywordInput = screen.getByPlaceholderText('검색어를 입력해주세요');
     const searchButton = screen.getByText('검색');
     fireEvent.change(keywordInput, { target: { value: 'TEST' } });
@@ -16,7 +32,15 @@ describe('<SearchBar />', () => {
   });
   it('should alert when keyword is empty', () => {
     jest.spyOn(window, 'alert').mockImplementation(() => {});
-    render(<SearchBar markers={[]} selected={[]} searchPlaces={jest.fn()} setInfo={jest.fn()} />);
+    render(
+      <SearchBar
+        markers={[]}
+        selected={[]}
+        searchPlaces={jest.fn()}
+        setInfo={jest.fn()}
+        addLocation={jest.fn()}
+      />,
+    );
     const searchButton = screen.getByText('검색');
     fireEvent.click(searchButton!);
     expect(window.alert).toHaveBeenCalled();
@@ -33,7 +57,13 @@ describe('<SearchBar />', () => {
       },
     ];
     render(
-      <SearchBar markers={[]} selected={selected} searchPlaces={jest.fn()} setInfo={jest.fn()} />,
+      <SearchBar
+        markers={[]}
+        selected={selected}
+        searchPlaces={jest.fn()}
+        setInfo={jest.fn()}
+        addLocation={jest.fn()}
+      />,
     );
   });
   it('should render markers', () => {
@@ -49,7 +79,13 @@ describe('<SearchBar />', () => {
     ];
     const setInfo = jest.fn();
     render(
-      <SearchBar markers={markers} selected={[]} searchPlaces={jest.fn()} setInfo={setInfo} />,
+      <SearchBar
+        markers={markers}
+        selected={[]}
+        searchPlaces={jest.fn()}
+        setInfo={setInfo}
+        addLocation={jest.fn()}
+      />,
     );
     const result = screen.getByText('TEST1');
     fireEvent.mouseEnter(result);

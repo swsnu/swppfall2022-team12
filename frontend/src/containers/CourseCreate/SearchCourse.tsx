@@ -225,7 +225,7 @@ export default function SearchCourse() {
           selected={selected}
           searchPlaces={searchPlaces}
           setInfo={setInfo}
-          // addLocation={addLocation}
+          addLocation={addLocation}
         />
         <KakaoMap
           setMap={setMap}

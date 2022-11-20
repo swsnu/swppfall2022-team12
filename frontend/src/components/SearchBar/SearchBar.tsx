@@ -8,7 +8,7 @@ type SearchProps = {
   selected: MarkerProps[];
   searchPlaces: (keyword: string) => void;
   setInfo: (marker: MarkerProps | null) => void;
-  addLocation?: () => void;
+  addLocation: (marker: MarkerProps) => void;
 };
 
 export default function SearchBar({
@@ -92,18 +92,22 @@ export default function SearchBar({
             }}
           >
             {markers.map((marker) => (
-              <li
+              <button
                 key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
                 id={marker.content}
                 style={{
-                  padding: '18px 20px 20px',
+                  border: 0,
+                  padding: '8px 10px 8px',
                   outline: '1px solid blue',
+                  backgroundColor: 'white',
+                  width: '100%',
                 }}
                 onMouseEnter={() => setInfo(marker)}
                 onMouseLeave={() => setInfo(null)}
+                onClick={() => addLocation(marker)}
               >
                 {marker.content}
-              </li>
+              </button>
             ))}
           </ul>
         </div>
