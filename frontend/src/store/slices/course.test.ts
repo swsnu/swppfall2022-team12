@@ -2,12 +2,7 @@ import { AnyAction, configureStore, EnhancedStore } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { ThunkMiddleware } from 'redux-thunk';
 
-import {
-  DataProps,
-  FeatureProps,
-  MarkerProps,
-  PositionProps,
-} from '../../containers/CourseCreate/SearchCourse';
+import { DataProps, FeatureProps, MarkerProps } from '../../containers/CourseCreate/SearchCourse';
 import reducer, {
   CourseState,
   CourseType,

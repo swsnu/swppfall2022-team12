@@ -1,8 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios, { AxiosRequestHeaders } from 'axios';
 
-import { dummyData } from '../../components/dummyData';
-import poisData from '../../components/poisData.json';
 import {
   DataProps,
   FeatureProps,
@@ -151,7 +149,6 @@ export const fetchPathFromTMap = createAsyncThunk(
       { headers },
     );
     return response.data;
-    // return { features: poisData.features, properties: poisData.properties };
   },
 );
 

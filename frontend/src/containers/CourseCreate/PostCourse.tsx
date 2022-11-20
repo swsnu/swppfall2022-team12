@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 
 import KakaoMap from '../../components/Map/KakaoMap';
@@ -19,7 +19,6 @@ export default function PostCourse() {
   const [path, setPath] = useState<PositionProps[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
-  const courseState = useSelector(selectCourse);
   const navigate = useNavigate();
 
   const { state } = useLocation();
@@ -96,6 +95,7 @@ export default function PostCourse() {
             setDescription(e.target.value);
           }}
         />
+        <label style={{ marginRight: '30px' }}>total fare : {`${fare} 원`}</label>
         <label style={{ marginRight: '30px' }}>expected time : {`${expectedTime} 분`}</label>
         <label>total distance : {`${distance} km`}</label>
       </div>

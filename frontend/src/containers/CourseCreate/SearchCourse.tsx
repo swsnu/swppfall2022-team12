@@ -6,7 +6,6 @@ import KakaoMap from '../../components/Map/KakaoMap';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import { AppDispatch } from '../../store';
 import { fetchPathFromTMap, selectCourse } from '../../store/slices/course';
-import styles from './SearchCourse.module.scss';
 
 const { Tmapv3 } = window as any;
 
@@ -74,7 +73,7 @@ export default function SearchCourse() {
           const bounds = new kakao.maps.LatLngBounds();
           const markerArr: MarkerProps[] = [];
 
-          for (let i = 0; i < data.length; i += 1) {
+          data.forEach((item, i) => {
             markerArr.push({
               position: {
                 lat: Number(data[i].y),
@@ -83,7 +82,7 @@ export default function SearchCourse() {
               content: data[i].place_name,
             });
             bounds.extend(new kakao.maps.LatLng(Number(data[i].y), Number(data[i].x)));
-          }
+          });
           setSearchMarkers(markerArr);
           setPreview(false);
 
@@ -182,8 +181,6 @@ export default function SearchCourse() {
   useEffect(() => {
     setResultData(courseState.tMapCourse.tMapData);
     setResultFeatures(courseState.tMapCourse.tMapFeatures);
-    // setResultData(poisData.properties);
-    // setResultFeatures(poisData.features);
   }, [courseState]);
 
   useEffect(() => {
@@ -194,7 +191,6 @@ export default function SearchCourse() {
 
   return (
     <>
-      {/* Buttons */}
       <div
         className="buttons"
         style={{
@@ -231,7 +227,6 @@ export default function SearchCourse() {
           setInfo={setInfo}
           // addLocation={addLocation}
         />
-        {/* Display Map */}
         <KakaoMap
           setMap={setMap}
           path={path}
