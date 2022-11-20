@@ -163,7 +163,7 @@ export default function SearchCourse() {
 
   const storeCourse = () => {
     if (selected.length) {
-      navigate('/course-create/post', { state: { selected, path, mapBound } });
+      navigate('/course-create/post', { state: { selected, path, resultData, mapBound } });
     } else {
       alert('경로를 작성해주세요');
     }
