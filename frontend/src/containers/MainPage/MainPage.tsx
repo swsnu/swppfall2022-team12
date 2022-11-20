@@ -15,7 +15,7 @@ function MainPage() {
   }, []);
 
   const onClickCreateCourse = () => {
-    navigate('search');
+    navigate('/course-create/search');
   };
 
   return (

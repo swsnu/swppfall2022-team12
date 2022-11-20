@@ -33,6 +33,7 @@ module.exports = {
         'no-new': 'off',
         'no-underscore-dangle': 'off',
         'no-alert': 'off',
+        'no-return-assign': 'off',
         'no-console': 'off',
         'no-restricted-syntax': 'off',
         '@typescript-eslint/no-unused-vars': 'off',
@@ -52,13 +53,13 @@ module.exports = {
             devDependencies: true,
           },
         ],
-        'prettier/prettier': [
-          'error',
-          {
-            endOfLine: 'auto',
-            usePrettierrc: true,
-          },
-        ],
+        // 'prettier/prettier': [
+        //   'error',
+        //   {
+        //     endOfLine: 'auto',
+        //     usePrettierrc: true,
+        //   },
+        // ],
         'jsx-a11y/label-has-associated-control': [
           'warn',
           {

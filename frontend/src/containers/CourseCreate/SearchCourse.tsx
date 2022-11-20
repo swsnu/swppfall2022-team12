@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 import KakaoMap from '../../components/Map/KakaoMap';
-import poisData from '../../components/poisData.json';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import { AppDispatch } from '../../store';
 import { fetchPathFromTMap, selectCourse } from '../../store/slices/course';
-import styles from './CourseCreate.module.scss';
 
 const { Tmapv3 } = window as any;
 
@@ -46,7 +45,7 @@ export interface MarkerProps {
   image?: string;
 }
 
-export default function CourseCreate() {
+export default function SearchCourse() {
   const [map, setMap] = useState<kakao.maps.Map>();
   const [searchMarkers, setSearchMarkers] = useState<MarkerProps[]>([]);
   const [previewMarkers, setPreviewMarkers] = useState<MarkerProps[]>([]);
@@ -54,12 +53,12 @@ export default function CourseCreate() {
   const [info, setInfo] = useState<MarkerProps | null>(null);
   const [selected, setSelected] = useState<MarkerProps[]>([]);
   const [preview, setPreview] = useState<boolean>(false);
-  const [onSearch, setOnSearch] = useState<boolean>(true);
-  const [resultData, setResultData] = useState<DataProps | null>();
+  const [resultData, setResultData] = useState<DataProps | null>(null);
   const [resultFeatures, setResultFeatures] = useState<FeatureProps[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
   const courseState = useSelector(selectCourse);
+  const navigate = useNavigate();
 
   const searchPlaces = (keyword: string) => {
     if (!map) return;
@@ -71,9 +70,9 @@ export default function CourseCreate() {
           // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
           // LatLngBounds 객체에 좌표를 추가합니다
           const bounds = new kakao.maps.LatLngBounds();
-          const markerArr = [];
+          const markerArr: MarkerProps[] = [];
 
-          for (let i = 0; i < data.length; i += 1) {
+          data.forEach((item, i) => {
             markerArr.push({
               position: {
                 lat: Number(data[i].y),
@@ -82,7 +81,7 @@ export default function CourseCreate() {
               content: data[i].place_name,
             });
             bounds.extend(new kakao.maps.LatLng(Number(data[i].y), Number(data[i].x)));
-          }
+          });
           setSearchMarkers(markerArr);
           setPreview(false);
 
@@ -112,10 +111,8 @@ export default function CourseCreate() {
           const latlng = new Tmapv3.Point(geometry.coordinates[j][0], geometry.coordinates[j][1]);
           // 포인트 객체를 받아 좌표값으로 변환
           const convertPoint = new Tmapv3.Projection.convertEPSG3857ToWGS84GEO(latlng);
-          // console.log("convertPoint:", convertPoint);
           // 포인트객체의 정보로 좌표값 변환 객체로 저장
           const convertChange = { lat: convertPoint._lat, lng: convertPoint._lng };
-          // console.log("convertChange:", convertChange);
 
           drawInfoArr.push(convertChange);
         }
@@ -124,13 +121,13 @@ export default function CourseCreate() {
 
         if (properties.pointType === 'S') {
           // 출발지 마커
-          markerImg = 'http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png';
+          markerImg = 'https://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png';
         } else if (properties.pointType === 'E') {
           // 도착지 마커
-          markerImg = 'http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png';
+          markerImg = 'https://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png';
         } else {
           // 각 포인트 마커
-          markerImg = `http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_${viaPoint}.png`;
+          markerImg = `https://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_${viaPoint}.png`;
           viaPoint += 1;
         }
 
@@ -151,27 +148,58 @@ export default function CourseCreate() {
       }
     }
     // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
-    map?.setBounds(bounds);
+    map?.setBounds(bounds, 200, 0, 270, 500);
     setPath(drawInfoArr);
     setPreviewMarkers(resultMarkerArr);
   };
 
   const addLocation = (marker: MarkerProps) => {
-    selected.push(marker);
-    setSelected(selected);
+    setSelected([...selected, marker]);
+  };
+
+  const setMarkerImage = (markers: MarkerProps[]) => {
+    const points = markers;
+    const processedMarkers: MarkerProps[] = [];
+    let count = 1;
+
+    for (let i = 0; i < points.length; i += 1) {
+      if (i === 0) {
+        points[i].image = 'https://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png';
+      } else if (i === points.length - 1) {
+        points[i].image = 'https://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png';
+      } else {
+        points[i].image = `https://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_${count}.png`;
+        count += 1;
+      }
+      processedMarkers.push(points[i]);
+    }
+    setSelected(processedMarkers);
+  };
+
+  const storeCourse = () => {
+    if (selected.length) {
+      setMarkerImage(selected);
+      navigate('/course-create/post', { state: { selected, path, resultData } });
+    } else {
+      alert('경로를 작성해주세요');
+    }
   };
 
   useEffect(() => {
     if (!map) return;
-    console.log(preview);
     if (preview) {
-      dispatch(fetchPathFromTMap());
-      setResultData(courseState.tMapData);
-      setResultFeatures(courseState.tMapFeatures);
-      // setResultData(poisData.properties);
-      // setResultFeatures(poisData.features);
+      if (selected.length < 3) {
+        alert('장소를 적어도 3개 이상 선택해주세요');
+        setPreview(false);
+      }
+      dispatch(fetchPathFromTMap(selected));
     }
-  }, [preview, map, courseState]);
+  }, [preview]);
+
+  useEffect(() => {
+    setResultData(courseState.tMapCourse.tMapData);
+    setResultFeatures(courseState.tMapCourse.tMapFeatures);
+  }, [courseState]);
 
   useEffect(() => {
     if (resultData && resultFeatures) {
@@ -180,8 +208,7 @@ export default function CourseCreate() {
   }, [resultFeatures, resultData]);
 
   return (
-    <div className="Container" style={{ display: 'flex', position: 'fixed' }}>
-      {/* Buttons */}
+    <>
       <div
         className="buttons"
         style={{
@@ -206,31 +233,29 @@ export default function CourseCreate() {
             <h3>경로 미리보기</h3>
           </button>
         )}
-
-        <button style={{ backgroundColor: 'white' }}>
+        <button style={{ backgroundColor: 'white' }} onClick={storeCourse}>
           <h3>경로 완성</h3>
         </button>
       </div>
-      <SearchBar
-        markers={searchMarkers}
-        selected={selected}
-        searchPlaces={searchPlaces}
-        setInfo={setInfo}
-        // addLocation={addLocation}
-      />
-
-      {/* Display Map */}
-      <KakaoMap
-        // map={map}
-        setMap={setMap}
-        path={path}
-        searchMarkers={searchMarkers}
-        previewMarkers={previewMarkers}
-        info={info}
-        setInfo={setInfo}
-        addLocation={addLocation}
-        preview={preview}
-      />
-    </div>
+      <div className="Container" style={{ display: 'flex', position: 'fixed' }}>
+        <SearchBar
+          markers={searchMarkers}
+          selected={selected}
+          searchPlaces={searchPlaces}
+          setInfo={setInfo}
+          addLocation={addLocation}
+        />
+        <KakaoMap
+          setMap={setMap}
+          path={path}
+          searchMarkers={searchMarkers}
+          previewMarkers={previewMarkers}
+          info={info}
+          setInfo={setInfo}
+          addLocation={addLocation}
+          preview={preview}
+        />
+      </div>
+    </>
   );
 }
