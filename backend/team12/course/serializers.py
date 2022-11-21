@@ -2,6 +2,7 @@ from rest_framework import serializers
 from course.models import *
 from team12.exceptions import FieldError
 
+
 class MarkerSerializer(serializers.ModelSerializer):
     """
     Point Marker Model Serializer
@@ -19,16 +20,16 @@ class MarkerSerializer(serializers.ModelSerializer):
     
     def get_position(self, instance):
         return {
-            'lat': instance.latitude,
-            'lng': instance.longitude
+            'lat': float(instance.latitude),
+            'lng': float(instance.longitude)
         }
 
 class PathSerializer(serializers.ModelSerializer):
     """
     Point Path Model Serializer
     """
-    lat = serializers.CharField(source='latitude')
-    lng = serializers.CharField(source='longitude')
+    lat = serializers.SerializerMethodField()
+    lng = serializers.SerializerMethodField()
     class Meta:
         model = Point
         fields = (
@@ -36,6 +37,11 @@ class PathSerializer(serializers.ModelSerializer):
             'lng',
             'idx'
         )
+
+    def get_lat(self, instance):
+        return float(instance.latitude)
+    def get_lng(self, instance):
+        return float(instance.longitude)
     
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -45,6 +51,7 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course 
         fields = (
+            'author',
             'title',
             'description',
             'category',
@@ -52,7 +59,6 @@ class CourseSerializer(serializers.ModelSerializer):
             'e_time',
             'distance'
         )
-        extra_kwargs = {"e_time": {'format':'%H:%M'}}
 
     def validate(self, data):
         title = data.get('title')
@@ -78,10 +84,6 @@ class CourseSerializer(serializers.ModelSerializer):
         if markers:
             if not len(markers) > 1:
                 raise FieldError("markers should be more than 2.")
-            else:
-                if set(map(lambda x: tuple(x.keys()), markers)) != {('content', 'image', 'position')} or \
-                    set(map(lambda x: tuple(x["position"].keys()), markers)) != {('lat', 'lng')}:
-                    raise FieldError("markers keys must have 'content', 'image', 'position['lat' or 'lng']'.")
         else:
             missing_fields.append("markers")
 
@@ -101,7 +103,7 @@ class CourseSerializer(serializers.ModelSerializer):
                 Point(
                     category=MARKER,
                     name=marker['content'],
-                    image=marker['image'],
+                    image=marker.get('image', ""),
                     course=course,
                     longitude=marker['position']['lng'],
                     latitude=marker['position']['lat'],
@@ -142,7 +144,6 @@ class CourseDetailSerializer(serializers.ModelSerializer):
             'e_time',
             'distance'
         )
-        extra_kwargs = {"e_time":{'format':'%H:%M'}}
     
     def get_markers(self, course):
         markers = course.points.filter(category=MARKER).order_by('idx')
@@ -171,5 +172,4 @@ class CourseListSerializer(serializers.ModelSerializer):
             'e_time',
             'distance'
         )
-        extra_kwargs = {"e_time":{'format':'%H:%M'}}
     

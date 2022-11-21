@@ -1,12 +1,11 @@
 from django.urls import include, path
 from rest_framework.routers import SimpleRouter
-from course.views import CourseViewSet
-from course import views
+from review.views import ReviewViewSet
 
-app_name = 'course'
+app_name = 'review'
 
 router = SimpleRouter() 
-router.register('course', CourseViewSet, basename='course')
+router.register('review', ReviewViewSet, basename='review')
 
 urlpatterns = [
     path('', include((router.urls))),
