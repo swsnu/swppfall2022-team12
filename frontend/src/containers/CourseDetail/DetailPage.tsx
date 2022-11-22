@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 
 export default function CourseDetail() {
-  const id = useParams(); // get the id of the course
+  const { id } = useParams(); // get the id of the course
   const [title, setTitle] = useState('dummy title');
   const [rating, setRating] = useState(4.7);
   const [rateNum, setRateNum] = useState(19);
@@ -18,10 +18,12 @@ export default function CourseDetail() {
   // const [created_at, setCreateAt] = useState("");
   // const [link, setLink] = useState("");
   const [element, setElement] = useState({
-    pid: 'test01',
-    name: 'test01',
-    latitude: '37.513272317072',
-    longitude: '127.09431687965',
+    content: '[0] 출발지',
+    image: 'http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png',
+    position: {
+      lat: '37.40268656668587',
+      lng: '127.10325874620656',
+    },
     idx: 0,
   });
 
@@ -31,7 +33,7 @@ export default function CourseDetail() {
       setDescription(res.data.description);
       setTime(res.data.e_time);
       setCounts(res.data.u_counts);
-      setPoints(res.data.points);
+      setPoints(res.data.markers);
     });
   }, []);
 
@@ -39,11 +41,12 @@ export default function CourseDetail() {
     const tempArray = ['nmap://navigation?'];
     const elementArray = [
       {
-        pid: 'test01',
-        name: 'test01',
-        latitude: '37.513272317072',
-        longitude: '127.09431687965',
-        idx: 0,
+        content: '[0] 출발지',
+        image: 'http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png',
+        position: {
+          lat: '37.40268656668555',
+          lng: '127.10325874620656',
+        },
       },
     ];
     for (let index = 0; index < points.length; index += 1) {
@@ -51,18 +54,20 @@ export default function CourseDetail() {
     }
     for (let index = 0; index < points.length - 1; index += 1) {
       tempArray.push(
-        `&v${index + 1}lat=${elementArray[index + 1].latitude}&v${index + 1}lng=${
-          elementArray[index + 1].longitude
-        }&v${index + 1}name=${encodeURI(elementArray[index + 1].name)}`,
+        `&v${index + 1}lat=${elementArray[index + 1].position.lat}&v${index + 1}lng=${
+          elementArray[index + 1].position.lng
+        }&v${index + 1}name=${encodeURIComponent(elementArray[index + 1].content.toString())}`,
       );
     }
 
-    const a = `dlat=${elementArray[points.length].latitude}&dlng=${
-      elementArray[points.length].longitude
-    }&dname=${encodeURI(elementArray[points.length].name)}`;
+    const a = `dlat=${elementArray[points.length].position.lat}&dlng=${
+      elementArray[points.length].position.lng
+    }&dname=${encodeURIComponent(elementArray[points.length].content.toString())}`;
     tempArray.splice(1, 0, a);
 
     tempArray.push('&appname=com.example.myapp');
+
+    console.log(tempArray.toString().replace(/,/g, ''));
 
     window.location.href = tempArray.toString().replace(/,/g, '');
   };
