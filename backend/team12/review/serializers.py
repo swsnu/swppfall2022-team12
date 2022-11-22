@@ -10,7 +10,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     """
     Review Model List Serializer.
     """
-    author = serializers.SerializerMethodField()
+    author = serializers.CharField(source='author.username')
 
     class Meta:
         model = Review 
@@ -22,8 +22,6 @@ class ReviewSerializer(serializers.ModelSerializer):
             'rate',
             'created_at'
         )
-    def get_author(self, instance):
-        return UserSerializer(instance.author).data
         
 class ReviewCreateSerializer(serializers.ModelSerializer):
     """

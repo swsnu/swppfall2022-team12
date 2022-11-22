@@ -19,7 +19,7 @@ class Course(models.Model):
         distance (int): Course's total distance. (km)
     """
     id = models.AutoField(primary_key=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     category = models.CharField(choices=CATEGORY, default=DRIVE, max_length=10)
     title = models.CharField(max_length=100, blank=True)
     description = models.CharField(max_length=1000, blank=True)

@@ -68,19 +68,24 @@ class CourseViewSet(
             return CourseDetailSerializer
         elif self.action == "list":
             return CourseListSerializer
-        elif self.action == "create":
+        elif self.action in ["create", "update"]:
             return CourseSerializer
 
     # POST /course
     @transaction.atomic
     def create(self, request):
         """Create Course"""
+        # TODO: remove anonymous cases
         context = {
             "markers": request.data.get("markers", []),
             "path": request.data.get("path", [])
         }
         data = request.data.copy()
-        data['author'] = request.user.id
+        if request.user.is_anonymous:
+            user_id = 1
+        else:
+            user_id = request.user.id
+        data['author'] = user_id
         serializer = self.get_serializer(data=data, context=context)
         serializer.is_valid(raise_exception=True)
         course = serializer.save()
@@ -99,9 +104,10 @@ class CourseViewSet(
         return super().retrieve(request, pk=None)
     
     # PUT /course/:courseId
+    @transaction.atomic
     def update(self, request, pk=None):
         """Update Course"""
-        course = get_object_or_404(Course, id=pk)
+        course = self.get_object()
         course.delete()
         return self.create(request)
 
