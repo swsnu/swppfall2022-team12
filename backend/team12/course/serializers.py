@@ -130,10 +130,12 @@ class CourseDetailSerializer(serializers.ModelSerializer):
     markers = serializers.SerializerMethodField()
     path = serializers.SerializerMethodField()
     p_counts = serializers.SerializerMethodField()
+    author = serializers.CharField(source='author.username')
     class Meta:
         model = Course 
         fields = (
             'id',
+            'author',
             'markers',
             'path',
             'p_counts',
@@ -155,16 +157,18 @@ class CourseDetailSerializer(serializers.ModelSerializer):
 
     def get_p_counts(self, course):
         return course.points.filter(category=MARKER).count()
+    
 
 class CourseListSerializer(serializers.ModelSerializer):
     """
     Course Model List Serializer
     """
-
+    author = serializers.CharField(source='author.username')
     class Meta:
         model = Course 
         fields = (
             'id',
+            'author',
             'title',
             'description',
             'created_at',

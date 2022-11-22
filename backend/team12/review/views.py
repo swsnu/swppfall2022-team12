@@ -31,10 +31,17 @@ class ReviewViewSet(
     def create(self, request):
         """Create Review"""
         data = request.data
-        context = {
-            'course': data.get('course'),
-            'author': request.user
-        }
+        # TODO: remove anonymous cases
+        if not request.user.is_anonymous:
+            context = {
+                'course': data.get('course'),
+                'author': request.user
+            }
+        else:
+            context = {
+                'course': data.get('course'),
+                'author': User.objects.get(id=1)
+            }
         serializer = self.get_serializer(data=request.data, context=context)
         serializer.is_valid(raise_exception=True)
         review = serializer.save()
