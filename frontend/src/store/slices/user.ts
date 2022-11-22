@@ -4,10 +4,17 @@ import axios, { AxiosRequestHeaders } from 'axios';
 
 import { RootState } from '../index';
 
+export interface TagType {
+  id: number;
+  content: string;
+}
+
 export interface UserType {
   id: number;
   username: string;
+  email: string;
   password: string;
+  tags: TagType[];
 }
 
 export interface UserState {
@@ -22,11 +29,20 @@ const initialUserState: UserState = {
   selectedUser: null,
 };
 
+export const signupUser = createAsyncThunk(
+  'user/signup',
+  async (usr: Pick<UserType, 'username' | 'email' | 'password'>) => {
+    const req = { username: usr.username, email: usr.email, password: usr.password };
+    const { data } = await axios.post<UserType>('/signup/', req);
+    
+  }
+)
+
 export const loginUser = createAsyncThunk(
   'user/login',
-  async (usr: Pick<UserType, 'username' | 'password'>, { dispatch }) => {
-    const req = { username: usr.username, password: usr.password };
-    const response = await axios.put('/signin', req);
+  async (usr: Pick<UserType, 'email' | 'password'>, { dispatch }) => {
+    const req = { email: usr.email, password: usr.password };
+    const { data } = await axios.put<UserType>('/signin/', req);
     // dispatch(userActions.loginUser({ id: UserType['id'], username: UserType['username'], password: UserType{'password'} }))
   },
 );
@@ -34,8 +50,7 @@ export const loginUser = createAsyncThunk(
 export const logoutUser = createAsyncThunk(
   'user/logoutUser',
   async (id: UserType['id'], { dispatch }) => {
-    const data = (await axios.get<UserType>(`/api/user/${id}`)).data;
-    await axios.put(`/api/user/${id}`, { ...data, logged_in: false });
+    const { data } = await axios.put<UserType>(`/signout/${id}`);
     // dispatch(userActions.logoutUser({ targetId: id }));
   },
 );
@@ -44,10 +59,15 @@ export const userSlice = createSlice({
   name: 'user',
   initialState: initialUserState,
   reducers: {
-    loginUser: (state, action: PayloadAction<{ user: UserType }>) => {
-      state.loggedInUser;
+    signupUser: (state, action: PayloadAction<{ user: UserType }>) => {
+      state.loggedInUser = action.payload.user;
     },
-    // logoutUser: (state, action: PayloadAction<>)
+    loginUser: (state, action: PayloadAction<{ user: UserType }>) => {
+      state.loggedInUser = action.payload.user;
+    },
+    logoutUser: (state, action) => {
+      state.loggedInUser = null;
+    },
   },
 });
 

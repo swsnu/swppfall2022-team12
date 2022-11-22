@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 import LoginTab from '../../components/LoginTab/LoginTab';
 import SignUpTab from '../../components/SignUpTab/SignUpTab';
 
-export default function Login() {
+export default function LoginPage() {
   const [isLoginTab, setIsLoginTab] = useState<boolean>(true);
 
   const onClickSignUpButton = () => {

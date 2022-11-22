@@ -7,24 +7,24 @@ import { AppDispatch } from '../../store';
 import { loginUser } from '../../store/slices/user';
 
 export default function LoginTab() {
-  const dispatch = useDispatch<AppDispatch>();
+  // const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const nameInput = useRef<HTMLInputElement>(null);
-  const pwInput = useRef<HTMLInputElement>(null);
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const pwInputRef = useRef<HTMLInputElement>(null);
 
-  const [usernameInput, setUsernameInput] = useState<string>('');
+  const [emailInput, setEmailInput] = useState<string>('');
   const [passwordInput, setPasswordInput] = useState<string>('');
 
   const onClickLogin = () => {
-    if (usernameInput === '' && nameInput.current != null) {
-      nameInput.current.focus();
+    if (emailInput === '' && emailInputRef.current != null) {
+      emailInputRef.current.focus();
       return;
     }
-    if (passwordInput === '' && pwInput.current != null) {
-      pwInput.current.focus();
+    if (passwordInput === '' && pwInputRef.current != null) {
+      pwInputRef.current.focus();
       return;
     }
-    // dispatch(loginUser(usernameInput, passwordInput));
+    // dispatch(loginUser(useremailInput, passwordInput));
     navigate('/main');
   };
 
@@ -48,12 +48,12 @@ export default function LoginTab() {
         }}
       >
         <label>
-          Username
+          Email
           <input
-            type="text"
-            value={usernameInput}
-            onChange={(e) => setUsernameInput(e.target.value)}
-            ref={nameInput}
+            type="email"
+            value={emailInput}
+            onChange={(e) => setEmailInput(e.target.value)}
+            ref={emailInputRef}
           />
         </label>
         <label>
@@ -62,7 +62,7 @@ export default function LoginTab() {
             type="password"
             value={passwordInput}
             onChange={(e) => setPasswordInput(e.target.value)}
-            ref={pwInput}
+            ref={pwInputRef}
           />
         </label>
       </div>

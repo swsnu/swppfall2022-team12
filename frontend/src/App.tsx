@@ -3,10 +3,10 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
 import './App.css';
 import CourseCreate from './containers/CourseCreate/CourseCreate';
-import CourseList from './containers/CourseList/CourseList';
-import MainPage from './containers/MainPage/MainPage';
 import CourseDetail from './containers/CourseDetail/DetailPage';
+import CourseList from './containers/CourseList/CourseList';
 import Login from './containers/LoginPage/LoginPage';
+import MainPage from './containers/MainPage/MainPage';
 
 function App() {
   return (

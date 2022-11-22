@@ -4,25 +4,31 @@ import { useNavigate } from 'react-router';
 
 export default function SignUpTab() {
   const navigate = useNavigate();
-  const nameInput = useRef<HTMLInputElement>(null);
-  const pwInput1 = useRef<HTMLInputElement>(null);
-  const pwInput2 = useRef<HTMLInputElement>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const pwInputRef1 = useRef<HTMLInputElement>(null);
+  const pwInputRef2 = useRef<HTMLInputElement>(null);
 
   const [usernameInput, setUsernameInput] = useState<string>('');
+  const [emailInput, setEmailInput] = useState<string>('');
   const [passwordInput, setPasswordInput] = useState<string>('');
   const [checkPwInput, setCheckPwInput] = useState<string>('');
 
   const onClickSignUpButton = () => {
-    if (usernameInput === '' && nameInput.current != null) {
-      nameInput.current.focus();
+    if (usernameInput === '' && nameInputRef.current != null) {
+      nameInputRef.current.focus();
       return;
     }
-    if (passwordInput === '' && pwInput1.current != null) {
-      pwInput1.current.focus();
+    if (emailInput === '' && emailInputRef.current != null) {
+      emailInputRef.current.focus();
       return;
     }
-    if (checkPwInput === '' && pwInput2.current != null) {
-      pwInput2.current.focus();
+    if (passwordInput === '' && pwInputRef1.current != null) {
+      pwInputRef1.current.focus();
+      return;
+    }
+    if ((checkPwInput === '' || passwordInput !== checkPwInput) && pwInputRef2.current != null) {
+      pwInputRef2.current.focus();
       return;
     }
 
@@ -54,7 +60,16 @@ export default function SignUpTab() {
             type="text"
             value={usernameInput}
             onChange={(e) => setUsernameInput(e.target.value)}
-            ref={nameInput}
+            ref={nameInputRef}
+          />
+        </label>
+        <label>
+          Email
+          <input
+            type="email"
+            value={emailInput}
+            onChange={(e) => setEmailInput(e.target.value)}
+            ref={emailInputRef}
           />
         </label>
         <label>
@@ -63,7 +78,7 @@ export default function SignUpTab() {
             type="password"
             value={passwordInput}
             onChange={(e) => setPasswordInput(e.target.value)}
-            ref={pwInput1}
+            ref={pwInputRef1}
           />
         </label>
         <label>
@@ -72,7 +87,7 @@ export default function SignUpTab() {
             type="password"
             value={checkPwInput}
             onChange={(e) => setCheckPwInput(e.target.value)}
-            ref={pwInput2}
+            ref={pwInputRef2}
           />
         </label>
       </div>
