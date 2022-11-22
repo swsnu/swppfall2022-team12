@@ -52,3 +52,19 @@ class Point(models.Model):
     longitude = models.CharField(max_length=30, blank=True)
     latitude = models.CharField(max_length=30, blank=True)
     idx = models.SmallIntegerField()
+
+class History(models.Model):
+    """
+    History Model
+    : Relational Model (Course, User). User's course use history.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="histories")
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="users")
+
+class Favor(models.Model):
+    """
+    Favor Model
+    : Relational Model (Course, User). User's course favor.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="favors")
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="fans")
