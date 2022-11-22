@@ -4,22 +4,27 @@ from user.models import User
 from course.models import Course
 from team12.exceptions import FieldError
 from django.shortcuts import get_object_or_404
+from user.serializers import UserSerializer
 
 class ReviewSerializer(serializers.ModelSerializer):
     """
     Review Model List Serializer.
     """
+    author = serializers.SerializerMethodField()
 
     class Meta:
         model = Review 
         fields = (
+            'id',
             'content',
             'likes',
             'author',
             'rate',
             'created_at'
         )
-
+    def get_author(self, instance):
+        return UserSerializer(instance.author).data
+        
 class ReviewCreateSerializer(serializers.ModelSerializer):
     """
     Review Model Create Serializer.
@@ -28,18 +33,17 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = (
-            'author',
-            'course',
             'rate',
             'content'
         )
     
     def validate(self, data):
         missing_fields = []
-        if not data.get('course'):
+        if not self.context.get('course'):
             missing_fields.append('course')
         else: 
-            _ = get_object_or_404(Course, id=data['course'])
+            course = get_object_or_404(Course, id=self.context['course'])
+            data['course'] = course
         if not data.get('rate'):
             missing_fields.append('rate')
         else:
@@ -47,7 +51,7 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
                 raise FieldError("rate must be between 1 and 5.")
         if not data.get('content'):
             missing_fields.append('content')
-
+        data['author'] = self.context['author']
         if len(missing_fields) > 0:
             raise FieldError(f"{missing_fields} fields missing.")
         return data

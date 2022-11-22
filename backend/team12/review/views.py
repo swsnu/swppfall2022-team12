@@ -1,4 +1,4 @@
-from django.db.models import Q, F
+from django.db.models import F
 from django.db import transaction
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
@@ -8,7 +8,7 @@ from review.models import Review, ReviewLike
 from review.serializers import ReviewSerializer, ReviewCreateSerializer
 from course.models import *
 from rest_framework.decorators import action
-from team12.exceptions import NotAllowed
+from team12.exceptions import NotAllowed, FieldError
 
 class ReviewViewSet(
         viewsets.GenericViewSet,
@@ -30,9 +30,12 @@ class ReviewViewSet(
     @transaction.atomic
     def create(self, request):
         """Create Review"""
-        data = request.data.copy()
-        data['author'] = request.user.id
-        serializer = self.get_serializer(data=data)
+        data = request.data
+        context = {
+            'course': data.get('course'),
+            'author': request.user
+        }
+        serializer = self.get_serializer(data=request.data, context=context)
         serializer.is_valid(raise_exception=True)
         review = serializer.save()
        
@@ -56,14 +59,11 @@ class ReviewViewSet(
     def update(self, request, pk=None):
         """Update Review"""
         review = self.get_object(id=pk)
-        data = request.data
-        if data.get('content'):
-            review.content = data['content']
-        if data.get('rate') and (0 < data.get('rate') < 6):
-            review.rate = data['rate']
-        review.save()
+        serializer = ReviewCreateSerializer(review, data=request.data, partial=True)
+        serializer.save()
         return Response(self.get_serializer(review).data, status=status.HTTP_200_OK)
     
+
     # GET /review/?course=(int)
     # &filter=(string)
     def list(self, request):
@@ -71,25 +71,28 @@ class ReviewViewSet(
         page = request.GET.get('page', '1')
         course_id = request.query_params.get("course")
         f_param = request.query_params.get("filter", False)
-        
+        if not course_id: raise FieldError("missing fields [course]")
         course = get_object_or_404(Course, id=course_id)
         reviews = Review.objects.filter(course=course).order_by(F("created_at").desc())
         if f_param:
             if f_param == "likes": reviews = reviews.order_by(F("likes").desc())
             elif f_param == "time_asc": reviews = reviews.order_by(F("created_at").asc())
             elif f_param == "time_desc": reviews = reviews.order_by(F("created_at").desc())
+            elif f_param == "rate_asc": reviews = reviews.order_by(F("rate").asc())
+            elif f_param == "rate_desc": reviews = reviews.order_by(F("rate").desc())
         
         reviews = Paginator(reviews, 20).get_page(page)
         return Response(self.get_serializer(reviews, many=True).data, status=status.HTTP_200_OK)
     
+
     # PUT /review/like/:reviewId
     @transaction.atomic
     @action(methods=['PUT'], detail=True)
     def like(self, request, pk=None):
-        review = self.get_object(id=pk)
+        review = self.get_object()
         user = request.user
         if review.author == user:
-            return NotAllowed("Author can't like the review.")
+            raise NotAllowed("Author can't like the review.")
         
         if user.like_reviews.filter(review=review).exists():
             user.like_reviews.get(review=review).delete()

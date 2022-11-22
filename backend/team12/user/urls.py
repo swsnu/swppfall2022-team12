@@ -1,9 +1,12 @@
 from django.urls import include, path
-from user import views
+from rest_framework.routers import SimpleRouter
+from user.views import UserViewSet
+
 app_name = 'user'
 
+router = SimpleRouter() 
+router.register('user', UserViewSet, basename='user')
+
 urlpatterns = [
-    path('signup/', views.signup, name='signup'),
-    path('signin/', views.signin, name='signin'),
-    path('logout/', views.logout, name='signout'),
+    path('', include((router.urls))),
 ]
