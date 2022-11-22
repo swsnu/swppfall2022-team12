@@ -8,7 +8,7 @@ from review.models import Review, ReviewLike
 from review.serializers import ReviewSerializer, ReviewCreateSerializer
 from course.models import *
 from rest_framework.decorators import action
-from team12.exceptions import NotAllowed
+from team12.exceptions import NotAllowed, FieldError
 
 class ReviewViewSet(
         viewsets.GenericViewSet,
@@ -71,13 +71,15 @@ class ReviewViewSet(
         page = request.GET.get('page', '1')
         course_id = request.query_params.get("course")
         f_param = request.query_params.get("filter", False)
-        
+        if not course_id: raise FieldError("missing fields [course]")
         course = get_object_or_404(Course, id=course_id)
         reviews = Review.objects.filter(course=course).order_by(F("created_at").desc())
         if f_param:
             if f_param == "likes": reviews = reviews.order_by(F("likes").desc())
             elif f_param == "time_asc": reviews = reviews.order_by(F("created_at").asc())
             elif f_param == "time_desc": reviews = reviews.order_by(F("created_at").desc())
+            elif f_param == "rate_asc": reviews = reviews.order_by(F("rate").asc())
+            elif f_param == "rate_desc": reviews = reviews.order_by(F("rate").desc())
         
         reviews = Paginator(reviews, 20).get_page(page)
         return Response(self.get_serializer(reviews, many=True).data, status=status.HTTP_200_OK)

@@ -4,22 +4,27 @@ from user.models import User
 from course.models import Course
 from team12.exceptions import FieldError
 from django.shortcuts import get_object_or_404
+from user.serializers import UserSerializer
 
 class ReviewSerializer(serializers.ModelSerializer):
     """
     Review Model List Serializer.
     """
+    author = serializers.SerializerMethodField()
 
     class Meta:
         model = Review 
         fields = (
+            'id',
             'content',
             'likes',
             'author',
             'rate',
             'created_at'
         )
-
+    def get_author(self, instance):
+        return UserSerializer(instance.author).data
+        
 class ReviewCreateSerializer(serializers.ModelSerializer):
     """
     Review Model Create Serializer.
