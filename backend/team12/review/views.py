@@ -65,9 +65,13 @@ class ReviewViewSet(
     # PUT /review/:reviewId
     def update(self, request, pk=None):
         """Update Review"""
-        review = self.get_object(id=pk)
-        serializer = ReviewCreateSerializer(review, data=request.data, partial=True)
-        serializer.save()
+        review = self.get_object()
+        data = request.data
+        if data.get('content'):
+            review.content = data['content']
+        if data.get('rate'):
+            review.rate = data['rate']
+        review.save()
         return Response(self.get_serializer(review).data, status=status.HTTP_200_OK)
     
 
