@@ -64,6 +64,7 @@ class CourseViewSet(
     @transaction.atomic
     def update(self, request, pk=None):
         """Update Course"""
+        # TODO: update only title, description, points
         course = self.get_object()
         course.delete()
         return self.create(request)

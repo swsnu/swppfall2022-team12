@@ -44,7 +44,7 @@ class UserSerializer(serializers.ModelSerializer):
     """
     User Model Serializer.
     """
-    # tags = serializers.SerializerMethodField()
+    tags = serializers.SerializerMethodField()
 
     class Meta:
         model = User 
@@ -54,6 +54,6 @@ class UserSerializer(serializers.ModelSerializer):
             'tags'
         )
 
-    # def get_tags(self, instance):
-    #     return instance.tags.values_list('content', flat=True)
+    def get_tags(self, instance):
+        return instance.tags.values_list('content', flat=True)
     

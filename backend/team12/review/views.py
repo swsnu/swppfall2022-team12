@@ -77,6 +77,7 @@ class ReviewViewSet(
         if data.get('rate'):
             review.rate = data['rate']
         review.save()
+        reflect_rate(review.course.id)
         return Response(self.get_serializer(review).data, status=status.HTTP_200_OK)
     
 
