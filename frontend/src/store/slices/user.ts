@@ -33,9 +33,9 @@ export const signupUser = createAsyncThunk(
   'user/signup',
   async (usr: Pick<UserType, 'username' | 'email' | 'password'>, { dispatch }) => {
     const req = { username: usr.username, email: usr.email, password: usr.password };
-    const { data } = await axios.post<Pick<UserType, 'email' | 'username'>>('/user/signup/', req);
+    await axios.post<Pick<UserType, 'email' | 'username'>>('/user/signup/', req);
 
-    return dispatch(userActions.signupUser({ user: data }));
+    // return dispatch(userActions.signupUser({ user: data }));
   },
 );
 
@@ -51,7 +51,7 @@ export const loginUser = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk(
   'user/logoutUser',
-  async (name: UserType["username"], { dispatch }) => {
+  async (name: UserType['username'], { dispatch }) => {
     const { data } = await axios.get('/user/logout/');
     return dispatch(userActions.logoutUser({ name }));
   },
@@ -61,9 +61,9 @@ export const userSlice = createSlice({
   name: 'user',
   initialState: initialUserState,
   reducers: {
-    signupUser: (state, action: PayloadAction<{ user: Pick<UserType, 'email' | 'username'> }>) => {
-      state.loggedInUser = action.payload.user;
-    },
+    // signupUser: (state, action: PayloadAction<{ user: Pick<UserType, 'email' | 'username'> }>) => {
+    //   state.loggedInUser = action.payload.user;
+    // },
     loginUser: (state, action: PayloadAction<{ user: Pick<UserType, 'email' | 'username'> }>) => {
       state.loggedInUser = action.payload.user;
     },
