@@ -1,4 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+/* global kakao */
+
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 
@@ -31,18 +33,17 @@ export default function PostCourse() {
     setFare(Number(state.resultData.totalFare));
   }, []);
 
-  const mapBounds = useMemo(() => {
-    const bounds = new kakao.maps.LatLngBounds();
-
-    markers.forEach((point) => {
-      bounds.extend(new kakao.maps.LatLng(point.position.lat, point.position.lng));
-    });
-    return bounds;
-  }, [markers]);
-
   useEffect(() => {
-    if (map) map.setBounds(mapBounds, 400, 50, 100, 50);
-  });
+    const mapBounds = () => {
+      const bounds = new kakao.maps.LatLngBounds();
+
+      markers.forEach((point) => {
+        bounds.extend(new kakao.maps.LatLng(point.position.lat, point.position.lng));
+      });
+      return bounds;
+    };
+    if (map) map.setBounds(mapBounds(), 400, 50, 100, 50);
+  }, [map]);
 
   const handleSubmitCourse = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -55,11 +56,16 @@ export default function PostCourse() {
       path,
       markers,
     };
-    console.log(data);
-    const result = await dispatch(postCourse(data));
-    if (result.type === `${postCourse.typePrefix}/fulfilled`) {
+    try {
+      await dispatch(postCourse(data));
       navigate('/courses');
+    } catch (error) {
+      alert('ERROR');
     }
+    // const result = await dispatch(postCourse(data));
+    // if (result.type === `${postCourse.typePrefix}/fulfilled`) {
+    //   navigate('/courses');
+    // }
   };
 
   return (
@@ -78,24 +84,28 @@ export default function PostCourse() {
         </button>
       </div>
       <div>
-        Title :{' '}
-        <input
-          style={{ marginRight: '30px' }}
-          type="text"
-          value={title}
-          onChange={(e) => {
-            setTitle(e.target.value);
-          }}
-        />
-        description :{' '}
-        <input
-          style={{ marginRight: '30px' }}
-          type="text"
-          value={description}
-          onChange={(e) => {
-            setDescription(e.target.value);
-          }}
-        />
+        <label>
+          Title
+          <input
+            style={{ marginRight: '30px' }}
+            type="text"
+            value={title}
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
+          />
+        </label>
+        <label>
+          Description
+          <input
+            style={{ marginRight: '30px' }}
+            type="text"
+            value={description}
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
+          />
+        </label>
         <label style={{ marginRight: '30px' }}>total fare : {`${fare} 원`}</label>
         <label style={{ marginRight: '30px' }}>expected time : {`${expectedTime} 분`}</label>
         <label>total distance : {`${distance} km`}</label>
