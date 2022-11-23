@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 
+import ReviewElement from '../../components/ReviewElement/ReviewElement';
+import ReviewPost from '../../components/ReviewPost/ReviewPost';
+
 export default function CourseDetail() {
   const { id } = useParams(); // get the id of the course
   const [title, setTitle] = useState('dummy title');
@@ -26,6 +29,24 @@ export default function CourseDetail() {
     },
     idx: 0,
   });
+  const [reviewList, setReviewList] = useState([
+    {
+      id: 2,
+      content: 'test content reviews 2',
+      likes: 0,
+      author: 'hoosi',
+      rate: 3,
+      created_at: '2022-11-22T08:09:34.764017Z',
+    },
+    {
+      id: 1,
+      content: 'review content test!!',
+      likes: 1,
+      author: 'sihoo',
+      rate: 5,
+      created_at: '2022-11-22T06:23:16.984213Z',
+    },
+  ]);
 
   useEffect(() => {
     axios.get(`/course/${id}/`).then((res) => {
@@ -34,10 +55,16 @@ export default function CourseDetail() {
       setTime(res.data.e_time);
       setCounts(res.data.u_counts);
       setPoints(res.data.markers);
+      console.log(res);
+    });
+    axios.get(`/review/?course=${id}`).then((res) => {
+      console.log(res);
+      setReviewList(res.data);
     });
   }, []);
 
   const onPlay = () => {
+    console.log(reviewList);
     const tempArray = ['nmap://navigation?'];
     const elementArray = [
       {
@@ -82,6 +109,22 @@ export default function CourseDetail() {
       </h6>
       <h6>expected time : {e_time}</h6>
       <button onClick={onPlay}>go to navigation</button>
+      <h3>Reviews</h3>
+      <ReviewPost courseId={id} />
+      <div>
+        {reviewList.map((prop) => {
+          return (
+            <ReviewElement
+              id={prop.id}
+              content={prop.content}
+              likes={prop.likes}
+              author={prop.author}
+              rate={prop.rate}
+              created_at={prop.created_at}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }
