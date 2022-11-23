@@ -4,18 +4,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { AppDispatch } from '../../store';
-import { loginUser } from '../../store/slices/user';
+import { loginUser, selectUser } from '../../store/slices/user';
 
 export default function LoginTab() {
-  // const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const userState = useSelector(selectUser);
+
   const emailInputRef = useRef<HTMLInputElement>(null);
   const pwInputRef = useRef<HTMLInputElement>(null);
 
   const [emailInput, setEmailInput] = useState<string>('');
   const [passwordInput, setPasswordInput] = useState<string>('');
 
-  const onClickLogin = () => {
+  const onClickLogin = async () => {
     if (emailInput === '' && emailInputRef.current != null) {
       emailInputRef.current.focus();
       return;
@@ -24,8 +26,9 @@ export default function LoginTab() {
       pwInputRef.current.focus();
       return;
     }
-    // dispatch(loginUser(useremailInput, passwordInput));
-    navigate('/main');
+    await dispatch(loginUser({ email: emailInput, password: passwordInput }));
+
+    if (userState.loggedInUser !== null) navigate('/main');
   };
 
   return (

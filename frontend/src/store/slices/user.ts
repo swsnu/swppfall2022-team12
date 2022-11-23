@@ -18,9 +18,9 @@ export interface UserType {
 }
 
 export interface UserState {
-  users: UserType[];
-  loggedInUser: UserType | null;
-  selectedUser: UserType | null;
+  users: Pick<UserType, 'email' | 'username'>[];
+  loggedInUser: Pick<UserType, 'email' | 'username'> | null;
+  selectedUser: Pick<UserType, 'email' | 'username'> | null;
 }
 
 const initialUserState: UserState = {
@@ -31,27 +31,29 @@ const initialUserState: UserState = {
 
 export const signupUser = createAsyncThunk(
   'user/signup',
-  async (usr: Pick<UserType, 'username' | 'email' | 'password'>) => {
+  async (usr: Pick<UserType, 'username' | 'email' | 'password'>, { dispatch }) => {
     const req = { username: usr.username, email: usr.email, password: usr.password };
-    const { data } = await axios.post<UserType>('/signup/', req);
-    
-  }
-)
+    const { data } = await axios.post<Pick<UserType, 'email' | 'username'>>('/user/signup/', req);
+
+    return dispatch(userActions.signupUser({ user: data }));
+  },
+);
 
 export const loginUser = createAsyncThunk(
   'user/login',
   async (usr: Pick<UserType, 'email' | 'password'>, { dispatch }) => {
     const req = { email: usr.email, password: usr.password };
-    const { data } = await axios.put<UserType>('/signin/', req);
-    // dispatch(userActions.loginUser({ id: UserType['id'], username: UserType['username'], password: UserType{'password'} }))
+    const { data } = await axios.put<Pick<UserType, 'email' | 'username'>>('/user/login/', req);
+
+    return dispatch(userActions.loginUser({ user: data }));
   },
 );
 
 export const logoutUser = createAsyncThunk(
   'user/logoutUser',
-  async (id: UserType['id'], { dispatch }) => {
-    const { data } = await axios.put<UserType>(`/signout/${id}`);
-    // dispatch(userActions.logoutUser({ targetId: id }));
+  async (name: UserType["username"], { dispatch }) => {
+    const { data } = await axios.get('/user/logout/');
+    return dispatch(userActions.logoutUser({ name }));
   },
 );
 
@@ -59,10 +61,10 @@ export const userSlice = createSlice({
   name: 'user',
   initialState: initialUserState,
   reducers: {
-    signupUser: (state, action: PayloadAction<{ user: UserType }>) => {
+    signupUser: (state, action: PayloadAction<{ user: Pick<UserType, 'email' | 'username'> }>) => {
       state.loggedInUser = action.payload.user;
     },
-    loginUser: (state, action: PayloadAction<{ user: UserType }>) => {
+    loginUser: (state, action: PayloadAction<{ user: Pick<UserType, 'email' | 'username'> }>) => {
       state.loggedInUser = action.payload.user;
     },
     logoutUser: (state, action) => {

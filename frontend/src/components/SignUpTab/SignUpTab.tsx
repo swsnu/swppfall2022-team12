@@ -1,9 +1,16 @@
 import { Button } from '@mui/material';
 import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
+import { AppDispatch, store } from '../../store';
+import { signupUser, selectUser } from '../../store/slices/user';
+
 export default function SignUpTab() {
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const userState = useSelector(selectUser);
+
   const nameInputRef = useRef<HTMLInputElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
   const pwInputRef1 = useRef<HTMLInputElement>(null);
@@ -14,7 +21,7 @@ export default function SignUpTab() {
   const [passwordInput, setPasswordInput] = useState<string>('');
   const [checkPwInput, setCheckPwInput] = useState<string>('');
 
-  const onClickSignUpButton = () => {
+  const onClickSignUpButton = async () => {
     if (usernameInput === '' && nameInputRef.current != null) {
       nameInputRef.current.focus();
       return;
@@ -32,7 +39,10 @@ export default function SignUpTab() {
       return;
     }
 
-    navigate('/main');
+    await dispatch(
+      signupUser({ email: emailInput, username: usernameInput, password: passwordInput }),
+    );
+    if (userState.loggedInUser !== null) navigate('/main');
   };
 
   return (

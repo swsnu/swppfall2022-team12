@@ -1,12 +1,15 @@
 import { Button } from '@mui/material';
 import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import Header from '../../components/Header/Header';
 import SearchBox from '../../components/SearchBox/SearchBox';
+import user, { selectUser } from '../../store/slices/user';
 
 function MainPage() {
   const navigate = useNavigate();
+  const userState = useSelector(selectUser);
 
   useEffect(() => {
     localStorage.removeItem('CATEGORY_KEY');
