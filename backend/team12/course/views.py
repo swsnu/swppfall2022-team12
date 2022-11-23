@@ -7,7 +7,6 @@ from rest_framework.decorators import action
 from course.serializers import CourseListSerializer, CourseDetailSerializer, CourseSerializer
 from course.models import Course
 from course.const import DRIVE
-from django.shortcuts import get_object_or_404
 
 
 class CourseViewSet(
@@ -35,7 +34,8 @@ class CourseViewSet(
         # TODO: remove anonymous cases
         context = {
             "markers": request.data.get("markers", []),
-            "path": request.data.get("path", [])
+            "path": request.data.get("path", []),
+            "tags": request.data.get("tags", [])
         }
         data = request.data.copy()
         if request.user.is_anonymous:
@@ -77,12 +77,17 @@ class CourseViewSet(
         category = request.query_params.get("category", DRIVE)
         search_keyword = request.query_params.get("search_keyword", "")
         f_param = request.query_params.get("filter", False)
+        tags = request.query_params.getlist("tags", False)
         
         courses = Course.objects.filter(category=category)
         if search_keyword:
             courses = courses.filter(
                 Q(title__icontains=search_keyword) | 
                 Q(description__icontains=search_keyword))
+        if tags:
+            courses = courses.filter(
+                tags__id__in = tags 
+            )
         courses = courses.order_by(F("created_at").desc())
         if f_param:
             if f_param == "use": courses = courses.order_by(F("u_counts").desc())

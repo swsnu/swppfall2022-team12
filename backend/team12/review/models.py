@@ -16,8 +16,8 @@ class Review(models.Model):
         created_at (DateTime): Review's created at time.
     """
     id = models.AutoField(primary_key=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reviews")
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="reviews")
     rate = models.PositiveSmallIntegerField()
     content = models.CharField(max_length=200, blank=True)
     likes = models.PositiveSmallIntegerField(default=0)

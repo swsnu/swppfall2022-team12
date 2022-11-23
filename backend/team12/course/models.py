@@ -16,6 +16,7 @@ class Course(models.Model):
         created_at (DateTime): Course's created at time.
         u_counts (int): numbers of Course's uses.
         e_time (int): estimated time of Course. (minute)
+        rate (int): average of reviews rate.
         distance (int): Course's total distance. (km)
     """
     id = models.AutoField(primary_key=True)
@@ -27,8 +28,8 @@ class Course(models.Model):
     u_counts = models.PositiveIntegerField(default=0)
     e_time = models.PositiveIntegerField(default=0)
     distance = models.FloatField(default=0)
-    rate = models.PositiveSmallIntegerField(default=0)
-    tag = models.ManyToManyField(Tag)
+    rate = models.FloatField(default=0)
+    tags = models.ManyToManyField(Tag, related_name="courses")
 
     
 class Point(models.Model):

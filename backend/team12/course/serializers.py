@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from course.models import *
 from team12.exceptions import FieldError
-
+from tag.models import Tag
 
 class MarkerSerializer(serializers.ModelSerializer):
     """
@@ -43,7 +43,6 @@ class PathSerializer(serializers.ModelSerializer):
     def get_lng(self, instance):
         return float(instance.longitude)
     
-
 class CourseSerializer(serializers.ModelSerializer):
     """
     Course Model Serializer
@@ -121,6 +120,8 @@ class CourseSerializer(serializers.ModelSerializer):
                 )
             )
         Point.objects.bulk_create(points_list)
+        tags = list(Tag.objects.filter(id__in=self.context['tags']))
+        course.tags.set(tags)
         return course
 
 class CourseDetailSerializer(serializers.ModelSerializer):
@@ -131,6 +132,7 @@ class CourseDetailSerializer(serializers.ModelSerializer):
     path = serializers.SerializerMethodField()
     p_counts = serializers.SerializerMethodField()
     author = serializers.CharField(source='author.username')
+    tags = serializers.SerializerMethodField()
     class Meta:
         model = Course 
         fields = (
@@ -144,7 +146,9 @@ class CourseDetailSerializer(serializers.ModelSerializer):
             'created_at',
             'u_counts',
             'e_time',
-            'distance'
+            'distance',
+            'tags',
+            'rate'
         )
     
     def get_markers(self, course):
@@ -157,6 +161,9 @@ class CourseDetailSerializer(serializers.ModelSerializer):
 
     def get_p_counts(self, course):
         return course.points.filter(category=MARKER).count()
+    
+    def get_tags(self, course):
+        return course.tags.values_list('content', flat=True)
     
 
 class CourseListSerializer(serializers.ModelSerializer):
@@ -174,6 +181,7 @@ class CourseListSerializer(serializers.ModelSerializer):
             'created_at',
             'u_counts',
             'e_time',
-            'distance'
+            'distance',
+            'rate'
         )
     

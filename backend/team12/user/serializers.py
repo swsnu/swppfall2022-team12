@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from user.models import User
 from team12.exceptions import FieldError
+from tag.models import Tag
 
 class UserCreateSerializer(serializers.ModelSerializer):
     """
@@ -29,21 +30,30 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return data
     
     def create(self, validated_data):
-        return User.objects.create_user(
+        user = User.objects.create_user(
             email=validated_data['email'],
             password=validated_data['password'],
             username=validated_data['username']
         )
+        tags = list(Tag.objects.filter(id__in=self.context['tags']))
+        user.tags.set(tags)
+        return user
+    
 
 class UserSerializer(serializers.ModelSerializer):
     """
     User Model Serializer.
     """
+    # tags = serializers.SerializerMethodField()
 
     class Meta:
         model = User 
         fields = (
             'email',
-            'username'
+            'username',
+            'tags'
         )
+
+    # def get_tags(self, instance):
+    #     return instance.tags.values_list('content', flat=True)
     
