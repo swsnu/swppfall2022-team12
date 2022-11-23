@@ -20,10 +20,12 @@ class UserViewSet(viewsets.GenericViewSet):
     @action(methods=['POST'], detail=False)
     @transaction.atomic
     def signup(self, request):
-       serializer = UserCreateSerializer(data=request.data)
-       serializer.is_valid(raise_exception=True)
-       user = serializer.save()
-       return Response(self.get_serializer(user).data, status=status.HTTP_201_CREATED)
+      serializer = UserCreateSerializer(data=request.data)
+      serializer.is_valid(raise_exception=True)
+      user = serializer.save()
+
+      login(request, user)
+      return Response(self.get_serializer(user).data, status=status.HTTP_201_CREATED)
     
     @action(methods=['PUT'], detail=False)
     @transaction.atomic
@@ -34,10 +36,10 @@ class UserViewSet(viewsets.GenericViewSet):
 			email=data.get('email', ""), 
 			password=data.get('password', ""))
         if user is not None:
-           login(request, user)
-           return Response(self.get_serializer(user).data, status=status.HTTP_200_OK)
+          login(request, user)
+          return Response(self.get_serializer(user).data, status=status.HTTP_200_OK)
         else:
-           raise AuthentificationFailed()
+          raise AuthentificationFailed()
     
     @action(methods=['GET'], detail=False)
     def logout(self, request):
