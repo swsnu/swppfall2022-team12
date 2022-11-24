@@ -23,13 +23,11 @@ export default function ReviewPost(prop: ReviewPostProp) {
       rate,
       content,
     };
-    axios
-      .post('/review/', data)
-      .then((res) => {
-        /* eslint no-restricted-globals: ["off"] */
-        location.reload();
-        //test needed for reloading***
-      })
+    axios.post('/review/', data).then((res) => {
+      /* eslint no-restricted-globals: ["off"] */
+      location.reload();
+      // test needed for reloading***
+    });
   };
 
   return (
@@ -38,7 +36,7 @@ export default function ReviewPost(prop: ReviewPostProp) {
         {clicked.map((currBoolean, idx) => {
           return (
             <FaStar
-              data-testid='star'
+              data-testid="star"
               size="30"
               onClick={() => {
                 setRate(idx + 1);

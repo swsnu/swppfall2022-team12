@@ -30,7 +30,7 @@ export default function ReviewElement(prop: ReviewProp) {
         {prop.likes} people liked this comment
         <button
           onClick={() => {
-            axios.put(`/review/like/${prop.id}/`)
+            axios.put(`/review/like/${prop.id}/`);
           }}
         >
           like
