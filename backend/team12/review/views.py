@@ -2,12 +2,17 @@ from django.db.models import F
 from django.db import transaction
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
+
 from rest_framework import status, viewsets, generics
 from rest_framework.response import Response
+from rest_framework.decorators import action
+
 from review.models import Review, ReviewLike
 from review.serializers import ReviewSerializer, ReviewCreateSerializer
+
 from course.models import *
-from rest_framework.decorators import action
+from course.utils import reflect_rate
+
 from team12.exceptions import NotAllowed, FieldError
 
 class ReviewViewSet(
@@ -45,7 +50,7 @@ class ReviewViewSet(
         serializer = self.get_serializer(data=request.data, context=context)
         serializer.is_valid(raise_exception=True)
         review = serializer.save()
-       
+        reflect_rate(data['course'])
         return Response(ReviewSerializer(review).data, status=status.HTTP_200_OK)
 
 
@@ -72,6 +77,7 @@ class ReviewViewSet(
         if data.get('rate'):
             review.rate = data['rate']
         review.save()
+        reflect_rate(review.course.id)
         return Response(self.get_serializer(review).data, status=status.HTTP_200_OK)
     
 
@@ -84,7 +90,7 @@ class ReviewViewSet(
         f_param = request.query_params.get("filter", False)
         if not course_id: raise FieldError("missing fields [course]")
         course = get_object_or_404(Course, id=course_id)
-        reviews = Review.objects.filter(course=course).order_by(F("created_at").desc())
+        reviews = course.reviews.all().order_by(F("created_at").desc())
         if f_param:
             if f_param == "likes": reviews = reviews.order_by(F("likes").desc())
             elif f_param == "time_asc": reviews = reviews.order_by(F("created_at").asc())

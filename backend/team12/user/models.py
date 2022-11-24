@@ -3,7 +3,7 @@ from django.db import models
 from tag.models import Tag
 
 class User(AbstractUser):
-	tags = models.ManyToManyField(Tag, related_name="tags")
+	tags = models.ManyToManyField(Tag, related_name="users")
 	email = models.EmailField(
         verbose_name='email',
         max_length=255,

@@ -7,5 +7,6 @@ urlpatterns = [
     path('', include('course.urls')),
     path('', include('review.urls')),
     path('', include('user.urls')),
+    path('', include('tag.urls')),
     path('token/', token, name='token'),
 ]
