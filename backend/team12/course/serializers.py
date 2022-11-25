@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from course.models import *
+from course.utils import point_create
 from team12.exceptions import FieldError
 from tag.models import Tag
 
@@ -96,30 +97,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         course = Course.objects.create(**validated_data)
-        points_list = []
-        for idx, marker in enumerate(self.context['markers']):
-            points_list.append(
-                Point(
-                    category=MARKER,
-                    name=marker['content'],
-                    image=marker.get('image', ""),
-                    course=course,
-                    longitude=marker['position']['lng'],
-                    latitude=marker['position']['lat'],
-                    idx=idx
-                )
-            )
-        for idx, path in enumerate(self.context['path']):
-            points_list.append(
-                Point(
-                    category=PATH,
-                    course=course,
-                    longitude=path['lng'],
-                    latitude=path['lat'],
-                    idx=idx
-                )
-            )
-        Point.objects.bulk_create(points_list)
+        point_create(self.context, course)
         tags = list(Tag.objects.filter(id__in=self.context['tags']))
         course.tags.set(tags)
         return course

@@ -1,12 +1,15 @@
 from django.db.models import Q, F
 from django.db import transaction
 from django.core.paginator import Paginator
+
 from rest_framework import status, viewsets, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
+
 from course.serializers import CourseListSerializer, CourseDetailSerializer, CourseSerializer
 from course.models import Course
 from course.const import DRIVE
+from course.utils import point_create
 
 
 class CourseViewSet(
@@ -64,9 +67,15 @@ class CourseViewSet(
     @transaction.atomic
     def update(self, request, pk=None):
         """Update Course"""
-        # TODO: update only title, description, points
         course = self.get_object()
-        course.delete()
+        data = request.data
+        if data.get("title"):
+            course.title = data['title']
+        if data.get('description'):
+            course.description = data['description']
+        if data.get("markers"):
+            course.points.delete()
+            point_create(data, course)
         return self.create(request)
 
     # GET /course/?category=(string)
