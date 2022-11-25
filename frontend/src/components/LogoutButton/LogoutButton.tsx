@@ -1,4 +1,5 @@
 import { Button } from '@mui/material';
+import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
@@ -11,10 +12,15 @@ export default function LogoutButton() {
   const userState = useSelector(selectUser);
 
   const onClickLogoutButton = async () => {
-    if (userState.loggedInUser !== null) {
-      await dispatch(logoutUser(userState.loggedInUser.username));
-    }
-    navigate('/login');
+    if (window.sessionStorage.getItem("user") !== null) {
+      await axios.get('/user/logout')
+      .catch((error) => {
+        alert(error.response.data.detail);
+      });
+
+      window.sessionStorage.removeItem("user");
+      window.location.reload();
+    };
   };
 
   return <Button onClick={onClickLogoutButton}>Logout</Button>;

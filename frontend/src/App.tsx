@@ -12,12 +12,14 @@ import { UserType, selectUser } from './store/slices/user';
 
 function App() {
   const userState = useSelector(selectUser);
-  const [loggedInUser, setLoggedInUser] = useState<Pick<UserType, 'email' | 'username'> | null>(
+// Pick<UserType, 'email' | 'username' | 'tags'>
+  const [loggedInUser, setLoggedInUser] = useState<string | null>(
     null,
   );
+
   useEffect(() => {
-    setLoggedInUser(userState.loggedInUser);
-  }, [userState]);
+    setLoggedInUser(window.sessionStorage.getItem("user"));
+  }, [window.sessionStorage]);
 
   return (
     <div className="App">

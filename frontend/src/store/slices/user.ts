@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, isRejected, PayloadAction } from '@reduxjs/toolkit';
 import userEvent from '@testing-library/user-event';
 import axios, { AxiosRequestHeaders } from 'axios';
 
@@ -33,9 +33,20 @@ export const signupUser = createAsyncThunk(
   'user/signup',
   async (usr: Pick<UserType, 'username' | 'email' | 'password'>, { dispatch }) => {
     const req = { username: usr.username, email: usr.email, password: usr.password };
-    await axios.post<Pick<UserType, 'email' | 'username' | 'tags'>>('/user/signup/', req);
+    const response = await axios.post<Pick<UserType, 'email' | 'username' | 'tags'>>(
+      '/user/signup/',
+      req,
+    );
+    const { data } = response;
 
-    // return dispatch(userActions.signupUser({ user: data }));
+    if (response.status === 400) return alert(response.data);
+    if (response.status === 201) return dispatch(userActions.signupUser({ user: data }));
+    // .then((response) => {
+    //   })
+    //   .catch((err) => {
+    //     const { data } = err;
+    //     return alert(data);
+    //   });
   },
 );
 
@@ -61,15 +72,20 @@ export const userSlice = createSlice({
   name: 'user',
   initialState: initialUserState,
   reducers: {
-    // signupUser: (state, action: PayloadAction<{ user: Pick<UserType, 'email' | 'username'> }>) => {
-    //   state.loggedInUser = action.payload.user;
-    // },
+    signupUser: (state, action: PayloadAction<{ user: Pick<UserType, 'email' | 'username' | 'tags'> }>) => {
+      state.loggedInUser = action.payload.user;
+    },
     loginUser: (state, action: PayloadAction<{ user: Pick<UserType, 'email' | 'username' | 'tags'> }>) => {
       state.loggedInUser = action.payload.user;
     },
     logoutUser: (state, action) => {
       state.loggedInUser = null;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(signupUser.rejected, (state, action) => {
+      // alert(action.payload);
+    });
   },
 });
 

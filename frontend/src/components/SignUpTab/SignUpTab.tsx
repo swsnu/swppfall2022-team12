@@ -1,15 +1,16 @@
 import { Button } from '@mui/material';
+import axios from 'axios';
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { AppDispatch, store } from '../../store';
-import { signupUser, selectUser } from '../../store/slices/user';
+import { signupUser, selectUser, UserType } from '../../store/slices/user';
 
 export default function SignUpTab() {
-  const dispatch = useDispatch<AppDispatch>();
+  // const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const userState = useSelector(selectUser);
+  // const userState = useSelector(selectUser);
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
@@ -38,11 +39,29 @@ export default function SignUpTab() {
       pwInputRef2.current.focus();
       return;
     }
+    console.log('signup');
+    // const result = await dispatch(
+    //   signupUser({ email: emailInput, username: usernameInput, password: passwordInput }),
+    // );
+    // console.log(result);
+    const req = { username: usernameInput, email: emailInput, password: passwordInput };
+    await axios.post<Pick<UserType, 'email' | 'username' | 'tags'>>(
+      '/user/signup/',
+      req,
+    )
+      .then((response) => {
+        window.sessionStorage.setItem('user', response.data.username);
+        navigate('/main');
+      })
+      .catch((error) => {
+        const msg = error.response.data;
+        let alertMsg = "";
 
-    await dispatch(
-      signupUser({ email: emailInput, username: usernameInput, password: passwordInput }),
-    );
-    if (userState.loggedInUser !== null) navigate('/main');
+        if (msg.email) alertMsg += 'Email : ' + msg.email + '\n';
+        if (msg.username) alertMsg += 'Username : ' + msg.username + '\n';
+        if (msg.password) alertMsg += 'Password : ' + msg.password + '\n';
+        alert(alertMsg);
+      });
   };
 
   return (

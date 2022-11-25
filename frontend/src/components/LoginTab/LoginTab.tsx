@@ -1,10 +1,11 @@
 import { Button } from '@mui/material';
+import axios from 'axios';
 import React, { useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { AppDispatch } from '../../store';
-import { loginUser, selectUser } from '../../store/slices/user';
+import { UserType, loginUser, selectUser } from '../../store/slices/user';
 
 export default function LoginTab() {
   const navigate = useNavigate();
@@ -26,9 +27,19 @@ export default function LoginTab() {
       pwInputRef.current.focus();
       return;
     }
-    await dispatch(loginUser({ email: emailInput, password: passwordInput }));
 
-    if (userState.loggedInUser !== null) navigate('/main');
+    const req = { email: emailInput, password: passwordInput };
+    await axios.put<Pick<UserType, 'email' | 'username' | 'tags'>>(
+      '/user/login/',
+      req,
+    )
+    .then((response) => {
+      window.sessionStorage.setItem('user', response.data.username);
+      window.location.reload();
+    })
+    .catch((error) => {
+      if (error.response.data.detail) alert(error.response.data.detail);
+    })
   };
 
   return (
