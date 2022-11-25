@@ -1,10 +1,9 @@
 from rest_framework import serializers
 from review.models import Review
-from user.models import User
 from course.models import Course
 from team12.exceptions import FieldError
 from django.shortcuts import get_object_or_404
-from user.serializers import UserSerializer
+
 
 class ReviewSerializer(serializers.ModelSerializer):
     """

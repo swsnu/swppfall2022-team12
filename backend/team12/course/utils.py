@@ -3,6 +3,7 @@
 from course.models import Course, Point
 from django.db.models import Avg
 from course.const import *
+from tag.models import Tag
 
 
 def reflect_rate(course_id):
@@ -12,7 +13,7 @@ def reflect_rate(course_id):
     course.save()
 
     
-def point_create(data: dict, course: Course):
+def create_points(data: dict, course: Course):
     """Create markers and path of Point model."""
     points_list = []
     for idx, marker in enumerate(data['markers']):
@@ -38,3 +39,10 @@ def point_create(data: dict, course: Course):
             )
         )
     Point.objects.bulk_create(points_list)
+
+    
+def set_tags(tags: list, course:Course):
+    """Set Course Tags."""
+    course.tags.clear()
+    tags = list(Tag.objects.filter(id__in=tags))
+    course.tags.set(tags)

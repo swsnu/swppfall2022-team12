@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from course.models import *
-from course.utils import point_create
+from course.utils import create_points, set_tags
 from team12.exceptions import FieldError
 from tag.models import Tag
 
@@ -44,9 +44,9 @@ class PathSerializer(serializers.ModelSerializer):
     def get_lng(self, instance):
         return float(instance.longitude)
     
-class CourseSerializer(serializers.ModelSerializer):
+class CourseCreateSerializer(serializers.ModelSerializer):
     """
-    Course Model Serializer
+    Course Model Create Serializer
     """
     class Meta:
         model = Course 
@@ -97,9 +97,8 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         course = Course.objects.create(**validated_data)
-        point_create(self.context, course)
-        tags = list(Tag.objects.filter(id__in=self.context['tags']))
-        course.tags.set(tags)
+        create_points(self.context, course)
+        set_tags(self.context['tags'], course)
         return course
 
 class CourseDetailSerializer(serializers.ModelSerializer):
@@ -163,3 +162,15 @@ class CourseListSerializer(serializers.ModelSerializer):
             'rate'
         )
     
+class CourseUpdateSerializer(serializers.ModelSerializer):
+    """
+    Course Model Update Serializer
+    """
+    class Meta:
+        model = Course
+        fields = (
+            'title',
+            'description',
+            'e_time',
+            'distance'
+        )

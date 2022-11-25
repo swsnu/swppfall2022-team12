@@ -6,11 +6,10 @@ from rest_framework import status, viewsets, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
-from course.serializers import CourseListSerializer, CourseDetailSerializer, CourseSerializer
+from course.serializers import CourseListSerializer, CourseDetailSerializer, CourseCreateSerializer, CourseUpdateSerializer
 from course.models import Course
 from course.const import DRIVE
-from course.utils import point_create
-
+from course.utils import create_points, set_tags
 
 class CourseViewSet(
         viewsets.GenericViewSet,
@@ -27,8 +26,10 @@ class CourseViewSet(
             return CourseDetailSerializer
         elif self.action == "list":
             return CourseListSerializer
-        elif self.action in ["create", "update"]:
-            return CourseSerializer
+        elif self.action == "create":
+            return CourseCreateSerializer
+        elif self.action == "update":
+            return CourseUpdateSerializer
 
     # POST /course
     @transaction.atomic
@@ -69,14 +70,15 @@ class CourseViewSet(
         """Update Course"""
         course = self.get_object()
         data = request.data
-        if data.get("title"):
-            course.title = data['title']
-        if data.get('description'):
-            course.description = data['description']
+        serializer = self.get_serializer(course, data=data)
+        serializer.is_valid(raise_exception=True)
+        course = serializer.save()
         if data.get("markers"):
-            course.points.delete()
-            point_create(data, course)
-        return self.create(request)
+            course.points.all().delete()
+            create_points(data, course)
+        if data.get("tags"):
+            set_tags(data['tags'], course)
+        return Response(CourseDetailSerializer(course).data, status=status.HTTP_200_OK)
 
     # GET /course/?category=(string)
     # &search_keyword=(string)
