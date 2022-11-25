@@ -66,6 +66,7 @@ export default function CourseDetail() {
       setMarkers(res.data.markers);
       setPath(res.data.path);
       setTags(res.data.tags);
+      setRating(res.data.rate);
       console.log(res);
     });
     axios.get(`/review/?course=${id}`).then((res) => {
@@ -114,7 +115,7 @@ export default function CourseDetail() {
       <>
       <div>
         <h1>{title}</h1>
-        <h3>tags : {tags} </h3>
+        <h3>tags : {tags.toString()} </h3>
         <h5>{description}</h5>
         <h6>{u_counts} people used this course!</h6>
         <h6>

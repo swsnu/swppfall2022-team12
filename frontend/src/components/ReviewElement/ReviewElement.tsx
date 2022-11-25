@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { FaStar } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
+/* eslint-disable */
 
 interface ReviewProp {
   id: number;
@@ -16,6 +17,7 @@ interface ReviewProp {
 export default function ReviewElement(prop: ReviewProp) {
   const ARRAY = [1, 1, 1, 1, 1];
   const [editting, setEditting] = useState<boolean>(false);
+  const [newtext, setNewText] = useState<string>(prop.content);
   return (
     <div>
       <div className="author">{prop.author}</div>
@@ -48,7 +50,21 @@ export default function ReviewElement(prop: ReviewProp) {
       >
         edit
       </button>
-      <div>{editting ? <div>editting area</div> : <div />}</div>
+      <div>{editting ? <div>editting area:
+        <input type={"text"} onChange={(e)=>setNewText(e.target.value)}></input>
+        <button onClick={()=>{
+          console.log(newtext)
+          axios.put('/review/'+prop.id+"/", {
+            content:newtext,
+            rate:prop.rate
+          }).then((res) => {
+            console.log(res)
+            /* eslint no-restricted-globals: ["off"] */
+            location.reload();
+            // test needed for reloading***
+          });
+        }}>edit!</button>
+      </div> : <div />}</div>
       <button
         onClick={() => {
           // need to be fixed due to login issue(Not everybody can delete!)
