@@ -72,11 +72,13 @@ export default function CourseDetail() {
     axios.get(`/review/?course=${id}`).then((res) => {
       console.log(res);
       setReviewList(res.data);
+      setRateNum(res.data.length);
     });
   }, []);
 
   const onPlay = () => {
     console.log(reviewList);
+    axios.put(`/course/${id}/play/`).then((res)=>{console.log(res)});
     const tempArray = ['nmap://navigation?'];
     const elementArray = [
       {

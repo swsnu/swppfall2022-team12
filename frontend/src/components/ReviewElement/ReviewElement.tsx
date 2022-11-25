@@ -17,7 +17,17 @@ interface ReviewProp {
 export default function ReviewElement(prop: ReviewProp) {
   const ARRAY = [1, 1, 1, 1, 1];
   const [editting, setEditting] = useState<boolean>(false);
-  const [newtext, setNewText] = useState<string>(prop.content);
+  const [newtext, setNewText] = useState<string>("");
+  const [clicked, setClicked] = useState([false, false, false, false, false]);
+  const [newRate, setNewRate] = useState<number>(5);
+
+
+
+  useEffect(()=>{
+    setNewText(prop.content);
+    setNewRate(prop.rate);
+  }, [editting])
+
   return (
     <div>
       <div className="author">{prop.author}</div>
@@ -25,7 +35,7 @@ export default function ReviewElement(prop: ReviewProp) {
       <div className="created_at">{prop.created_at}</div>
       <div>
         {ARRAY.map((elem, idx) => {
-          return <FaStar size="10" color={prop.rate >= idx + 1 ? '#d57358' : 'lightgray'} />;
+          return <FaStar size="15" color={prop.rate >= idx + 1 ? '#d57358' : 'lightgray'} />;
         })}
       </div>
       <div className="likes">
@@ -40,8 +50,7 @@ export default function ReviewElement(prop: ReviewProp) {
       </div>
       <button
         onClick={() => {
-          if (prop.author === 'sihoo') {
-            // need to be fixed due to login issue
+          if (prop.author === 'sihoo') {// need to be fixed due to login issue
             setEditting(true);
           } else {
             // make Modal to notice user that he can't edit the comment
@@ -51,12 +60,26 @@ export default function ReviewElement(prop: ReviewProp) {
         edit
       </button>
       <div>{editting ? <div>editting area:
-        <input type={"text"} onChange={(e)=>setNewText(e.target.value)}></input>
+        <div>
+        {clicked.map((currBoolean, idx) => {
+          return (
+            <FaStar
+              data-testid="star"
+              size="15"
+              onClick={() => {
+                setNewRate(idx + 1);
+              }}
+              color={newRate >= idx + 1 ? '#d57358' : 'lightgray'}
+            />
+          );
+        })}
+      </div>
+        <input type={"text"} onChange={(e)=>setNewText(e.target.value)} value={newtext}></input>
         <button onClick={()=>{
           console.log(newtext)
           axios.put('/review/'+prop.id+"/", {
             content:newtext,
-            rate:prop.rate
+            rate:newRate
           }).then((res) => {
             console.log(res)
             /* eslint no-restricted-globals: ["off"] */
