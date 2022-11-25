@@ -19,7 +19,7 @@ const initialState = {
   }
 };
 
-const mockStore = getMockStore({ ...initialState });
+// const mockStore = getMockStore({ ...initialState });
 
 const mockNavigate = jest.fn();
 jest.mock("react-router", () => ({

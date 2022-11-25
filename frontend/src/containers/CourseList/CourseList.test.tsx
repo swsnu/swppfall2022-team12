@@ -57,6 +57,10 @@ const mockStore = getMockStore({
         users: [],
         loggedInUser: null,
         selectedUser: null,
+    },
+    tag: {
+      tags: [],
+      selectedTags: [],
     }
 });
 

@@ -5,11 +5,14 @@ import { useNavigate } from 'react-router';
 
 import Header from '../../components/Header/Header';
 import SearchBox from '../../components/SearchBox/SearchBox';
+import TagSelectPopup from '../../components/TagSelectPopup/TagSelectPopup';
+import { selectTag } from '../../store/slices/tag';
 import user, { selectUser } from '../../store/slices/user';
 
 function MainPage() {
   const navigate = useNavigate();
   const userState = useSelector(selectUser);
+  const tagState = useSelector(selectTag);
 
   useEffect(() => {
     localStorage.removeItem('CATEGORY_KEY');
@@ -20,6 +23,8 @@ function MainPage() {
   const onClickCreateCourse = () => {
     navigate('search');
   };
+
+  const toOpenPopup = tagState.selectedTags.length === 0;
 
   return (
     <div
@@ -38,6 +43,7 @@ function MainPage() {
       <Button variant="outlined" onClick={onClickCreateCourse}>
         Create New Course
       </Button>
+      <TagSelectPopup toOpen={toOpenPopup} />
     </div>
   );
 }

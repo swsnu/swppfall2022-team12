@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import { AppStore, RootState } from "../store";
 import courseReducer from "../store/slices/course";
 import userReducer from '../store/slices/user';
+import tagReducer from '../store/slices/tag';
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, "queries"> {
     preloadedState?: PreloadedState<RootState>;
@@ -16,6 +17,7 @@ export const getMockStore = (preloadedState?: PreloadedState<RootState>) => {
         reducer: {
             course: courseReducer,
             user: userReducer,
+            tag: tagReducer,
         },
         preloadedState,
     })

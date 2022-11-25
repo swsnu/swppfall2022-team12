@@ -4,7 +4,7 @@ import axios, { AxiosRequestHeaders } from 'axios';
 
 import { RootState } from '../index';
 
-export interface TagType {
+interface TagType {
   id: number;
   content: string;
 }

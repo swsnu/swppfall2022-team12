@@ -16,6 +16,10 @@ const initialState = {
     users: [],
     loggedInUser: null,
     selectedUser: null,
+  },
+  tag: {
+    tags: [],
+    selectedTags: [],
   }
 };
 
