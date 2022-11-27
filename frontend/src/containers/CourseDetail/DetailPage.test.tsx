@@ -9,56 +9,56 @@ import CourseDetail from './DetailPage';
 describe('<CourseDetail /', () => {
   const d = {
     data: {
-    id: 117,
-    markers: [
+      id: 117,
+      markers: [
         {
-            content: "[0] 출발지",
-            image: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
-            position: {
-                lat: "37.40268656668587",
-                lng: "127.10325874620656"
-            },
-            idx: 0
+          content: '[0] 출발지',
+          image: 'http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png',
+          position: {
+            lat: '37.40268656668587',
+            lng: '127.10325874620656',
+          },
+          idx: 0,
         },
         {
-            content: "[0] name01",
-            image: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
-            position: {
-                lat: "37.40268656668587",
-                lng: "127.10325874620656"
-            },
-            idx: 1
+          content: '[0] name01',
+          image: 'http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png',
+          position: {
+            lat: '37.40268656668587',
+            lng: '127.10325874620656',
+          },
+          idx: 1,
         },
         {
-            content: "[0] 도착지",
-            image: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
-            position: {
-                lat: "37.40268656668587",
-                lng: "127.10325874620656"
-            },
-            idx: 2
-        }
-    ],
-    path: [
+          content: '[0] 도착지',
+          image: 'http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png',
+          position: {
+            lat: '37.40268656668587',
+            lng: '127.10325874620656',
+          },
+          idx: 2,
+        },
+      ],
+      path: [
         {
-            lat: "37.408363969648015",
-            lng: "127.11902659769227",
-            idx: 0
+          lat: '37.408363969648015',
+          lng: '127.11902659769227',
+          idx: 0,
         },
         {
-            lat: "37.408363969648015",
-            lng: "127.11902659769227",
-            idx: 1
-        }
-    ],
-    p_counts: 3,
-    title: "test title for mid presentation",
-    description: "test description for mid presentation",
-    created_at: "2022-11-17T10:38:24.424411Z",
-    u_counts: 0,
-    e_time: "03:30",
-    distance: 2
-},
+          lat: '37.408363969648015',
+          lng: '127.11902659769227',
+          idx: 1,
+        },
+      ],
+      p_counts: 3,
+      title: 'test title for mid presentation',
+      description: 'test description for mid presentation',
+      created_at: '2022-11-17T10:38:24.424411Z',
+      u_counts: 0,
+      e_time: '03:30',
+      distance: 2,
+    },
   };
   it('should render CourseDetail without error', () => {
     jest.spyOn(axios, 'get').mockImplementation(() => {
