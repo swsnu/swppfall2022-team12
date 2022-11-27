@@ -5,8 +5,6 @@ from random import randint, shuffle
 from tag.models import Tag
 from tag.utils import create_tags
 
-test_tags = [2, 3, 4, 5, 6]
-
 class CourseFactory(DjangoModelFactory):
     class Meta:
         model = Course
@@ -28,8 +26,13 @@ class CourseFactory(DjangoModelFactory):
                     distance = i*0.4,
                     rate=randint(1, 5)
             )
-            shuffle(test_tags)
-            c.tags.set(Tag.objects.filter(id__in=test_tags[:randint(1, 5)]))
+            if kwargs.get("tags"):
+                test_tags = kwargs['tags']
+                c.tags.set(Tag.objects.filter(id__in=test_tags))
+            else: 
+                test_tags = [2, 3, 4, 5, 6]
+                shuffle(test_tags)
+                c.tags.set(Tag.objects.filter(id__in=test_tags[:randint(1, 5)]))
             courses.append(c)
         points = []
         for course in courses:

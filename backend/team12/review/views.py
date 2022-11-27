@@ -58,13 +58,13 @@ class ReviewViewSet(
     @transaction.atomic
     def destroy(self, request, pk=None):
         """Destroy Review"""
-        return super().destroy(request, pk=None)
+        return super().destroy(request, pk)
     
 
     # GET /review/:reviewId
     def retrieve(self, request, pk=None):
         """Retrieve Review"""
-        return super().retrieve(request, pk=None)
+        return super().retrieve(request, pk)
 
     
     # PUT /review/:reviewId
@@ -106,10 +106,11 @@ class ReviewViewSet(
     @transaction.atomic
     @action(methods=['PUT'], detail=True)
     def like(self, request, pk=None):
+        """Like Reviews"""
         review = self.get_object()
         user = request.user
-        if review.author == user:
-            raise NotAllowed("Author can't like the review.")
+        # if review.author == user:
+        #     raise NotAllowed("Author can't like the review.")
         
         if user.like_reviews.filter(review=review).exists():
             user.like_reviews.get(review=review).delete()

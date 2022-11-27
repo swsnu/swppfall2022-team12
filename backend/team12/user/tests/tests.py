@@ -3,6 +3,7 @@ from rest_framework import status
 from user.models import User
 from course.tests.utils import CourseFactory
 from user.tests.utils import UserFactory
+from tag.models import Tag
 
 
 class UserTestCase(TestCase):
@@ -17,7 +18,6 @@ class UserTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user, cls.user_token = UserFactory.create()
-        #cls.courses = CourseFactory.create(nums=3)
 
 
     def test_signup(self):
@@ -73,10 +73,24 @@ class UserTestCase(TestCase):
             content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-    # def test_recommend(self):
-    #     """
-    #     Recommend test case.
-    #     """
-    #     cls.courses = CourseFactory.create(nums=3, author=cls.user)
+    def test_recommend(self):
+        """
+        Recommend test case.
+        """
+        user_tags = list(self.user.tags.values_list("id", flat=True))
+        courses = CourseFactory.create(nums=3, author=self.user, tags=user_tags)
+
+        response = self.client.get(
+            '/user/recommend/', 
+            HTTP_AUTHORIZATION=self.user_token,
+            content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+
+        for tag in data:
+            self.assertIn(Tag.objects.get(content=tag['tag']).id, user_tags)
+            self.assertEqual(len(tag['courses']), 3)
+
+
 
     
