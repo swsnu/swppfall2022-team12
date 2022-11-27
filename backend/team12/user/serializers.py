@@ -48,12 +48,15 @@ class UserLoginSerializer(serializers.ModelSerializer):
     User Model Login Serializer.
     """
     token = serializers.SerializerMethodField()
+    tags = serializers.SerializerMethodField()
 
     class Meta:
         model = User 
         fields = (
             'email',
-            'token'
+            'username',
+            'token',
+            'tags'
         )
     
     def get_token(self, user):
@@ -64,6 +67,9 @@ class UserLoginSerializer(serializers.ModelSerializer):
             "access": access_token,
             "refresh": refresh_token
         }
+    
+    def get_tags(self, user):
+        return user.tags.values_list('content', flat=True)
 
     
 
