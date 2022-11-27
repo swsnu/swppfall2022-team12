@@ -1,4 +1,6 @@
-import { render } from '@testing-library/react';
+/* global kakao */
+
+import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -34,7 +36,33 @@ const courseInitState: CourseState = {
     },
   ],
   selectedCourse: null,
-  tMapCourse: { tMapData: null, tMapFeatures: [] },
+  tMapCourse: {
+    tMapData: {
+      totalDistance: '10805',
+      totalTime: '3180',
+      totalFare: '0',
+    },
+    tMapFeatures: [
+      {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [14149070.04179341, 4495385.72777567],
+        },
+        properties: {
+          index: '0',
+          viaPointId: '',
+          viaPointName: 'TEST',
+          arriveTime: '20170808110200',
+          completeTime: '20170808110200',
+          distance: '0',
+          deliveryTime: '0',
+          waitTime: '0',
+          pointType: 'S',
+        },
+      },
+    ],
+  },
 };
 
 const mockStore = getMockStore({
@@ -51,5 +79,16 @@ describe('<SearchCourse />', () => {
       </BrowserRouter>,
     );
     expect(container).toBeTruthy();
+  });
+  it('should run searchPlaces function without error', () => {
+    render(
+      <BrowserRouter>
+        <Provider store={mockStore}>
+          <SearchCourse />
+        </Provider>
+      </BrowserRouter>,
+    );
+    const keywordInput = screen.getByPlaceholderText('검색어를 입력해주세요');
+    const submitButton = screen.getByText('검색');
   });
 });
