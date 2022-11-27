@@ -1,19 +1,20 @@
 from django.db.models import Q, F
 from django.db import transaction
 from django.core.paginator import Paginator
+
 from rest_framework import status, viewsets, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from course.serializers import CourseListSerializer, CourseDetailSerializer, CourseSerializer
-from course.models import Course
-from team12.exceptions import FieldError
-from course.const import DRIVE
 
+from course.serializers import CourseListSerializer, CourseDetailSerializer, CourseCreateSerializer, CourseUpdateSerializer
+from course.models import Course
+from course.const import DRIVE
+from course.utils import create_points, set_tags
 
 class CourseViewSet(
         viewsets.GenericViewSet,
         generics.RetrieveDestroyAPIView,
-        generics.CreateAPIView):
+    ):
     """
     Generic ViewSet of Course Object.
     """
@@ -26,17 +27,27 @@ class CourseViewSet(
         elif self.action == "list":
             return CourseListSerializer
         elif self.action == "create":
-            return CourseSerializer
+            return CourseCreateSerializer
+        elif self.action == "update":
+            return CourseUpdateSerializer
 
     # POST /course
     @transaction.atomic
     def create(self, request):
         """Create Course"""
+        # TODO: remove anonymous cases
         context = {
             "markers": request.data.get("markers", []),
-            "path": request.data.get("path", [])
+            "path": request.data.get("path", []),
+            "tags": request.data.get("tags", [])
         }
-        serializer = self.get_serializer(data=request.data, context=context)
+        data = request.data.copy()
+        if request.user.is_anonymous:
+            user_id = 1
+        else:
+            user_id = request.user.id
+        data['author'] = user_id
+        serializer = self.get_serializer(data=data, context=context)
         serializer.is_valid(raise_exception=True)
         course = serializer.save()
         return Response(CourseDetailSerializer(course).data, status=status.HTTP_200_OK)
@@ -52,6 +63,22 @@ class CourseViewSet(
     def retrieve(self, request, pk=None):
         """Retrieve Course"""
         return super().retrieve(request, pk=None)
+    
+    # PUT /course/:courseId
+    @transaction.atomic
+    def update(self, request, pk=None):
+        """Update Course"""
+        course = self.get_object()
+        data = request.data
+        serializer = self.get_serializer(course, data=data)
+        serializer.is_valid(raise_exception=True)
+        course = serializer.save()
+        if data.get("markers"):
+            course.points.all().delete()
+            create_points(data, course)
+        if data.get("tags"):
+            set_tags(data['tags'], course)
+        return Response(CourseDetailSerializer(course).data, status=status.HTTP_200_OK)
 
     # GET /course/?category=(string)
     # &search_keyword=(string)
@@ -62,12 +89,17 @@ class CourseViewSet(
         category = request.query_params.get("category", DRIVE)
         search_keyword = request.query_params.get("search_keyword", "")
         f_param = request.query_params.get("filter", False)
+        tags = request.query_params.getlist("tags", False)
         
         courses = Course.objects.filter(category=category)
         if search_keyword:
             courses = courses.filter(
                 Q(title__icontains=search_keyword) | 
                 Q(description__icontains=search_keyword))
+        if tags:
+            courses = courses.filter(
+                tags__id__in = tags 
+            )
         courses = courses.order_by(F("created_at").desc())
         if f_param:
             if f_param == "use": courses = courses.order_by(F("u_counts").desc())

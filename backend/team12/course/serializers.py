@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from course.models import *
+from course.utils import create_points, set_tags
 from team12.exceptions import FieldError
 
 class MarkerSerializer(serializers.ModelSerializer):
@@ -19,16 +20,16 @@ class MarkerSerializer(serializers.ModelSerializer):
     
     def get_position(self, instance):
         return {
-            'lat': instance.latitude,
-            'lng': instance.longitude
+            'lat': float(instance.latitude),
+            'lng': float(instance.longitude)
         }
 
 class PathSerializer(serializers.ModelSerializer):
     """
     Point Path Model Serializer
     """
-    lat = serializers.CharField(source='latitude')
-    lng = serializers.CharField(source='longitude')
+    lat = serializers.SerializerMethodField()
+    lng = serializers.SerializerMethodField()
     class Meta:
         model = Point
         fields = (
@@ -36,15 +37,20 @@ class PathSerializer(serializers.ModelSerializer):
             'lng',
             'idx'
         )
-    
 
-class CourseSerializer(serializers.ModelSerializer):
+    def get_lat(self, instance):
+        return float(instance.latitude)
+    def get_lng(self, instance):
+        return float(instance.longitude)
+    
+class CourseCreateSerializer(serializers.ModelSerializer):
     """
-    Course Model Serializer
+    Course Model Create Serializer
     """
     class Meta:
         model = Course 
         fields = (
+            'author',
             'title',
             'description',
             'category',
@@ -52,7 +58,6 @@ class CourseSerializer(serializers.ModelSerializer):
             'e_time',
             'distance'
         )
-        extra_kwargs = {"e_time": {'format':'%H:%M'}}
 
     def validate(self, data):
         title = data.get('title')
@@ -78,10 +83,6 @@ class CourseSerializer(serializers.ModelSerializer):
         if markers:
             if not len(markers) > 1:
                 raise FieldError("markers should be more than 2.")
-            else:
-                if set(map(lambda x: tuple(x.keys()), markers)) != {('content', 'image', 'position')} or \
-                    set(map(lambda x: tuple(x["position"].keys()), markers)) != {('lat', 'lng')}:
-                    raise FieldError("markers keys must have 'content', 'image', 'position['lat' or 'lng']'.")
         else:
             missing_fields.append("markers")
 
@@ -95,30 +96,8 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         course = Course.objects.create(**validated_data)
-        points_list = []
-        for idx, marker in enumerate(self.context['markers']):
-            points_list.append(
-                Point(
-                    category=MARKER,
-                    name=marker['content'],
-                    image=marker['image'],
-                    course=course,
-                    longitude=marker['position']['lng'],
-                    latitude=marker['position']['lat'],
-                    idx=idx
-                )
-            )
-        for idx, path in enumerate(self.context['path']):
-            points_list.append(
-                Point(
-                    category=PATH,
-                    course=course,
-                    longitude=path['lng'],
-                    latitude=path['lat'],
-                    idx=idx
-                )
-            )
-        Point.objects.bulk_create(points_list)
+        create_points(self.context, course)
+        set_tags(self.context['tags'], course)
         return course
 
 class CourseDetailSerializer(serializers.ModelSerializer):
@@ -128,10 +107,13 @@ class CourseDetailSerializer(serializers.ModelSerializer):
     markers = serializers.SerializerMethodField()
     path = serializers.SerializerMethodField()
     p_counts = serializers.SerializerMethodField()
+    author = serializers.CharField(source='author.username')
+    tags = serializers.SerializerMethodField()
     class Meta:
         model = Course 
         fields = (
             'id',
+            'author',
             'markers',
             'path',
             'p_counts',
@@ -140,9 +122,10 @@ class CourseDetailSerializer(serializers.ModelSerializer):
             'created_at',
             'u_counts',
             'e_time',
-            'distance'
+            'distance',
+            'tags',
+            'rate'
         )
-        extra_kwargs = {"e_time":{'format':'%H:%M'}}
     
     def get_markers(self, course):
         markers = course.points.filter(category=MARKER).order_by('idx')
@@ -154,22 +137,39 @@ class CourseDetailSerializer(serializers.ModelSerializer):
 
     def get_p_counts(self, course):
         return course.points.filter(category=MARKER).count()
+    
+    def get_tags(self, course):
+        return course.tags.values_list('content', flat=True)
+    
 
 class CourseListSerializer(serializers.ModelSerializer):
     """
     Course Model List Serializer
     """
-
+    author = serializers.CharField(source='author.username')
     class Meta:
         model = Course 
         fields = (
             'id',
+            'author',
             'title',
             'description',
             'created_at',
             'u_counts',
             'e_time',
+            'distance',
+            'rate'
+        )
+    
+class CourseUpdateSerializer(serializers.ModelSerializer):
+    """
+    Course Model Update Serializer
+    """
+    class Meta:
+        model = Course
+        fields = (
+            'title',
+            'description',
+            'e_time',
             'distance'
         )
-        extra_kwargs = {"e_time":{'format':'%H:%M'}}
-    
