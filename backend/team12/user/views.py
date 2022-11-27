@@ -10,7 +10,7 @@ from rest_framework.decorators import action
 from team12.exceptions import AuthentificationFailed, AnonymousError
 
 from user.models import User
-from user.serializers import UserSerializer, UserCreateSerializer
+from user.serializers import UserLoginSerializer, UserCreateSerializer
 
 from course.serializers import CourseListSerializer
 from course.const import *
@@ -18,12 +18,11 @@ from course.const import *
 from tag.models import Tag
 import random
 
-
 class UserViewSet(viewsets.GenericViewSet):
     
     queryset = User.objects.all()
     permission_classes = []
-    serializer_class = UserSerializer
+    serializer_class = UserLoginSerializer
     
     @csrf_exempt
     @action(methods=['POST'], detail=False)
@@ -59,7 +58,9 @@ class UserViewSet(viewsets.GenericViewSet):
     def logout(self, request):
         if request.user.is_authenticated:
             logout(request)
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            response = Response(status=status.HTTP_204_NO_CONTENT)
+            response.delete_cookie('refreshtoken')
+            return response
         else:
             raise AnonymousError
         
@@ -87,10 +88,3 @@ class UserViewSet(viewsets.GenericViewSet):
             )
         return Response(response, status=status.HTTP_200_OK)
 
-		
-@ensure_csrf_cookie
-def token(request):
-    if request.method == 'GET':
-        return HttpResponse("Check csrf token in cookies.", status=200)
-    else:
-        return HttpResponseNotAllowed(['GET'])

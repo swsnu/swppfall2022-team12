@@ -1,7 +1,10 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
 from user.models import User
 from team12.exceptions import FieldError
 from tag.models import Tag
+
 
 class UserCreateSerializer(serializers.ModelSerializer):
     """
@@ -38,6 +41,30 @@ class UserCreateSerializer(serializers.ModelSerializer):
         tags = list(Tag.objects.filter(id__in=self.context['tags']))
         user.tags.set(tags)
         return user
+    
+
+class UserLoginSerializer(serializers.ModelSerializer):
+    """
+    User Model Login Serializer.
+    """
+    token = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User 
+        fields = (
+            'email',
+            'token'
+        )
+    
+    def get_token(self, user):
+        token = TokenObtainPairSerializer.get_token(user)
+        refresh_token = str(token)
+        access_token = str(token.access_token)
+        return {
+            "access": access_token,
+            "refresh": refresh_token
+        }
+
     
 
 class UserSerializer(serializers.ModelSerializer):
