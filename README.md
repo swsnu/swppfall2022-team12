@@ -4,9 +4,9 @@
 [![Coverage Status](https://coveralls.io/repos/github/swsnu/swppfall2022-team12/badge.svg?branch=main&kill_cache=1)](https://coveralls.io/github/swsnu/swppfall2022-team12?branch=main)
 
 To run
-: in frontend -> yarn start \n 
+: in frontend -> yarn start 
   in backend -> python manage.py runserver
   
 To test
-: in frontend -> 
+: in frontend -> yarn && yarn test --coverage --watchAll=false
   in backend -> 
