@@ -7,9 +7,9 @@ import { AppDispatch } from '../../store';
 import { logoutUser, selectUser } from '../../store/slices/user';
 
 export default function LogoutButton() {
-  const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
-  const userState = useSelector(selectUser);
+  // const navigate = useNavigate();
+  // const dispatch = useDispatch<AppDispatch>();
+  // const userState = useSelector(selectUser);
 
   const onClickLogoutButton = async () => {
     if (window.sessionStorage.getItem("user") !== null) {
@@ -19,8 +19,8 @@ export default function LogoutButton() {
       });
 
       window.sessionStorage.removeItem("user");
-      window.location.reload();
     };
+    window.location.reload();
   };
 
   return <Button onClick={onClickLogoutButton}>Logout</Button>;
