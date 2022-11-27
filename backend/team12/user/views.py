@@ -28,15 +28,18 @@ class UserViewSet(viewsets.GenericViewSet):
     @action(methods=['POST'], detail=False)
     @transaction.atomic
     def signup(self, request):
-        context = {
-            "tags": request.data.get('tags', [])
-        }
-        serializer = UserCreateSerializer(data=request.data, context=context)
+        serializer = UserCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-
         login(request, user)
         return Response(self.get_serializer(user).data, status=status.HTTP_201_CREATED)
+    
+    @transaction.atomic
+    def update(self, request, pk=None):
+        tags_ = request.data.get('tags', [])
+        tags = list(Tag.objects.filter(id__in=tags_))
+        request.user.tags.set(tags)
+        return Response(self.get_serializer(request.user).data, status=status.HTTP_200_OK)
     
     @csrf_exempt
     @action(methods=['PUT'], detail=False)

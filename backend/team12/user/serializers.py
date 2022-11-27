@@ -33,14 +33,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return data
     
     def create(self, validated_data):
-        user = User.objects.create_user(
-            email=validated_data['email'],
-            password=validated_data['password'],
-            username=validated_data['username']
-        )
-        tags = list(Tag.objects.filter(id__in=self.context['tags']))
-        user.tags.set(tags)
-        return user
+        return User.objects.create_user(**validated_data)
     
 
 class UserLoginSerializer(serializers.ModelSerializer):

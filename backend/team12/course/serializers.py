@@ -2,7 +2,6 @@ from rest_framework import serializers
 from course.models import *
 from course.utils import create_points, set_tags
 from team12.exceptions import FieldError
-from tag.models import Tag
 
 class MarkerSerializer(serializers.ModelSerializer):
     """
