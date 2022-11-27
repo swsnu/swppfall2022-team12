@@ -1,56 +1,15 @@
 from django.db.models import Q, F
 from django.db import transaction
 from django.core.paginator import Paginator
-from django.http import HttpResponse, HttpResponseNotAllowed, JsonResponse
+
 from rest_framework import status, viewsets, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from course.serializers import CourseListSerializer, CourseDetailSerializer, CourseSerializer
+
+from course.serializers import CourseListSerializer, CourseDetailSerializer, CourseCreateSerializer, CourseUpdateSerializer
 from course.models import Course
 from course.const import DRIVE
-
-def getUserDataFromReq(request):
-    req_data = json.loads(request.body.decode())
-    username = req_data['username']
-    password = req_data['password']
-    return username, password
-
-def checkUnauthenticatedReq(request):
-    if not request.user.is_authenticated:
-        return HttpResponse(status=401)
-
-def signup(request):
-    if request.method == 'POST':
-        username, password = getUserDataFromReq(request)
-        User.objects.create_user(username=username, password=password)
-        return HttpResponse(status=201)
-    else:
-        return HttpResponseNotAllowed(['POST'])
-
-def signin(request):
-    if request.method == 'POST':
-        username, password = getUserDataFromReq(request)
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-            return HttpResponse(status=204)
-        else:
-            return HttpResponse(status=401)
-
-    else:
-        return HttpResponseNotAllowed(['POST'])
-
-def signout(request):
-    if request.method == 'GET':
-        if request.user.is_authenticated:
-            logout(request)
-            return HttpResponse(status=204)
-        else:
-            return HttpResponse(status=401)
-
-    else:
-        return HttpResponseNotAllowed(['GET'])
+from course.utils import create_points, set_tags
 
 class CourseViewSet(
         viewsets.GenericViewSet,
@@ -67,8 +26,10 @@ class CourseViewSet(
             return CourseDetailSerializer
         elif self.action == "list":
             return CourseListSerializer
-        elif self.action in ["create", "update"]:
-            return CourseSerializer
+        elif self.action == "create":
+            return CourseCreateSerializer
+        elif self.action == "update":
+            return CourseUpdateSerializer
 
     # POST /course
     @transaction.atomic
@@ -107,10 +68,17 @@ class CourseViewSet(
     @transaction.atomic
     def update(self, request, pk=None):
         """Update Course"""
-        # TODO: update only title, description, points
         course = self.get_object()
-        course.delete()
-        return self.create(request)
+        data = request.data
+        serializer = self.get_serializer(course, data=data)
+        serializer.is_valid(raise_exception=True)
+        course = serializer.save()
+        if data.get("markers"):
+            course.points.all().delete()
+            create_points(data, course)
+        if data.get("tags"):
+            set_tags(data['tags'], course)
+        return Response(CourseDetailSerializer(course).data, status=status.HTTP_200_OK)
 
     # GET /course/?category=(string)
     # &search_keyword=(string)

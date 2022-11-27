@@ -4,7 +4,8 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import './App.css';
-import CourseCreate from './containers/CourseCreate/CourseCreate';
+import PostCourse from './containers/CourseCreate/PostCourse';
+import SearchCourse from './containers/CourseCreate/SearchCourse';
 import CourseDetail from './containers/CourseDetail/DetailPage';
 import CourseList from './containers/CourseList/CourseList';
 import Login from './containers/LoginPage/LoginPage';
@@ -38,7 +39,8 @@ function App() {
               <Route path="/main" element={<MainPage />} />
               <Route path="/courses" element={<CourseList />} />
               <Route path="/course/:id" element={<CourseDetail />} />
-              <Route path="search" element={<CourseCreate />} />
+              <Route path="/course-create/search" element={<SearchCourse />} />
+              <Route path="/course-create/post" element={<PostCourse />} />
               <Route path="/" element={<Navigate replace to="/main" />} />
               <Route path="*" element={<Navigate replace to="/main" />} />
             </>

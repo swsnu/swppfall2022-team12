@@ -10,7 +10,7 @@ from rest_framework.decorators import action
 from team12.exceptions import AuthentificationFailed, AnonymousError
 
 from user.models import User
-from user.serializers import UserSerializer, UserCreateSerializer
+from user.serializers import UserLoginSerializer, UserCreateSerializer
 
 from course.serializers import CourseListSerializer
 from course.const import *
@@ -18,26 +18,28 @@ from course.const import *
 from tag.models import Tag
 import random
 
-
 class UserViewSet(viewsets.GenericViewSet):
     
     queryset = User.objects.all()
     permission_classes = []
-    serializer_class = UserSerializer
+    serializer_class = UserLoginSerializer
     
     @csrf_exempt
     @action(methods=['POST'], detail=False)
     @transaction.atomic
     def signup(self, request):
-        context = {
-            "tags": request.data.get('tags', [])
-        }
-        serializer = UserCreateSerializer(data=request.data, context=context)
+        serializer = UserCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-
         login(request, user)
         return Response(self.get_serializer(user).data, status=status.HTTP_201_CREATED)
+    
+    @transaction.atomic
+    def update(self, request, pk=None):
+        tags_ = request.data.get('tags', [])
+        tags = list(Tag.objects.filter(id__in=tags_))
+        request.user.tags.set(tags)
+        return Response(self.get_serializer(request.user).data, status=status.HTTP_200_OK)
     
     @csrf_exempt
     @action(methods=['PUT'], detail=False)
@@ -59,7 +61,9 @@ class UserViewSet(viewsets.GenericViewSet):
     def logout(self, request):
         if request.user.is_authenticated:
             logout(request)
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            response = Response(status=status.HTTP_204_NO_CONTENT)
+            response.delete_cookie('refreshtoken')
+            return response
         else:
             raise AnonymousError
         
@@ -87,10 +91,3 @@ class UserViewSet(viewsets.GenericViewSet):
             )
         return Response(response, status=status.HTTP_200_OK)
 
-		
-@ensure_csrf_cookie
-def token(request):
-    if request.method == 'GET':
-        return HttpResponse("Check csrf token in cookies.", status=200)
-    else:
-        return HttpResponseNotAllowed(['GET'])

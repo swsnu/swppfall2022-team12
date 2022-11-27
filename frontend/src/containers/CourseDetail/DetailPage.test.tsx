@@ -6,32 +6,60 @@ import { MemoryRouter, Route, Routes, Navigate } from 'react-router';
 
 import CourseDetail from './DetailPage';
 
-
 describe('<CourseDetail /', () => {
-    const d = {
-        data: {
-          title: 'MOCK Title',
-          description: 'MOCK Description',
-          e_time: 40,
-          u_counts: 15,
-          points: [
-            {
-              pid: 'test01',
-              name: 'test01',
-              latitude: '37.513272317072',
-              longitude: '127.09431687965',
-              idx: 0,
+  const d = {
+    data: {
+    id: 117,
+    markers: [
+        {
+            content: "[0] 출발지",
+            image: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
+            position: {
+                lat: "37.40268656668587",
+                lng: "127.10325874620656"
             },
-            {
-              pid: 'test02',
-              name: 'test02',
-              latitude: '37.413272317072',
-              longitude: '127.19431687965',
-              idx: 0,
-            },
-          ],
+            idx: 0
         },
-      };
+        {
+            content: "[0] name01",
+            image: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
+            position: {
+                lat: "37.40268656668587",
+                lng: "127.10325874620656"
+            },
+            idx: 1
+        },
+        {
+            content: "[0] 도착지",
+            image: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
+            position: {
+                lat: "37.40268656668587",
+                lng: "127.10325874620656"
+            },
+            idx: 2
+        }
+    ],
+    path: [
+        {
+            lat: "37.408363969648015",
+            lng: "127.11902659769227",
+            idx: 0
+        },
+        {
+            lat: "37.408363969648015",
+            lng: "127.11902659769227",
+            idx: 1
+        }
+    ],
+    p_counts: 3,
+    title: "test title for mid presentation",
+    description: "test description for mid presentation",
+    created_at: "2022-11-17T10:38:24.424411Z",
+    u_counts: 0,
+    e_time: "03:30",
+    distance: 2
+},
+  };
   it('should render CourseDetail without error', () => {
     jest.spyOn(axios, 'get').mockImplementation(() => {
       return Promise.resolve(d);
@@ -50,6 +78,6 @@ describe('<CourseDetail /', () => {
     render(<CourseDetail />);
     const button = screen.getByText('go to navigation');
     fireEvent.click(button!);
-    //expect(button).toBeCalled();
+    // expect(button).toBeCalled();
   });
 });

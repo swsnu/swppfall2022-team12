@@ -27,6 +27,7 @@
     "react-router-dom": "^6.4.1",
     "react-scripts": "5.0.1",
     "redux": "^4.2.0",
+    "redux-thunk": "^2.4.2",
     "styled-components": "^5.3.6",
     "typescript": "^4.8.4",
     "web-vitals": "2.1.4"
@@ -61,7 +62,10 @@
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
       "!src/index.tsx",
-      "!src/test-utils/*"
+      "!src/test-utils/*",
+      "!src/components/dummyData.js",
+      "!src/components/Map/KakaoMap.tsx",
+      "!global.d.ts"
     ]
   },
   "devDependencies": {

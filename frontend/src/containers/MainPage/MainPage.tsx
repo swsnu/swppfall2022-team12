@@ -21,7 +21,7 @@ function MainPage() {
   }, []);
 
   const onClickCreateCourse = () => {
-    navigate('search');
+    navigate('/course-create/search');
   };
 
   const toOpenPopup = tagState.selectedTags.length === 0;

@@ -3,17 +3,16 @@
 import React from 'react';
 import { Map, MapMarker, Polyline } from 'react-kakao-maps-sdk';
 
-import { PositionProps, MarkerProps } from '../../containers/CourseCreate/CourseCreate';
+import { PositionProps, MarkerProps } from '../../containers/CourseCreate/SearchCourse';
 
 type MapProps = {
-  // map: kakao.maps.Map | undefined;
   setMap: (map: kakao.maps.Map) => void;
   path: PositionProps[];
-  searchMarkers: MarkerProps[];
-  previewMarkers: MarkerProps[];
+  searchMarkers?: MarkerProps[];
+  previewMarkers?: MarkerProps[];
   info: MarkerProps | null;
   setInfo: (marker: MarkerProps | null) => void;
-  addLocation: (marker: MarkerProps) => void;
+  addLocation?: (marker: MarkerProps) => void;
   preview: boolean;
 };
 
@@ -28,9 +27,10 @@ function KakaoMap({
   preview,
 }: MapProps) {
   return (
-    <div>
+    <div key="uniqueID">
       {preview ? (
         <Map // 지도를 표시할 Container
+          key="kakao-map"
           center={{
             // 지도의 중심좌표
             lat: 37.405278291509404,
@@ -53,7 +53,7 @@ function KakaoMap({
             strokeOpacity={1} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
             strokeStyle="solid" // 선의 스타일입니다
           />
-          {previewMarkers.map((marker, idx) => (
+          {previewMarkers?.map((marker, idx) => (
             <div className={`marker${idx}`}>
               <MapMarker
                 key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
@@ -77,6 +77,7 @@ function KakaoMap({
         </Map>
       ) : (
         <Map
+          key="kakao-map"
           center={{
             lat: 37.566826,
             lng: 126.9786567,
@@ -90,13 +91,13 @@ function KakaoMap({
           level={3}
           onCreate={setMap}
         >
-          {searchMarkers.map((marker) => (
+          {searchMarkers?.map((marker) => (
             <MapMarker
               key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
               position={marker.position}
               onMouseOver={() => setInfo(marker)}
               onMouseOut={() => setInfo(null)}
-              onClick={() => addLocation(marker)}
+              onClick={() => (addLocation ? addLocation(marker) : {})}
             >
               {info && info?.content === marker.content && (
                 <div style={{ color: '#000' }}>{marker.content}</div>

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from course.models import *
+from course.utils import create_points, set_tags
 from team12.exceptions import FieldError
-from tag.models import Tag
 
 class MarkerSerializer(serializers.ModelSerializer):
     """
@@ -43,9 +43,9 @@ class PathSerializer(serializers.ModelSerializer):
     def get_lng(self, instance):
         return float(instance.longitude)
     
-class CourseSerializer(serializers.ModelSerializer):
+class CourseCreateSerializer(serializers.ModelSerializer):
     """
-    Course Model Serializer
+    Course Model Create Serializer
     """
     class Meta:
         model = Course 
@@ -96,32 +96,8 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         course = Course.objects.create(**validated_data)
-        points_list = []
-        for idx, marker in enumerate(self.context['markers']):
-            points_list.append(
-                Point(
-                    category=MARKER,
-                    name=marker['content'],
-                    image=marker.get('image', ""),
-                    course=course,
-                    longitude=marker['position']['lng'],
-                    latitude=marker['position']['lat'],
-                    idx=idx
-                )
-            )
-        for idx, path in enumerate(self.context['path']):
-            points_list.append(
-                Point(
-                    category=PATH,
-                    course=course,
-                    longitude=path['lng'],
-                    latitude=path['lat'],
-                    idx=idx
-                )
-            )
-        Point.objects.bulk_create(points_list)
-        tags = list(Tag.objects.filter(id__in=self.context['tags']))
-        course.tags.set(tags)
+        create_points(self.context, course)
+        set_tags(self.context['tags'], course)
         return course
 
 class CourseDetailSerializer(serializers.ModelSerializer):
@@ -185,3 +161,15 @@ class CourseListSerializer(serializers.ModelSerializer):
             'rate'
         )
     
+class CourseUpdateSerializer(serializers.ModelSerializer):
+    """
+    Course Model Update Serializer
+    """
+    class Meta:
+        model = Course
+        fields = (
+            'title',
+            'description',
+            'e_time',
+            'distance'
+        )

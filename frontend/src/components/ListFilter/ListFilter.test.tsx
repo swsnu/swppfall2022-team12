@@ -1,16 +1,18 @@
-import { getByRole, fireEvent, render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import ListFilter from "./ListFilter";
-
+import { getByRole, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
+
+import ListFilter from './ListFilter';
 import { getMockStore } from '../../test-utils/mocks';
 
 const initialState = {
   course: {
     courses: [],
     selectedCourse: null,
-    tMapData: null,
-    tMapFeatures: [],
+    tMapCourse: {
+      tMapData: null,
+      tMapFeatures: [],
+    }
   },
   user: {
     users: [],
