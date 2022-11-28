@@ -46,7 +46,7 @@ class ReviewTestCase(TestCase):
             1) create success.
             2) course not found.
             3) rate must be between 1 and 5.
-            4) ['course', 'rate', 'content'] fields missing.
+            4) ['course'] fields missing.
         """
         # 1) create success.
         before_rate = self.course.rate 
@@ -85,10 +85,13 @@ class ReviewTestCase(TestCase):
         data = response.json()
         self.assertEqual(data['detail'], "rate must be between 1 and 5.")
 
-        # 4) ['course', 'rate', 'content'] fields missing.
+        # 4) ['course'] fields missing.
         response = self.client.post(
             '/review/', 
-            data={},
+            data={
+                'rate': 5,
+                'content': 'test content'
+            },
             HTTP_AUTHORIZATION = self.user_token,
             content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

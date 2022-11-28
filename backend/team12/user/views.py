@@ -35,7 +35,8 @@ class UserViewSet(viewsets.GenericViewSet):
         return Response(self.get_serializer(user).data, status=status.HTTP_201_CREATED)
     
     @transaction.atomic
-    def update(self, request, pk=None):
+    @action(methods=['PUT'], detail=False)
+    def tags(self, request, pk=None):
         tags_ = request.data.get('tags', [])
         tags = list(Tag.objects.filter(id__in=tags_))
         request.user.tags.set(tags)
