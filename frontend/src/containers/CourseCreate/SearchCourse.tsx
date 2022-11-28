@@ -58,19 +58,6 @@ export default function SearchCourse() {
   const [resultData, setResultData] = useState<DataProps | null>(null);
   const [resultFeatures, setResultFeatures] = useState<FeatureProps[]>([]);
 
-  useEffect(() => {
-    kakao.maps.load(() => {
-      const container = document.getElementById('map');
-      const options = {
-        center: new kakao.maps.LatLng(37.566826, 126.9786567), // 위도, 경도 입력
-        level: 3,
-      };
-      // @ts-ignore
-      const kakaoMap = new kakao.maps.Map(container, options); // 지도그리기
-      setMap(kakaoMap);
-    });
-  }, []);
-
   const dispatch = useDispatch<AppDispatch>();
   const courseState = useSelector(selectCourse);
   const navigate = useNavigate();
