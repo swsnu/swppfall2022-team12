@@ -9,3 +9,4 @@ def create_tags():
         )
         if created:
             tags_created.append(content)
+    return tags_created
