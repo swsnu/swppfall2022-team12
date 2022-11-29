@@ -2,7 +2,7 @@
 from factory.django import DjangoModelFactory
 from user.models import User
 from faker import Faker
-from random import randint, shuffle
+from random import randint, shuffle, choice
 from django.test import Client
 from tag.models import Tag
 from tag.utils import create_tags
@@ -22,7 +22,9 @@ class UserFactory(DjangoModelFactory):
         data = {
             "email": kwargs.get("email", f"test{self.idx}@test.com"),
             "password": kwargs.get("password", "12345678"),
-            "username": kwargs.get("username", fake.name())
+            "username": kwargs.get("username", fake.name()),
+            "ages": kwargs.get("ages", choice([10, 20, 30, 40, 50])),
+            "gender": kwargs.get("gender", choice(["male", "female"]))
         }
         user = User.objects.create_user(**data)
         self.idx+=1

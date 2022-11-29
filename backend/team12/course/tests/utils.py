@@ -4,6 +4,7 @@ from course.models import *
 from random import randint, shuffle
 from tag.models import Tag
 from tag.utils import create_tags
+from datetime import datetime
 
 class CourseFactory(DjangoModelFactory):
     class Meta:
@@ -61,3 +62,6 @@ class CourseFactory(DjangoModelFactory):
         Point.objects.bulk_create(points)
 
         return courses
+    
+def make_history(user: User, course: Course, hours: int = datetime.now().hour):
+    return History.objects.create(user=user, course=course, hours=hours)
