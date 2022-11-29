@@ -1,5 +1,5 @@
 from tag.models import Tag
-from tag.const import TAGLIST
+from tag.utils import create_tags
 from django.db import transaction
 from rest_framework import status, viewsets
 from rest_framework.response import Response
@@ -16,15 +16,17 @@ class TagViewSet(viewsets.GenericViewSet):
     @transaction.atomic
     def create(self, request):
         """Create Tag"""
-        tags_created = []
-        for content in TAGLIST:
-            _, created = Tag.objects.get_or_create(
-                content=content
-            )
-            if created:
-                tags_created.append(content)
+        tags_created = create_tags()
+        contents = request.data.get("contents")
+        if contents:
+            for content in contents:
+                _, created = Tag.objects.get_or_create(
+                    content=content
+                )
+                if created:
+                    tags_created.append(content)
         new_tags = " | ".join(tags_created)
-        return Response(f"{new_tags} created.", status=status.HTTP_200_OK)
+        return Response(f"{new_tags} created.", status=status.HTTP_201_CREATED)
 
     # GET /tag/
     def list(self, request):

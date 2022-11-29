@@ -41,13 +41,8 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
         else: 
             course = get_object_or_404(Course, id=self.context['course'])
             data['course'] = course
-        if not data.get('rate'):
-            missing_fields.append('rate')
-        else:
-            if not 0 < data['rate'] < 6:
-                raise FieldError("rate must be between 1 and 5.")
-        if not data.get('content'):
-            missing_fields.append('content')
+        if not 0 < data['rate'] < 6:
+            raise FieldError("rate must be between 1 and 5.")
         data['author'] = self.context['author']
         if len(missing_fields) > 0:
             raise FieldError(f"{missing_fields} fields missing.")

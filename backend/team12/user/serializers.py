@@ -16,21 +16,10 @@ class UserCreateSerializer(serializers.ModelSerializer):
         fields = (
             'email',
             'password',
+            'ages',
+            'gender',
             'username'
         )
-    
-    def validate(self, data):
-        missing_fields = []
-        if not data.get('email'):
-            missing_fields.append('email')
-        if not data.get('username'):
-            missing_fields.append('username')
-        if not data.get('password'):
-            missing_fields.append('password')
-
-        if len(missing_fields) > 0:
-            raise FieldError(f"{missing_fields} fields missing.")
-        return data
     
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
@@ -66,20 +55,20 @@ class UserLoginSerializer(serializers.ModelSerializer):
 
     
 
-class UserSerializer(serializers.ModelSerializer):
-    """
-    User Model Serializer.
-    """
-    tags = serializers.SerializerMethodField()
+# class UserSerializer(serializers.ModelSerializer):
+#     """
+#     User Model Serializer.
+#     """
+#     tags = serializers.SerializerMethodField()
 
-    class Meta:
-        model = User 
-        fields = (
-            'email',
-            'username',
-            'tags'
-        )
+#     class Meta:
+#         model = User 
+#         fields = (
+#             'email',
+#             'username',
+#             'tags'
+#         )
 
-    def get_tags(self, instance):
-        return instance.tags.values_list('content', flat=True)
+#     def get_tags(self, instance):
+#         return instance.tags.values_list('content', flat=True)
     

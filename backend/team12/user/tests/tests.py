@@ -1,8 +1,9 @@
 from django.test import TestCase
 from rest_framework import status
-from user.models import User
-from course.tests.utils import CourseFactory
+from course.tests.utils import CourseFactory, make_history
 from user.tests.utils import UserFactory
+from tag.models import Tag
+from datetime import datetime, timedelta
 
 
 class UserTestCase(TestCase):
@@ -12,12 +13,12 @@ class UserTestCase(TestCase):
         [PUT] /user/login
         [GET] /user/logout
         [GET] /user/recommend
+        [PUT] /user/
     """
 
     @classmethod
     def setUpTestData(cls):
-        cls.user, cls.user_token = UserFactory.create()
-        #cls.courses = CourseFactory.create(nums=3)
+        cls.user, cls.user_token = UserFactory.create(ages=20, gender='M')
 
 
     def test_signup(self):
@@ -28,6 +29,8 @@ class UserTestCase(TestCase):
             "email": "testuser@test.com",
             "username": "testuser",
             "password": "12345678",
+            "birth": "1997-02-03",
+            "gender": "male"
         }
         response = self.client.post(
             '/user/signup/', 
@@ -63,6 +66,18 @@ class UserTestCase(TestCase):
         self.assertIn("refresh", data["token"].keys())
         self.assertSetEqual(set(data["tags"]), set(self.user.tags.values_list("content", flat=True)))
 
+        login_data = {
+            "email": "wrongemail@test.com",
+            "password": "12345678"
+        }
+        response = self.client.put(
+            '/user/login/', 
+            data=login_data,
+            content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        data = response.json()
+        self.assertEqual(data['detail'], '아이디 또는 비밀번호를 확인해주세요.')
+
     def test_logout(self):
         """
         Logout test case.
@@ -73,10 +88,50 @@ class UserTestCase(TestCase):
             content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-    # def test_recommend(self):
-    #     """
-    #     Recommend test case.
-    #     """
-    #     cls.courses = CourseFactory.create(nums=3, author=cls.user)
+    def test_tags_user(self):
+        """
+        Tags User test case.
+        """
+        data = {
+            "tags": [1, 2, 3, 4, 5]
+        }
+        response = self.client.put(
+            '/user/tags/', 
+            HTTP_AUTHORIZATION=self.user_token,
+            data=data,
+            content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        for tag_id in data['tags']:
+            self.assertTrue(self.user.tags.filter(id=tag_id).exists())
+
+    def test_recommend(self):
+        """
+        Recommend test case.
+        """
+        user_tags = list(self.user.tags.values_list("id", flat=True))
+        courses = CourseFactory.create(nums=3, author=self.user, tags=user_tags)
+        histories = []
+        cnt = 3
+        for course in courses:
+            histories.extend([make_history(self.user, course, (datetime.now()-timedelta(hours=cnt-1)).hour) for i in range(cnt)])
+            cnt-=1
+
+        response = self.client.get(
+            '/user/recommend/', 
+            HTTP_AUTHORIZATION=self.user_token,
+            content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+
+        for tag in data:
+            if tag['tag'] != "recommend":
+                self.assertIn(Tag.objects.get(content=tag['tag']).id, user_tags)
+                self.assertEqual(len(tag['courses']), 3)
+            else:
+                for i, c in enumerate(tag['courses']):
+                    self.assertEqual(courses[i].id, c['id'])
+
+
 
     
