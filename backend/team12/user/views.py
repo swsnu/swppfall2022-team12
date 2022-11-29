@@ -1,6 +1,5 @@
 from django.db import transaction
-from django.http import HttpResponse, HttpResponseNotAllowed
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 
 from rest_framework import status, viewsets
@@ -12,11 +11,15 @@ from team12.exceptions import AuthentificationFailed, AnonymousError
 from user.models import User
 from user.serializers import UserLoginSerializer, UserCreateSerializer
 
+from course.models import History, Course
 from course.serializers import CourseListSerializer
 from course.const import *
 
 from tag.models import Tag
+
 import random
+from datetime import datetime, timedelta
+from collections import Counter
 
 class UserViewSet(viewsets.GenericViewSet):
     
@@ -76,12 +79,23 @@ class UserViewSet(viewsets.GenericViewSet):
             user = request.user
         else:
             user = User.objects.get(id=1)
-        tags = user.tags.all()
+        tags = list(user.tags.all())
         response = []
         if len(tags) == 0:
             tags = list(Tag.objects.all())
             random.shuffle(tags)
             tags = tags[:3]
+        
+        now = datetime.now()
+        before = (now - timedelta(hours=2)).hour
+        after = (now + timedelta(hours=2)).hour
+        recommends = Counter(list(History.objects.filter(
+                hours__lte=after, 
+                hours__gte=before, 
+                user__ages=user.ages, 
+                user__gender=user.gender)\
+                    .values_list('course', flat=True)))\
+                    .most_common()
 
         for tag in tags:
             response.append(
@@ -90,5 +104,11 @@ class UserViewSet(viewsets.GenericViewSet):
                     "courses": CourseListSerializer(tag.courses.filter(category=category).all(), many=True).data
                 }
             )
+        response.append(
+            {
+                "tag": "recommend",
+                "courses": CourseListSerializer(list(map(lambda x: Course.objects.get(id=x[0]), recommends)), many=True).data
+            }
+        )
         return Response(response, status=status.HTTP_200_OK)
 

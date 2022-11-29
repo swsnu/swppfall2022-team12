@@ -1,9 +1,9 @@
 from django.test import TestCase
 from rest_framework import status
-from user.models import User
-from course.tests.utils import CourseFactory
+from course.tests.utils import CourseFactory, make_history
 from user.tests.utils import UserFactory
 from tag.models import Tag
+from datetime import datetime, timedelta
 
 
 class UserTestCase(TestCase):
@@ -18,7 +18,7 @@ class UserTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.user, cls.user_token = UserFactory.create()
+        cls.user, cls.user_token = UserFactory.create(ages=20, gender='M')
 
 
     def test_signup(self):
@@ -29,6 +29,8 @@ class UserTestCase(TestCase):
             "email": "testuser@test.com",
             "username": "testuser",
             "password": "12345678",
+            "birth": "1997-02-03",
+            "gender": "male"
         }
         response = self.client.post(
             '/user/signup/', 
@@ -109,6 +111,11 @@ class UserTestCase(TestCase):
         """
         user_tags = list(self.user.tags.values_list("id", flat=True))
         courses = CourseFactory.create(nums=3, author=self.user, tags=user_tags)
+        histories = []
+        cnt = 3
+        for course in courses:
+            histories.extend([make_history(self.user, course, (datetime.now()-timedelta(hours=cnt-1)).hour) for i in range(cnt)])
+            cnt-=1
 
         response = self.client.get(
             '/user/recommend/', 
@@ -118,8 +125,12 @@ class UserTestCase(TestCase):
         data = response.json()
 
         for tag in data:
-            self.assertIn(Tag.objects.get(content=tag['tag']).id, user_tags)
-            self.assertEqual(len(tag['courses']), 3)
+            if tag['tag'] != "recommend":
+                self.assertIn(Tag.objects.get(content=tag['tag']).id, user_tags)
+                self.assertEqual(len(tag['courses']), 3)
+            else:
+                for i, c in enumerate(tag['courses']):
+                    self.assertEqual(courses[i].id, c['id'])
 
 
 

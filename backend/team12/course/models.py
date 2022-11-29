@@ -61,6 +61,8 @@ class History(models.Model):
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="histories")
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="users")
+    created_at = models.DateTimeField(auto_now_add=True)
+    hours = models.SmallIntegerField(default=18)
 
 class Favor(models.Model):
     """
