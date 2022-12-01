@@ -20,6 +20,7 @@
     "enzyme": "3.11.0",
     "node-sass": "^8.0.0",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
     "react-icons": "^4.6.0",
     "react-kakao-maps-sdk": "^1.1.5",
@@ -30,7 +31,7 @@
     "redux": "^4.2.0",
     "redux-thunk": "^2.4.2",
     "styled-components": "^5.3.6",
-    "typescript": "^4.8.4",
+    "typescript": "~4.8.2",
     "web-vitals": "2.1.4"
   },
   "scripts": {
