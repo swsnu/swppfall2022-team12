@@ -50,11 +50,12 @@ export default function ReviewElement(prop: ReviewProp) {
       </div>
       <button
         onClick={() => {
-          if (prop.author === 'sihoo') {// need to be fixed due to login issue
-            setEditting(true);
-          } else {
-            // make Modal to notice user that he can't edit the comment
-          }
+          setEditting(true);
+          // if (prop.author === 'sihoo') {// need to be fixed due to login issue
+          //   setEditting(true);
+          // } else {
+          //   // make Modal to notice user that he can't edit the comment
+          // }
         }}
       >
         edit
@@ -64,7 +65,7 @@ export default function ReviewElement(prop: ReviewProp) {
         {clicked.map((currBoolean, idx) => {
           return (
             <FaStar
-              data-testid="star"
+              data-testid={"star"}
               size="15"
               onClick={() => {
                 setNewRate(idx + 1);
@@ -74,19 +75,18 @@ export default function ReviewElement(prop: ReviewProp) {
           );
         })}
       </div>
-        <input type={"text"} onChange={(e)=>setNewText(e.target.value)} value={newtext}></input>
-        <button onClick={()=>{
+        <input data-testid="editting" type={"text"} onChange={(e)=>setNewText(e.target.value)} value={newtext}></input>
+        <button  onClick={()=>{
           console.log(newtext)
           axios.put('/review/'+prop.id+"/", {
             content:newtext,
             rate:newRate
           }).then((res) => {
-            console.log(res)
             /* eslint no-restricted-globals: ["off"] */
             location.reload();
             // test needed for reloading***
           });
-        }}>edit!</button>
+        }}>edit</button>
       </div> : <div />}</div>
       <button
         onClick={() => {
@@ -102,3 +102,4 @@ export default function ReviewElement(prop: ReviewProp) {
     </div>
   );
 }
+
