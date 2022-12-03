@@ -94,7 +94,7 @@ export default function SearchBar({
                   key={marker.content}
                   draggableId={index.toString()}
                   index={index}
-                  isDragDisabled={!preview}
+                  isDragDisabled={preview}
                 >
                   {(item, snapshots) => (
                     <li
