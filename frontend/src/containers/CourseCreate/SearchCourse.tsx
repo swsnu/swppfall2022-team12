@@ -169,6 +169,14 @@ export default function SearchCourse() {
     }
   };
 
+  const removeLocation = (marker: MarkerProps) => {
+    const removedLocations = selected.filter(
+      (item) =>
+        item.position.lat !== marker.position.lat && item.position.lng !== marker.position.lng,
+    );
+    setSelected(removedLocations);
+  };
+
   const setMarkerImage = (markers: MarkerProps[]) => {
     const points = markers;
     const processedMarkers: MarkerProps[] = [];
@@ -211,6 +219,7 @@ export default function SearchCourse() {
       if (selected.length < 3) {
         alert('장소를 적어도 3개 이상 선택해주세요');
         setPreview(false);
+        return;
       }
       dispatch(fetchPathFromTMap(selected));
     }
@@ -264,6 +273,7 @@ export default function SearchCourse() {
           searchPlaces={searchPlaces}
           setInfo={setInfo}
           addLocation={addLocation}
+          removeLocation={removeLocation}
           handleDrag={handleDrag}
           preview={preview}
         />

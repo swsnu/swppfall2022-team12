@@ -1,3 +1,7 @@
+import { mkdir } from 'fs';
+
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
 import React, { useState } from 'react';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 
@@ -9,6 +13,7 @@ type SearchProps = {
   searchPlaces: (keyword: string) => void;
   setInfo: (marker: MarkerProps | null) => void;
   addLocation: (marker: MarkerProps) => void;
+  removeLocation: (marker: MarkerProps) => void;
   handleDrag: (result: DropResult) => void;
   preview: boolean;
 };
@@ -19,6 +24,7 @@ export default function SearchBar({
   searchPlaces,
   setInfo,
   addLocation,
+  removeLocation,
   handleDrag,
   preview,
 }: SearchProps) {
@@ -46,6 +52,8 @@ export default function SearchBar({
     padding: grid * 2,
     margin: `0 0 ${grid}px 0`,
     listStyle: 'none',
+    // display: 'inline-block',
+    // width: '90%',
 
     // change background colour if dragging
     background: isDragging ? 'lightgreen' : 'lightgray',
@@ -103,7 +111,14 @@ export default function SearchBar({
                       {...item.draggableProps}
                       style={getItemStyle(snapshots.isDragging, item.draggableProps.style)}
                     >
-                      {marker.content}
+                      {marker.content}{' '}
+                      <IconButton
+                        aria-label="delete"
+                        disabled={preview}
+                        onClick={() => removeLocation(marker)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
                     </li>
                   )}
                 </Draggable>

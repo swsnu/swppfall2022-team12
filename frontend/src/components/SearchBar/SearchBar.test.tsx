@@ -11,6 +11,7 @@ describe('<SearchBar />', () => {
         searchPlaces={jest.fn()}
         setInfo={jest.fn()}
         addLocation={jest.fn()}
+        removeLocation={jest.fn()}
         handleDrag={jest.fn()}
         preview
       />,
@@ -24,6 +25,7 @@ describe('<SearchBar />', () => {
         searchPlaces={jest.fn()}
         setInfo={jest.fn()}
         addLocation={jest.fn()}
+        removeLocation={jest.fn()}
         handleDrag={jest.fn()}
         preview
       />,
@@ -42,6 +44,7 @@ describe('<SearchBar />', () => {
         searchPlaces={jest.fn()}
         setInfo={jest.fn()}
         addLocation={jest.fn()}
+        removeLocation={jest.fn()}
         handleDrag={jest.fn()}
         preview
       />,
@@ -68,6 +71,7 @@ describe('<SearchBar />', () => {
         searchPlaces={jest.fn()}
         setInfo={jest.fn()}
         addLocation={jest.fn()}
+        removeLocation={jest.fn()}
         handleDrag={jest.fn()}
         preview
       />,
@@ -92,6 +96,7 @@ describe('<SearchBar />', () => {
         searchPlaces={jest.fn()}
         setInfo={setInfo}
         addLocation={jest.fn()}
+        removeLocation={jest.fn()}
         handleDrag={jest.fn()}
         preview
       />,
@@ -121,6 +126,7 @@ describe('<SearchBar />', () => {
         searchPlaces={jest.fn()}
         setInfo={jest.fn()}
         addLocation={addLocation}
+        removeLocation={jest.fn()}
         handleDrag={jest.fn()}
         preview
       />,
