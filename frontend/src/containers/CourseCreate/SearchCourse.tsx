@@ -256,6 +256,7 @@ export default function SearchCourse() {
           setInfo={setInfo}
           addLocation={addLocation}
           handleDrag={handleDrag}
+          preview={preview}
         />
         <KakaoMap
           setMap={setMap}

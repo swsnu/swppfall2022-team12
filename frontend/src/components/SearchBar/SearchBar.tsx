@@ -10,6 +10,7 @@ type SearchProps = {
   setInfo: (marker: MarkerProps | null) => void;
   addLocation: (marker: MarkerProps) => void;
   handleDrag: (result: DropResult) => void;
+  preview: boolean;
 };
 
 export default function SearchBar({
@@ -19,6 +20,7 @@ export default function SearchBar({
   setInfo,
   addLocation,
   handleDrag,
+  preview,
 }: SearchProps) {
   const [keyword, setKeyword] = useState('');
 
@@ -36,9 +38,9 @@ export default function SearchBar({
     searchPlaces(keyword);
   };
 
-  const grid = 6;
+  const grid = 5;
 
-  const getItemStyle = (isDragging: any, draggableStyle: any) => ({
+  const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
     // some basic styles to make the items look a bit nicer
     userSelect: 'none',
     padding: grid * 2,
@@ -46,16 +48,15 @@ export default function SearchBar({
     listStyle: 'none',
 
     // change background colour if dragging
-    background: isDragging ? 'lightgreen' : 'grey',
+    background: isDragging ? 'lightgreen' : 'lightgray',
 
     // styles we need to apply on draggables
     ...draggableStyle,
   });
 
-  const getListStyle = (isDraggingOver: any) => ({
-    background: isDraggingOver ? 'lightblue' : 'lightgrey',
+  const getListStyle = (isDraggingOver: boolean) => ({
+    background: isDraggingOver ? 'lightblue' : 'white',
     padding: grid,
-    width: 250,
   });
 
   return (
@@ -89,7 +90,12 @@ export default function SearchBar({
               style={getListStyle(snapshot.isDraggingOver)}
             >
               {selected.map((marker, index) => (
-                <Draggable key={marker.content} draggableId={index.toString()} index={index}>
+                <Draggable
+                  key={marker.content}
+                  draggableId={index.toString()}
+                  index={index}
+                  isDragDisabled={!preview}
+                >
                   {(item, snapshots) => (
                     <li
                       ref={item.innerRef}
@@ -107,17 +113,6 @@ export default function SearchBar({
           )}
         </Droppable>
       </DragDropContext>
-      {/* <div className="selection" style={{ outline: '1px solid blue' }}> */}
-      {/*  <strong>Selected Locations</strong> */}
-      {/*  {selected && */}
-      {/*    selected.map((location) => ( */}
-      {/*      <li */}
-      {/*        key={`marker-${location.content}-${location.position.lat},${location.position.lng}`} */}
-      {/*      > */}
-      {/*        {location.content} */}
-      {/*      </li> */}
-      {/*    ))} */}
-      {/* </div> */}
 
       {/* Search Result List */}
       <div className="rst_wrap">

@@ -11,6 +11,8 @@ describe('<SearchBar />', () => {
         searchPlaces={jest.fn()}
         setInfo={jest.fn()}
         addLocation={jest.fn()}
+        handleDrag={jest.fn()}
+        preview
       />,
     );
   });
@@ -22,6 +24,8 @@ describe('<SearchBar />', () => {
         searchPlaces={jest.fn()}
         setInfo={jest.fn()}
         addLocation={jest.fn()}
+        handleDrag={jest.fn()}
+        preview
       />,
     );
     const keywordInput = screen.getByPlaceholderText('검색어를 입력해주세요');
@@ -38,6 +42,8 @@ describe('<SearchBar />', () => {
         searchPlaces={jest.fn()}
         setInfo={jest.fn()}
         addLocation={jest.fn()}
+        handleDrag={jest.fn()}
+        preview
       />,
     );
     const searchButton = screen.getByText('검색');
@@ -62,6 +68,8 @@ describe('<SearchBar />', () => {
         searchPlaces={jest.fn()}
         setInfo={jest.fn()}
         addLocation={jest.fn()}
+        handleDrag={jest.fn()}
+        preview
       />,
     );
   });
@@ -84,6 +92,8 @@ describe('<SearchBar />', () => {
         searchPlaces={jest.fn()}
         setInfo={setInfo}
         addLocation={jest.fn()}
+        handleDrag={jest.fn()}
+        preview
       />,
     );
     const result = screen.getByText('TEST1');
@@ -111,6 +121,8 @@ describe('<SearchBar />', () => {
         searchPlaces={jest.fn()}
         setInfo={jest.fn()}
         addLocation={addLocation}
+        handleDrag={jest.fn()}
+        preview
       />,
     );
     const result = screen.getByText('TEST1');
