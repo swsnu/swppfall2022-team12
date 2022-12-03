@@ -38,7 +38,7 @@ export default function SearchBar({
     searchPlaces(keyword);
   };
 
-  const grid = 8;
+  const grid = 5;
 
   const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
     // some basic styles to make the items look a bit nicer
