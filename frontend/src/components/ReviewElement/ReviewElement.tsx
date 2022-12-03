@@ -21,8 +21,6 @@ export default function ReviewElement(prop: ReviewProp) {
   const [clicked, setClicked] = useState([false, false, false, false, false]);
   const [newRate, setNewRate] = useState<number>(5);
 
-
-
   useEffect(()=>{
     setNewText(prop.content);
     setNewRate(prop.rate);
@@ -42,7 +40,11 @@ export default function ReviewElement(prop: ReviewProp) {
         {prop.likes} people liked this comment
         <button
           onClick={() => {
-            axios.put(`/review/like/${prop.id}/`);
+            if (prop.author === window.sessionStorage.getItem('username')) {
+              alert('자신이 작성한 댓글은 좋아할수 없습니다')
+            }else{
+              axios.put(`/review/like/${prop.id}/`);
+            }
           }}
         >
           like
