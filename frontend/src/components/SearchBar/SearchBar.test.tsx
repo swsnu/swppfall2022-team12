@@ -4,7 +4,6 @@ import {
   mockDndSpacing,
   makeDnd,
   DND_DIRECTION_UP,
-  DND_DIRECTION_DOWN,
 } from 'react-beautiful-dnd-test-utils';
 
 import SearchBar from './SearchBar';
