@@ -12,15 +12,17 @@ export default function LogoutButton() {
   // const userState = useSelector(selectUser);
 
   const onClickLogoutButton = async () => {
-    if (window.sessionStorage.getItem("user") !== null) {
-      await axios.get('/user/logout')
+    if (window.sessionStorage.getItem("username") !== null) {
+      await axios.get('/user/logout/', { headers : { Authorization : `Bearer ${window.sessionStorage.getItem('access')}`}})
+      .then((response) => {
+        window.sessionStorage.clear();
+        window.location.reload();
+      })
       .catch((error) => {
         alert(error.response.data.detail);
+        window.location.reload();
       });
-
-      window.sessionStorage.removeItem("user");
     };
-    window.location.reload();
   };
 
   return <Button onClick={onClickLogoutButton}>Logout</Button>;

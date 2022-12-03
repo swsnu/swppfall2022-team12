@@ -24,7 +24,7 @@ function MainPage() {
     navigate('/course-create/search');
   };
 
-  const toOpenPopup = tagState.selectedTags.length === 0;
+  const toOpenPopup = window.sessionStorage.getItem('tags') === null;
 
   return (
     <div
@@ -44,6 +44,15 @@ function MainPage() {
         Create New Course
       </Button>
       <TagSelectPopup toOpen={toOpenPopup} />
+      {
+        !toOpenPopup && (
+          <div>
+            <p>{window.sessionStorage.getItem('username')}님을 위한 맞춤 코스</p>
+            <div></div>
+          </div>
+        )
+      }
+      
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { CloseRounded } from '@mui/icons-material';
 import { Button, Chip, Modal, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -26,23 +27,29 @@ export default function TagSelectPopup(prop: TagPopupProp) {
   const dispatch = useDispatch<AppDispatch>();
   const tagState = useSelector(selectTag);
 
-  const [selectedTags, setSelectedTags] = useState<TagType[]>([]);
+  const [selectedTags, setSelectedTags] = useState<TagType["id"][]>([]);
   const [open, setOpen] = useState<boolean>(prop.toOpen);
 
   const onCloseModal = () => {
     setOpen(false);
   };
 
-  const onClickTag = (tag: TagType) => {
-    setSelectedTags([...selectedTags, tag]);
+  const onClickTag = (tagId: TagType["id"]) => {
+    setSelectedTags([...selectedTags, tagId]);
   };
 
-  const onDeleteTag = (tag: TagType) => {
-    setSelectedTags(selectedTags.filter((tg) => tg.id !== tag.id));
+  const onDeleteTag = (tagId: TagType["id"]) => {
+    setSelectedTags(selectedTags.filter((id: TagType["id"]) => id !== tagId));
   };
 
-  const onComplete = () => {
-    setOpen(false);
+  const onComplete = async () => {
+    await axios.put('/user/tags/',
+      { tags: selectedTags },
+      { headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` } })
+    .then((response) => {
+      // dispatch()
+      setOpen(false);
+    });
   };
 
   return (
@@ -55,8 +62,10 @@ export default function TagSelectPopup(prop: TagPopupProp) {
           <p>나의 태그</p>
           <div id="my-tag-list">
             <Stack direction="row" spacing={1}>
-              {selectedTags.map((tag) => {
-                return <Chip label={tag.content} color="primary" variant="outlined" />;
+              {tagState.tags.map((tag: TagType) => {
+                return selectedTags.includes(tag.id) ? (
+                  <Chip label={tag.content} color="primary" variant="outlined" />
+                ) : ( null );
               })}
             </Stack>
           </div>
@@ -64,16 +73,16 @@ export default function TagSelectPopup(prop: TagPopupProp) {
           <div id="tag-list">
             <Stack direction="column" spacing={1}>
               {tagState.tags.map((tag: TagType) => {
-                const isSelected = selectedTags.includes(tag);
+                const isSelected = selectedTags.includes(tag.id);
                 return isSelected ? (
                   <Chip
                     label={tag.content}
-                    onClick={() => onClickTag(tag)}
-                    onDelete={() => onDeleteTag(tag)}
+                    onClick={() => onClickTag(tag.id)}
+                    onDelete={() => onDeleteTag(tag.id)}
                     variant="outlined"
                   />
                 ) : (
-                  <Chip label={tag.content} onClick={() => onClickTag(tag)} variant="outlined" />
+                  <Chip label={tag.content} onClick={() => onClickTag(tag.id)} variant="outlined" />
                 );
               })}
             </Stack>

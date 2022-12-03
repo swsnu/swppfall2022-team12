@@ -6,6 +6,15 @@ import { useNavigate } from 'react-router';
 
 import { AppDispatch, store } from '../../store';
 import { signupUser, selectUser, UserType } from '../../store/slices/user';
+import { TagType } from '../../store/slices/tag';
+
+export interface SignUpResponseType {
+  email: string;
+  token: {
+    access: string;
+    refresh: string;
+  };
+};
 
 export default function SignUpTab() {
   // const dispatch = useDispatch<AppDispatch>();
@@ -42,9 +51,11 @@ export default function SignUpTab() {
 
     const req = { username: usernameInput, email: emailInput, password: passwordInput };
     await axios
-      .post<Pick<UserType, 'email' | 'username' | 'tags'>>('/user/signup/', req)
+      .post<SignUpResponseType>('/user/signup/', req)
       .then((response) => {
-        window.sessionStorage.setItem('user', response.data.username);
+        window.sessionStorage.setItem('username', response.data.email);
+        window.sessionStorage.setItem('access', response.data.token.access);
+        window.sessionStorage.setItem('refresh', response.data.token.refresh);
         window.location.reload();
       })
       .catch((error) => {

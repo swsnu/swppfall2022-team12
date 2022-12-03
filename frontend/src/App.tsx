@@ -27,7 +27,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    setLoggedInUser(window.sessionStorage.getItem("user"));
+    setLoggedInUser(window.sessionStorage.getItem('access'));
   }, [window.sessionStorage]);
 
   return (

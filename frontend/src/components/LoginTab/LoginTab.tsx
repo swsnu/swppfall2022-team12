@@ -6,7 +6,16 @@ import { useNavigate } from 'react-router';
 
 import { AppDispatch } from '../../store';
 import { UserType, loginUser, selectUser } from '../../store/slices/user';
-
+import { TagType } from '../../store/slices/tag';
+export interface LoginResponseType {
+  email: string;
+  username: string;
+  token: {
+    access: string;
+    refresh: string;
+  };
+  tags: TagType[];
+}
 export default function LoginTab() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -29,12 +38,15 @@ export default function LoginTab() {
     }
 
     const req = { email: emailInput, password: passwordInput };
-    await axios.put<Pick<UserType, 'email' | 'username' | 'tags'>>(
+    await axios.put<LoginResponseType>(
       '/user/login/',
       req,
     )
     .then((response) => {
-      window.sessionStorage.setItem('user', response.data.username);
+      window.sessionStorage.setItem('username', response.data.username);
+      window.sessionStorage.setItem('access', response.data.token.access);
+      window.sessionStorage.setItem('refresh', response.data.token.refresh);
+      window.sessionStorage.setItem('tags', JSON.stringify(response.data.tags));
       window.location.reload();
     })
     .catch((error) => {

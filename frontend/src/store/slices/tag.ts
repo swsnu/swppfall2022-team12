@@ -27,6 +27,13 @@ export const fetchTags = createAsyncThunk(
   }
 );
 
+// export setSelectedtags = createAsyncThunk(
+//   'tag/setSelectedTags',
+//   async () => {
+
+//   }
+// )
+
 export const tagSlice = createSlice({
   name: 'tag',
   initialState: initialTagState,
