@@ -157,7 +157,16 @@ export default function SearchCourse() {
   };
 
   const addLocation = (marker: MarkerProps) => {
-    setSelected([...selected, marker]);
+    if (
+      selected.find(
+        (item) =>
+          item.position.lat === marker.position.lat && item.position.lng === marker.position.lng,
+      )
+    ) {
+      alert('이미 같은 장소가 선택되었습니다');
+    } else {
+      setSelected([...selected, marker]);
+    }
   };
 
   const setMarkerImage = (markers: MarkerProps[]) => {
