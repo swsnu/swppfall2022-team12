@@ -1,6 +1,7 @@
 /* global kakao */
 
 import React, { useEffect, useState } from 'react';
+import { DropResult } from 'react-beautiful-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
@@ -178,6 +179,14 @@ export default function SearchCourse() {
     setSelected(processedMarkers);
   };
 
+  const handleDrag = (result: DropResult) => {
+    if (!result.destination) return;
+    const items = [...selected];
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    setSelected(items);
+  };
+
   const storeCourse = () => {
     if (selected.length) {
       setMarkerImage(selected);
@@ -246,6 +255,7 @@ export default function SearchCourse() {
           searchPlaces={searchPlaces}
           setInfo={setInfo}
           addLocation={addLocation}
+          handleDrag={handleDrag}
         />
         <KakaoMap
           setMap={setMap}

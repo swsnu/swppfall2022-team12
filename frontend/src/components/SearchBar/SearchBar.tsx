@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 
 import { MarkerProps } from '../../containers/CourseCreate/SearchCourse';
 
@@ -8,6 +9,7 @@ type SearchProps = {
   searchPlaces: (keyword: string) => void;
   setInfo: (marker: MarkerProps | null) => void;
   addLocation: (marker: MarkerProps) => void;
+  handleDrag: (result: DropResult) => void;
 };
 
 export default function SearchBar({
@@ -16,6 +18,7 @@ export default function SearchBar({
   searchPlaces,
   setInfo,
   addLocation,
+  handleDrag,
 }: SearchProps) {
   const [keyword, setKeyword] = useState('');
 
@@ -33,6 +36,28 @@ export default function SearchBar({
     searchPlaces(keyword);
   };
 
+  const grid = 6;
+
+  const getItemStyle = (isDragging: any, draggableStyle: any) => ({
+    // some basic styles to make the items look a bit nicer
+    userSelect: 'none',
+    padding: grid * 2,
+    margin: `0 0 ${grid}px 0`,
+    listStyle: 'none',
+
+    // change background colour if dragging
+    background: isDragging ? 'lightgreen' : 'grey',
+
+    // styles we need to apply on draggables
+    ...draggableStyle,
+  });
+
+  const getListStyle = (isDraggingOver: any) => ({
+    background: isDraggingOver ? 'lightblue' : 'lightgrey',
+    padding: grid,
+    width: 250,
+  });
+
   return (
     <div
       className="SearchBar"
@@ -40,9 +65,6 @@ export default function SearchBar({
         width: '390px',
         zIndex: 1,
         backgroundColor: 'white',
-        // height: '100vh',
-        // height: 'inherit',
-        // position: 'relative',
       }}
     >
       <h1>Search!</h1>
@@ -57,24 +79,55 @@ export default function SearchBar({
       </form>
 
       {/* Selected Location List */}
-      <div className="selection">
-        <strong>Selected Locations</strong>
-        {selected &&
-          selected.map((location) => (
-            <li
-              key={`marker-${location.content}-${location.position.lat},${location.position.lng}`}
+      <DragDropContext onDragEnd={handleDrag}>
+        <Droppable droppableId="selected">
+          {(provided, snapshot) => (
+            <ul
+              className="selected"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              style={getListStyle(snapshot.isDraggingOver)}
             >
-              {location.content}
-            </li>
-          ))}
-      </div>
+              {selected.map((marker, index) => (
+                <Draggable key={marker.content} draggableId={index.toString()} index={index}>
+                  {(item, snapshots) => (
+                    <li
+                      ref={item.innerRef}
+                      {...item.dragHandleProps}
+                      {...item.draggableProps}
+                      style={getItemStyle(snapshots.isDragging, item.draggableProps.style)}
+                    >
+                      {marker.content}
+                    </li>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </ul>
+          )}
+        </Droppable>
+      </DragDropContext>
+      {/* <div className="selection" style={{ outline: '1px solid blue' }}> */}
+      {/*  <strong>Selected Locations</strong> */}
+      {/*  {selected && */}
+      {/*    selected.map((location) => ( */}
+      {/*      <li */}
+      {/*        key={`marker-${location.content}-${location.position.lat},${location.position.lng}`} */}
+      {/*      > */}
+      {/*        {location.content} */}
+      {/*      </li> */}
+      {/*    ))} */}
+      {/* </div> */}
 
       {/* Search Result List */}
       <div className="rst_wrap">
-        <div className="rst mCustomScrollbar" style={{ overflow: 'auto', height: '100vh' }}>
+        <div
+          className="rst mCustomScrollbar"
+          style={{ position: 'relative', overflow: 'auto', height: '100vh' }}
+        >
           <h2>Route</h2>
           {/* <div> */}
-          {/*  <input className={styles.Input} placeholder="출발" /> */}
+          {/*  <input placeholder="출발" /> */}
           {/* </div> */}
           {/* <div> */}
           {/*  <input placeholder="도착" /> */}
@@ -88,6 +141,7 @@ export default function SearchBar({
               listStyle: 'none',
               margin: 0,
               padding: 0,
+              height: '110vh',
             }}
           >
             {markers.map((marker) => (
@@ -96,7 +150,7 @@ export default function SearchBar({
                 id={marker.content}
                 style={{
                   border: 0,
-                  padding: '8px 10px 8px',
+                  padding: '20px 10px 8px',
                   outline: '1px solid blue',
                   backgroundColor: 'white',
                   width: '100%',
