@@ -63,10 +63,9 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
+      "src/components/SearchBar/*.tsx",
       "!src/index.tsx",
       "!src/test-utils/*",
-      "!src/components/dummyData.js",
       "!src/components/Map/KakaoMap.tsx",
       "!global.d.ts"
     ]

@@ -52,8 +52,6 @@ export default function SearchBar({
     padding: grid * 2,
     margin: `0 0 ${grid}px 0`,
     listStyle: 'none',
-    // display: 'inline-block',
-    // width: '90%',
 
     // change background colour if dragging
     background: isDragging ? 'lightgreen' : 'lightgray',

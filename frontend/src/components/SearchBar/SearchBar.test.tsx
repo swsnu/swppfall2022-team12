@@ -135,4 +135,28 @@ describe('<SearchBar />', () => {
     fireEvent.click(result);
     expect(addLocation).toHaveBeenCalled();
   });
+  it('should work removeLocation', () => {
+    const selected = [
+      {
+        position: { lat: 1, lng: 1 },
+        content: 'TEST1',
+      },
+    ];
+    const removeLocation = jest.fn();
+    render(
+      <SearchBar
+        markers={[]}
+        selected={selected}
+        searchPlaces={jest.fn()}
+        setInfo={jest.fn()}
+        addLocation={jest.fn()}
+        removeLocation={removeLocation}
+        handleDrag={jest.fn()}
+        preview={false}
+      />,
+    );
+    const removeButton = screen.getByRole('button', { name: /delete/i });
+    fireEvent.click(removeButton);
+    expect(removeLocation).toHaveBeenCalled();
+  });
 });
