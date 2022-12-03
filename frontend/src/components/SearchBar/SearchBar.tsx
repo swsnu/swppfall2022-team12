@@ -38,7 +38,7 @@ export default function SearchBar({
     searchPlaces(keyword);
   };
 
-  const grid = 5;
+  const grid = 8;
 
   const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
     // some basic styles to make the items look a bit nicer
@@ -91,8 +91,8 @@ export default function SearchBar({
             >
               {selected.map((marker, index) => (
                 <Draggable
-                  key={marker.content}
-                  draggableId={index.toString()}
+                  key={`${marker.content}`}
+                  draggableId={marker.content}
                   index={index}
                   isDragDisabled={preview}
                 >
