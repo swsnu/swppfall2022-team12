@@ -8570,6 +8570,11 @@ react-app-polyfill@^3.0.0:
     regenerator-runtime "^0.13.9"
     whatwg-fetch "^3.6.2"
 
+react-beautiful-dnd-test-utils@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/react-beautiful-dnd-test-utils/-/react-beautiful-dnd-test-utils-4.1.1.tgz#e4bf0d997cee2ce28987866c7b22b887424fe179"
+  integrity sha512-2l8IrPyKpmjBmYr89kAOltNVG3m09FWlAofjpX018Bmz+7hYEoh1AV1FowX3ab/CFjAgt28W0sakf1juuRwF4w==
+
 react-beautiful-dnd@^13.1.1:
   version "13.1.1"
   resolved "https://registry.yarnpkg.com/react-beautiful-dnd/-/react-beautiful-dnd-13.1.1.tgz#b0f3087a5840920abf8bb2325f1ffa46d8c4d0a2"

@@ -1,6 +1,20 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
+import {
+  mockGetComputedStyle,
+  mockDndSpacing,
+  makeDnd,
+  DND_DIRECTION_UP,
+  DND_DIRECTION_DOWN,
+} from 'react-beautiful-dnd-test-utils';
 
 import SearchBar from './SearchBar';
+
+const verifyTaskOrderInColumn = (columnTestId: string, orderedTasks: string[]): void => {
+  const texts = within(screen.getByTestId(columnTestId))
+    .getAllByTestId('task')
+    .map((x) => x.textContent);
+  expect(texts).toEqual(orderedTasks);
+};
 
 describe('<SearchBar />', () => {
   it('should render without errors', () => {
@@ -158,5 +172,39 @@ describe('<SearchBar />', () => {
     const removeButton = screen.getByRole('button', { name: /delete/i });
     fireEvent.click(removeButton);
     expect(removeLocation).toHaveBeenCalled();
+  });
+
+  it('should work dragging list item', async () => {
+    const selected = [
+      {
+        position: { lat: 1, lng: 1 },
+        content: 'TEST1',
+      },
+      {
+        position: { lat: 2, lng: 2 },
+        content: 'TEST2',
+      },
+    ];
+    mockGetComputedStyle();
+    const { container } = render(
+      <SearchBar
+        markers={[]}
+        selected={selected}
+        searchPlaces={jest.fn()}
+        setInfo={jest.fn()}
+        addLocation={jest.fn()}
+        removeLocation={jest.fn()}
+        handleDrag={jest.fn()}
+        preview={false}
+      />,
+    );
+    mockDndSpacing(container);
+    await makeDnd({
+      text: 'TEST2',
+      direction: DND_DIRECTION_UP,
+      positions: 1,
+    });
+
+    verifyTaskOrderInColumn('selected', ['TEST2', 'TEST1']);
   });
 });
