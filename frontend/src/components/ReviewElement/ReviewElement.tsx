@@ -50,12 +50,12 @@ export default function ReviewElement(prop: ReviewProp) {
       </div>
       <button
         onClick={() => {
-          setEditting(true);
-          // if (prop.author === 'sihoo') {// need to be fixed due to login issue
-          //   setEditting(true);
-          // } else {
-          //   // make Modal to notice user that he can't edit the comment
-          // }
+          if (prop.author === window.sessionStorage.getItem('username')) {
+            setEditting(true);
+          } else {
+            // make Modal to notice user that he can't edit the comment
+            alert('자신이 작성한 댓글만 수정 가능합니다')
+          }
         }}
       >
         edit
@@ -83,18 +83,21 @@ export default function ReviewElement(prop: ReviewProp) {
             rate:newRate
           }).then((res) => {
             /* eslint no-restricted-globals: ["off"] */
-            location.reload();
+            setEditting(false);
             // test needed for reloading***
           });
         }}>edit</button>
       </div> : <div />}</div>
       <button
         onClick={() => {
-          // need to be fixed due to login issue(Not everybody can delete!)
-          axios.delete(`/review/${prop.id}/`).then((res) => {
-            /* eslint no-restricted-globals: ["off"] */
-            location.reload();
-          });
+          if(prop.author === window.sessionStorage.getItem('username')){
+            axios.delete(`/review/${prop.id}/`).then((res) => {
+              /* eslint no-restricted-globals: ["off"] */
+              location.reload();
+            });
+          }else{
+            alert('자신이 작성한 댓글만 삭제 가능합니다')
+          }
         }}
       >
         delete
