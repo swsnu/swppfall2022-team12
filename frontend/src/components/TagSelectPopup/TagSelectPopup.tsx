@@ -1,8 +1,9 @@
 import { CloseRounded } from '@mui/icons-material';
 import { Button, Chip, Modal, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
+// import { Dispatch } from '@reduxjs/toolkit';
 import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { AppDispatch } from '../../store';
@@ -10,6 +11,7 @@ import { selectTag, TagType } from '../../store/slices/tag';
 
 interface TagPopupProp {
   toOpen: boolean;
+  openHandler: Dispatch<SetStateAction<boolean>>;
 }
 
 const style = {
@@ -28,10 +30,12 @@ export default function TagSelectPopup(prop: TagPopupProp) {
   const tagState = useSelector(selectTag);
 
   const [selectedTags, setSelectedTags] = useState<TagType["id"][]>([]);
-  const [open, setOpen] = useState<boolean>(prop.toOpen);
+  // const [open, setOpen] = useState<boolean>(prop.toOpen);
+  const { toOpen, openHandler } = prop;
+
 
   const onCloseModal = () => {
-    setOpen(false);
+    openHandler(false);
   };
 
   const onClickTag = (tagId: TagType["id"]) => {
@@ -48,12 +52,13 @@ export default function TagSelectPopup(prop: TagPopupProp) {
       { headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` } })
     .then((response) => {
       // dispatch()
-      setOpen(false);
+      window.sessionStorage.setItem('tags', JSON.stringify(selectedTags));
+      openHandler(false);
     });
   };
 
   return (
-    <Modal open={open} onClose={onCloseModal}>
+    <Modal open={toOpen} onClose={onCloseModal}>
       <div id="tag-select-popup" style={style}>
         <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>
           <CloseRounded onClick={onCloseModal} />

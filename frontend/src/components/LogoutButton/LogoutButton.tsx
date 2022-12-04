@@ -13,7 +13,10 @@ export default function LogoutButton() {
 
   const onClickLogoutButton = async () => {
     if (window.sessionStorage.getItem("username") !== null) {
-      await axios.get('/user/logout/', { headers : { Authorization : `Bearer ${window.sessionStorage.getItem('access')}`}})
+      await axios.get(
+        '/user/logout/',
+        { headers : { Authorization : `Bearer ${window.sessionStorage.getItem('access')}` } }
+      )
       .then((response) => {
         window.sessionStorage.clear();
         window.location.reload();
