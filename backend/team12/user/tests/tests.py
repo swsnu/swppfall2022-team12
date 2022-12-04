@@ -64,7 +64,7 @@ class UserTestCase(TestCase):
         self.assertEqual(data["username"], self.user.username)
         self.assertIn("access", data["token"].keys())
         self.assertIn("refresh", data["token"].keys())
-        self.assertSetEqual(set(data["tags"]), set(self.user.tags.values_list("content", flat=True)))
+        self.assertSetEqual(set(data["tags"]), set(self.user.tags.values_list("id", flat=True)))
 
         login_data = {
             "email": "wrongemail@test.com",
@@ -114,7 +114,12 @@ class UserTestCase(TestCase):
         histories = []
         cnt = 3
         for course in courses:
-            histories.extend([make_history(self.user, course, (datetime.now()-timedelta(hours=cnt-1)).hour) for i in range(cnt)])
+            histories.extend(
+                    [make_history(
+                        self.user, 
+                        course, 
+                        (datetime.now()-timedelta(hours=cnt-1)).hour)\
+                             for i in range(cnt)])
             cnt-=1
 
         response = self.client.get(

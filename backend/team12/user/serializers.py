@@ -51,7 +51,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
         }
     
     def get_tags(self, user):
-        return user.tags.values_list('content', flat=True)
+        return user.tags.values_list('id', flat=True)
 
     
 
