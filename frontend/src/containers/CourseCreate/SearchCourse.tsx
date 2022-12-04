@@ -1,6 +1,7 @@
 /* global kakao */
 
 import React, { useEffect, useState } from 'react';
+import { DropResult } from 'react-beautiful-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
@@ -156,7 +157,24 @@ export default function SearchCourse() {
   };
 
   const addLocation = (marker: MarkerProps) => {
-    setSelected([...selected, marker]);
+    if (
+      selected.find(
+        (item) =>
+          item.position.lat === marker.position.lat && item.position.lng === marker.position.lng,
+      )
+    ) {
+      alert('이미 같은 장소가 선택되었습니다');
+    } else {
+      setSelected([...selected, marker]);
+    }
+  };
+
+  const removeLocation = (marker: MarkerProps) => {
+    const removedLocations = selected.filter(
+      (item) =>
+        item.position.lat !== marker.position.lat && item.position.lng !== marker.position.lng,
+    );
+    setSelected(removedLocations);
   };
 
   const setMarkerImage = (markers: MarkerProps[]) => {
@@ -178,6 +196,14 @@ export default function SearchCourse() {
     setSelected(processedMarkers);
   };
 
+  const handleDrag = (result: DropResult) => {
+    if (!result.destination) return;
+    const items = [...selected];
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    setSelected(items);
+  };
+
   const storeCourse = () => {
     if (selected.length) {
       setMarkerImage(selected);
@@ -193,6 +219,7 @@ export default function SearchCourse() {
       if (selected.length < 3) {
         alert('장소를 적어도 3개 이상 선택해주세요');
         setPreview(false);
+        return;
       }
       dispatch(fetchPathFromTMap(selected));
     }
@@ -246,6 +273,9 @@ export default function SearchCourse() {
           searchPlaces={searchPlaces}
           setInfo={setInfo}
           addLocation={addLocation}
+          removeLocation={removeLocation}
+          handleDrag={handleDrag}
+          preview={preview}
         />
         <KakaoMap
           setMap={setMap}
