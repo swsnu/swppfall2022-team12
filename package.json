@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@types/react-beautiful-dnd": "^13.1.2",
+    "@types/react-router": "^5.1.19",
+    "react-beautiful-dnd": "^13.1.1"
+  }
+}
