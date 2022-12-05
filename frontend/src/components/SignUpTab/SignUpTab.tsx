@@ -56,7 +56,6 @@ export default function SignUpTab() {
         window.sessionStorage.setItem('username', response.data.email);
         window.sessionStorage.setItem('access', response.data.token.access);
         window.sessionStorage.setItem('refresh', response.data.token.refresh);
-        window.location.reload();
         navigate('/main');
       })
       .catch((error) => {

@@ -87,18 +87,7 @@ export const fetchRecommendedCourse = createAsyncThunk(
     const response = await axios.get<TaggedCourse[]>(
       '/user/recommend/',
       { params: { category: 'drive'}});
-      // { headers: { Authentication: `Bearer ${window.sessionStorage.getItem('access')}`}});
     return response.data;
-    // if (props.tags === null || props.tags.length === 0) return;
-
-    // const recommandResult: TaggedCourse[] = [];
-    // for (let i=0; i<props.tags.length; i++){
-    //   const currentTag = props.tags[i];
-    //   const tmpParams = { ...props, tags: [currentTag]};
-    //   const recommandResposne = await axios.get<CourseType[]>('/courses/', { params: tmpParams});
-    //   recommandResult.push({ tag: currentTag, courses: recommandResposne.data });
-    // }
-    // return recommandResult;
   }
 )
 

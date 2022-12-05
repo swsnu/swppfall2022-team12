@@ -47,7 +47,6 @@ export default function LoginTab() {
       window.sessionStorage.setItem('access', response.data.token.access);
       window.sessionStorage.setItem('refresh', response.data.token.refresh);
       window.sessionStorage.setItem('tags', JSON.stringify(response.data.tags));
-      // window.location.reload();
       navigate('/main');
     })
     .catch((error) => {

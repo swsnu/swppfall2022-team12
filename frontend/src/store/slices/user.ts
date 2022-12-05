@@ -84,7 +84,6 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(signupUser.rejected, (state, action) => {
-      // alert(action.payload);
     });
   },
 });

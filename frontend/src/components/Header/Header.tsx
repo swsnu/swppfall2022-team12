@@ -23,6 +23,7 @@ export default function Header() {
       category: localStorage.getItem('CATEGORY_KEY')!,
       search_keyword: null,
       filter: null,
+      tags: null,
     };
 
     await dispatch(fetchCourses(params));

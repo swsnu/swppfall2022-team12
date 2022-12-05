@@ -20,18 +20,18 @@ function App() {
   const dispatch = useDispatch<AppDispatch>();
   const userState = useSelector(selectUser);
 // Pick<UserType, 'email' | 'username' | 'tags'>
-  const [loggedInUser, setLoggedInUser] = useState<string | null>(
-    null,
-  );
+  // const [loggedInUser, setLoggedInUser] = useState<string | null>(
+  //   null,
+  // );
 
   useEffect(() => {
     dispatch(fetchTags());
   }, []);
 
-  useEffect(() => {
-    setLoggedInUser(window.sessionStorage.getItem('access'));
-    console.log(loggedInUser);
-  }, [window.sessionStorage.getItem('access')]);
+  // useEffect(() => {
+  //   setLoggedInUser(window.sessionStorage.getItem('access'));
+  //   console.log(loggedInUser);
+  // }, [window.sessionStorage.getItem('access')]);
 
   return (
     <div className="App">

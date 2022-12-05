@@ -35,6 +35,7 @@ export default function CourseList() {
         category: localStorage.getItem('CATEGORY_KEY') ?? 'drive',
         search_keyword: localStorage.getItem('SEARCH_KEY') ?? null,
         filter: localStorage.getItem('FILTER') ?? null,
+        tags: null,
       };
       dispatch(fetchCourses(params));
     };

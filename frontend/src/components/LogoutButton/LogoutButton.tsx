@@ -19,12 +19,10 @@ export default function LogoutButton() {
       )
       .then((response) => {
         window.sessionStorage.clear();
-        // window.location.reload();
         navigate('/login');
       })
       .catch((error) => {
         alert(error.response.data.detail);
-        // window.location.reload();
         navigate('/login');
       });
     };

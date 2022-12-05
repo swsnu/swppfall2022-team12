@@ -26,7 +26,7 @@ function MainPage() {
   };
 
   useEffect(() => {
-    setTagIds(convertTagsStringToArray(window.sessionStorage.getItem('tags')));
+    // setTagIds(convertTagsStringToArray(window.sessionStorage.getItem('tags')));
     // console.log(tagIds, tagIds.length, toOpenPopup);
     localStorage.removeItem('CATEGORY_KEY');
     localStorage.removeItem('SEARCH_KEY');
@@ -35,9 +35,9 @@ function MainPage() {
     dispatch(fetchRecommendedCourse());
   }, []);
 
-  useEffect(() => {
-    setTagIds(convertTagsStringToArray(window.sessionStorage.getItem('tags')));
-  }, [window.sessionStorage]);
+  // useEffect(() => {
+  //   setTagIds(convertTagsStringToArray(window.sessionStorage.getItem('tags')));
+  // }, [window.sessionStorage]);
 
   const onClickCreateCourse = () => {
     navigate('/course-create/search');
