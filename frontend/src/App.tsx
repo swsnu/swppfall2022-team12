@@ -13,6 +13,8 @@ import MainPage from './containers/MainPage/MainPage';
 import { AppDispatch } from './store';
 import { UserType, selectUser } from './store/slices/user';
 import { TagType, selectTag, fetchTags } from './store/slices/tag';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
+import isLogin from './utils/isLogin';
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
@@ -28,29 +30,21 @@ function App() {
 
   useEffect(() => {
     setLoggedInUser(window.sessionStorage.getItem('access'));
-  }, [window.sessionStorage]);
+    console.log(loggedInUser);
+  }, [window.sessionStorage.getItem('access')]);
 
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          {loggedInUser ? (
-            <>
-              <Route path="/main" element={<MainPage />} />
-              <Route path="/courses" element={<CourseList />} />
-              <Route path="/course/:id" element={<CourseDetail />} />
-              <Route path="/course-create/search" element={<SearchCourse />} />
-              <Route path="/course-create/post" element={<PostCourse />} />
-              <Route path="/" element={<Navigate replace to="/main" />} />
-              <Route path="*" element={<Navigate replace to="/main" />} />
-            </>
-          ) : (
-            <>
-              <Route path="/login" element={<Login />} />
-              <Route path="/" element={<Navigate replace to="/login" />} />
-              <Route path="*" element={<Navigate replace to="/login" />} />
-            </>
-          )}
+          <Route path="/login" element={isLogin() ? <Navigate replace to="/main" /> : <Login />} />
+          <Route path="/main" element={<PrivateRoute component={<MainPage />} />} />
+          <Route path="/courses" element={<PrivateRoute component={<CourseList />} />} />
+          <Route path="/course/:id" element={<PrivateRoute component={<CourseDetail />} />} />
+          <Route path="/course-create/search" element={<PrivateRoute component={<SearchCourse />} />} />
+          <Route path="/course-create/post" element={<PrivateRoute component={<PostCourse />} />} />
+          <Route path="/" element={isLogin() ? <Navigate replace to="/main" /> : <Navigate replace to="/login" />} />
+          <Route path="*" element={isLogin() ? <Navigate replace to="/main" /> : <Navigate replace to="/login" />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -7,7 +7,7 @@ import { AppDispatch } from '../../store';
 import { logoutUser, selectUser } from '../../store/slices/user';
 
 export default function LogoutButton() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // const dispatch = useDispatch<AppDispatch>();
   // const userState = useSelector(selectUser);
 
@@ -19,11 +19,13 @@ export default function LogoutButton() {
       )
       .then((response) => {
         window.sessionStorage.clear();
-        window.location.reload();
+        // window.location.reload();
+        navigate('/login');
       })
       .catch((error) => {
         alert(error.response.data.detail);
-        window.location.reload();
+        // window.location.reload();
+        navigate('/login');
       });
     };
   };
