@@ -163,7 +163,7 @@ class ReviewTestCase(TestCase):
         """
         target = self.reviews[0]
         before_likes = target.likes
-        response = self.client.put(
+        response = self.client.get(
             f'/review/{target.id}/like/', 
             HTTP_AUTHORIZATION = self.stranger_token,
             content_type="application/json")

@@ -73,12 +73,8 @@ class UserViewSet(viewsets.GenericViewSet):
         
     @action(methods=['GET'], detail=False)
     def recommend(self, request):
-        # TODO: remove ananoymous user cases.
         category = request.query_params.get("category", DRIVE)
-        if request.user.is_authenticated:
-            user = request.user
-        else:
-            user = User.objects.get(id=1)
+        user = request.user
         tags = list(user.tags.all())
         response = []
         if len(tags) == 0:
