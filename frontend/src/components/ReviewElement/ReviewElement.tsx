@@ -12,6 +12,8 @@ interface ReviewProp {
   author: string;
   rate: number;
   created_at: string;
+  change: number;
+  setChange : (change: number)=>void;
 }
 
 export default function ReviewElement(prop: ReviewProp) {
@@ -20,6 +22,7 @@ export default function ReviewElement(prop: ReviewProp) {
   const [newtext, setNewText] = useState<string>("");
   const [clicked, setClicked] = useState([false, false, false, false, false]);
   const [newRate, setNewRate] = useState<number>(5);
+  
 
   useEffect(()=>{
     setNewText(prop.content);
@@ -43,26 +46,16 @@ export default function ReviewElement(prop: ReviewProp) {
             if (prop.author === window.sessionStorage.getItem('username')) {
               alert('자신이 작성한 댓글은 좋아할수 없습니다')
             }else{
-              axios.put(`/review/like/${prop.id}/`);
+              axios.put(`/review/${prop.id}/like/`,{},{ headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` } });
+              prop.setChange(Math.random());
             }
           }}
         >
           like
         </button>
       </div>
-      <button
-        onClick={() => {
-          if (prop.author === window.sessionStorage.getItem('username')) {
-            setEditting(true);
-          } else {
-            // make Modal to notice user that he can't edit the comment
-            alert('자신이 작성한 댓글만 수정 가능합니다')
-          }
-        }}
-      >
-        edit
-      </button>
-      <div>{editting ? <div>editting area:
+      
+      <div>{editting ? <div>
         <div>
         {clicked.map((currBoolean, idx) => {
           return (
@@ -76,7 +69,7 @@ export default function ReviewElement(prop: ReviewProp) {
             />
           );
         })}
-      </div>
+      </div>editting area:
         <input data-testid="editting" type={"text"} onChange={(e)=>setNewText(e.target.value)} value={newtext}></input>
         <button  onClick={()=>{
           console.log(newtext)
@@ -86,16 +79,33 @@ export default function ReviewElement(prop: ReviewProp) {
           }).then((res) => {
             /* eslint no-restricted-globals: ["off"] */
             setEditting(false);
+            prop.setChange(Math.random());
             // test needed for reloading***
           });
-        }}>edit</button>
+        }}>confirm</button>
       </div> : <div />}</div>
+      {
+      prop.author != window.sessionStorage.getItem('username')?
+          <div></div>:
+          <div>
+          <button
+        onClick={() => {
+          if (prop.author === window.sessionStorage.getItem('username')) {
+            setEditting(true);
+          } else {
+            // make Modal to notice user that he can't edit the comment
+            alert('자신이 작성한 댓글만 수정 가능합니다')
+          }
+        }}
+      >
+        edit
+      </button>
       <button
         onClick={() => {
           if(prop.author === window.sessionStorage.getItem('username')){
             axios.delete(`/review/${prop.id}/`).then((res) => {
               /* eslint no-restricted-globals: ["off"] */
-              location.reload();
+              prop.setChange(Math.random());
             });
           }else{
             alert('자신이 작성한 댓글만 삭제 가능합니다')
@@ -104,6 +114,10 @@ export default function ReviewElement(prop: ReviewProp) {
       >
         delete
       </button>
+      </div>
+
+      }
+      
     </div>
   );
 }
