@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router';
+import { Navigate, useLocation } from 'react-router';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
 
 import KakaoMap from '../../components/Map/KakaoMap';
@@ -19,6 +19,7 @@ export default function CourseDetail() {
     rate : number,
     created_at : string
   }
+  const navigate = useNavigate();
 
   const { id } = useParams(); // get the id of the course
   const [info, setInfo] = useState<MarkerProps | null>(null);
@@ -37,6 +38,7 @@ export default function CourseDetail() {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const [e_time, setTime] = useState(50);
   const [tags, setTags] = useState([]);
+  const [author, setAuthor] = useState<string>("");
   // const [created_at, setCreateAt] = useState("");
   // const [link, setLink] = useState("");
   const [element, setElement] = useState({
@@ -62,6 +64,7 @@ export default function CourseDetail() {
       setPath(res.data.path);
       setTags(res.data.tags);
       setRating(res.data.rate);
+      setAuthor(res.data.author);
       console.log(res);
     });
     
@@ -125,6 +128,19 @@ export default function CourseDetail() {
     >
       <div style={{  height: '50px' , width:"50px"}}/>
         <h1>{title}</h1>
+        
+      {
+        author != window.sessionStorage.getItem('username')?
+        <div></div>
+        :
+        <div>
+        <button onClick={() => {
+          navigate(`/course/edit-search/${id}/`)
+        }}
+      >edit this course
+      </button>
+        </div>
+        }
         <h3>tags : {tags.toString()} </h3>
         <h5>{description}</h5>
         <h6>{u_counts} people used this course!</h6>
