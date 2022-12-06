@@ -31,6 +31,7 @@ export default function CourseDetail() {
   const [description, setDescription] = useState('dummy description');
   const [points, setPoints] = useState([]);
   const [destination, setDestination] = useState('dummy destination');
+  const [changeInside, setChangeInside] = useState<number>(0);
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const [u_counts, setCounts] = useState(45);
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -63,16 +64,21 @@ export default function CourseDetail() {
       setRating(res.data.rate);
       console.log(res);
     });
+    
+  }, [changeInside]);
+
+  useEffect( () =>{
     axios.get(`/review/?course=${id}${reviewState}`).then((res) => {
       console.log(res);
       setReviewList(res.data);
       setRateNum(res.data.length);
     });
-  }, [reviewState]);
+  }, [reviewState, changeInside])
 
   const onPlay = () => {
     console.log(reviewList);
-    axios.put(`/course/${id}/play/`).then((res)=>{console.log(res)});
+    axios.put(`/course/${id}/play/`,{},
+    {headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` }}).then((res)=>{console.log(res)});
     const tempArray = ['nmap://navigation?'];
     const elementArray = [
       {
@@ -128,7 +134,7 @@ export default function CourseDetail() {
         <h6>expected time : {e_time}</h6>
         <button onClick={onPlay}>go to navigation</button>
         <h3>Reviews</h3>
-        <ReviewPost courseId={id} />
+        <ReviewPost courseId={id} setChange={setChangeInside} />
         <div>
           <button onClick={()=>{setReviewState("&filter=time_desc")}}>최신순</button>
           <button onClick={()=>{setReviewState("&filter=time_asc")}}>오래된순</button>
@@ -140,12 +146,15 @@ export default function CourseDetail() {
           {reviewList.map((prop) => {
             return (
               <ReviewElement
+                key={prop.id}
                 id={prop.id}
                 content={prop.content}
                 likes={prop.likes}
                 author={prop.author}
                 rate={prop.rate}
                 created_at={prop.created_at}
+                change={changeInside}
+                setChange={setChangeInside}
               />
             );
           })}

@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import { Route, Navigate } from 'react-router-dom';
+
 import isLogin from '../../utils/isLogin';
 
 interface propsInterface {
   component: JSX.Element;
 }
-const PrivateRoute = (props: propsInterface) => {
+function PrivateRoute(props: propsInterface) {
   const { component } = props;
-    return (
-        isLogin() ? component : <Navigate to='/login' />
-    );
-};
+  return isLogin() ? component : <Navigate to="/login" />;
+}
 
 export default PrivateRoute;

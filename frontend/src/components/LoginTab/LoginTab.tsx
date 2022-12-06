@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { AppDispatch } from '../../store';
-import { UserType, loginUser, selectUser } from '../../store/slices/user';
 import { TagType } from '../../store/slices/tag';
+import { UserType, loginUser, selectUser } from '../../store/slices/user';
+
 export interface LoginResponseType {
   email: string;
   username: string;
@@ -38,20 +39,18 @@ export default function LoginTab() {
     }
 
     const req = { email: emailInput, password: passwordInput };
-    await axios.put<LoginResponseType>(
-      '/user/login/',
-      req,
-    )
-    .then((response) => {
-      window.sessionStorage.setItem('username', response.data.username);
-      window.sessionStorage.setItem('access', response.data.token.access);
-      window.sessionStorage.setItem('refresh', response.data.token.refresh);
-      window.sessionStorage.setItem('tags', JSON.stringify(response.data.tags));
-      navigate('/main');
-    })
-    .catch((error) => {
-      if (error.response.data.detail) alert(error.response.data.detail);
-    })
+    await axios
+      .put<LoginResponseType>('/user/login/', req)
+      .then((response) => {
+        window.sessionStorage.setItem('username', response.data.username);
+        window.sessionStorage.setItem('access', response.data.token.access);
+        window.sessionStorage.setItem('refresh', response.data.token.refresh);
+        window.sessionStorage.setItem('tags', JSON.stringify(response.data.tags));
+        navigate('/main');
+      })
+      .catch((error) => {
+        if (error.response.data.detail) alert(error.response.data.detail);
+      });
   };
 
   return (

@@ -12,20 +12,20 @@ export default function LogoutButton() {
   // const userState = useSelector(selectUser);
 
   const onClickLogoutButton = async () => {
-    if (window.sessionStorage.getItem("username") !== null) {
-      await axios.get(
-        '/user/logout/',
-        { headers : { Authorization : `Bearer ${window.sessionStorage.getItem('access')}` } }
-      )
-      .then((response) => {
-        window.sessionStorage.clear();
-        navigate('/login');
-      })
-      .catch((error) => {
-        alert(error.response.data.detail);
-        navigate('/login');
-      });
-    };
+    if (window.sessionStorage.getItem('username') !== null) {
+      await axios
+        .get('/user/logout/', {
+          headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+        })
+        .then((response) => {
+          window.sessionStorage.clear();
+          navigate('/login');
+        })
+        .catch((error) => {
+          alert(error.response.data.detail);
+          navigate('/login');
+        });
+    }
   };
 
   return <Button onClick={onClickLogoutButton}>Logout</Button>;

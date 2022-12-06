@@ -54,7 +54,10 @@ export const loginUser = createAsyncThunk(
   'user/login',
   async (usr: Pick<UserType, 'email' | 'password'>, { dispatch }) => {
     const req = { email: usr.email, password: usr.password };
-    const { data } = await axios.put<Pick<UserType, 'email' | 'username' | 'tags'>>('/user/login/', req);
+    const { data } = await axios.put<Pick<UserType, 'email' | 'username' | 'tags'>>(
+      '/user/login/',
+      req,
+    );
 
     return dispatch(userActions.loginUser({ user: data }));
   },
@@ -72,10 +75,16 @@ export const userSlice = createSlice({
   name: 'user',
   initialState: initialUserState,
   reducers: {
-    signupUser: (state, action: PayloadAction<{ user: Pick<UserType, 'email' | 'username' | 'tags'> }>) => {
+    signupUser: (
+      state,
+      action: PayloadAction<{ user: Pick<UserType, 'email' | 'username' | 'tags'> }>,
+    ) => {
       state.loggedInUser = action.payload.user;
     },
-    loginUser: (state, action: PayloadAction<{ user: Pick<UserType, 'email' | 'username' | 'tags'> }>) => {
+    loginUser: (
+      state,
+      action: PayloadAction<{ user: Pick<UserType, 'email' | 'username' | 'tags'> }>,
+    ) => {
       state.loggedInUser = action.payload.user;
     },
     logoutUser: (state, action) => {
@@ -83,8 +92,7 @@ export const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(signupUser.rejected, (state, action) => {
-    });
+    builder.addCase(signupUser.rejected, (state, action) => {});
   },
 });
 
