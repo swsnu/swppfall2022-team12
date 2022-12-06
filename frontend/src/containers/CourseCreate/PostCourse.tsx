@@ -43,10 +43,8 @@ export default function PostCourse() {
   }, [markers]);
 
   useEffect(() => {
-    if (map) {
-      map.setBounds(mapBounds, 400, 50, 100, 50);
-    }
-  }, [map]);
+    map?.setBounds(mapBounds, 400, 50, 100, 50);
+  }, []);
 
   const handleSubmitCourse = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
