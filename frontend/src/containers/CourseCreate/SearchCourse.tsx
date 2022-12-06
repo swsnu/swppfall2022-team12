@@ -46,6 +46,7 @@ export interface MarkerProps {
   position: PositionProps;
   content: string;
   image?: string;
+  selected?: boolean;
 }
 
 export default function SearchCourse() {
@@ -166,6 +167,17 @@ export default function SearchCourse() {
       alert('이미 같은 장소가 선택되었습니다');
     } else {
       setSelected([...selected, marker]);
+      const added = searchMarkers.map((item) => {
+        if (item.content === marker.content) {
+          return {
+            ...marker,
+            image: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/red_b.png',
+            selected: true,
+          };
+        }
+        return item;
+      });
+      setSearchMarkers(added);
     }
   };
 
@@ -175,6 +187,16 @@ export default function SearchCourse() {
         item.position.lat !== marker.position.lat && item.position.lng !== marker.position.lng,
     );
     setSelected(removedLocations);
+    const removed = searchMarkers.map((item) => {
+      if (item.content === marker.content) {
+        return {
+          ...marker,
+          selected: false,
+        };
+      }
+      return item;
+    });
+    setSearchMarkers(removed);
   };
 
   const setMarkerImage = (markers: MarkerProps[]) => {
