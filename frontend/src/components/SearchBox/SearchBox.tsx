@@ -1,3 +1,5 @@
+import SearchIcon from '@mui/icons-material/Search';
+import { TextField, Input, InputAdornment, Button } from '@mui/material';
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -40,14 +42,49 @@ export default function SearchBox(prop: SearchProp) {
   };
 
   return (
-    <div className="main-search">
-      <input
-        placeholder="Search Courses"
-        value={searchInput}
-        onChange={(e) => setSearchInput(e.target.value)}
-        ref={inputFocus}
-      />
-      <button onClick={onClickSearch}>Search</button>
+    <div
+      style={{
+        height: '360px',
+        width: '800px',
+        borderRadius: '10px',
+        backgroundImage: 'url(/search-bg.jpg)',
+        backgroundSize: 'cover',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <div
+        className="main-search"
+        style={{
+          height: '20%',
+          width: '70%',
+          borderRadius: '50px',
+          backgroundColor: 'white',
+          display: 'flex',
+          justifyContent: 'space-evenly',
+          alignItems: 'center',
+        }}
+      >
+        <TextField
+          label="어디로 가볼까요?"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          ref={inputFocus}
+          variant="standard"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+          style={{ width: '70%' }}
+        />
+        <Button variant="outlined" onClick={onClickSearch}>
+          로 떠나기
+        </Button>
+      </div>
     </div>
   );
 }

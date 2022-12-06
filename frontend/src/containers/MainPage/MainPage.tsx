@@ -42,10 +42,6 @@ function MainPage() {
   //   setTagIds(convertTagsStringToArray(window.sessionStorage.getItem('tags')));
   // }, [window.sessionStorage]);
 
-  const onClickCreateCourse = () => {
-    navigate('/course-create/search');
-  };
-
   return (
     <div
       style={{
@@ -60,9 +56,6 @@ function MainPage() {
       <div style={{ height: '20px' }}> </div>
       <SearchBox searchKey={localStorage.getItem('SEARCH_KEY') ?? ''} />
       <div style={{ height: '20px' }}> </div>
-      <Button variant="outlined" onClick={onClickCreateCourse}>
-        Create New Course
-      </Button>
       <TagSelectPopup toOpen={toOpenPopup} openHandler={setToOpenPopup} />
       <div>
         <p>{window.sessionStorage.getItem('username')}님을 위한 맞춤 코스</p>
