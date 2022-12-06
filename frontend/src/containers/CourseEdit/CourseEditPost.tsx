@@ -2,13 +2,15 @@
 
 import axios from 'axios';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router';
 
 import KakaoMap from '../../components/Map/KakaoMap';
 import { AppDispatch } from '../../store';
 import { postCourse } from '../../store/slices/course';
 import { MarkerProps, PositionProps } from "./CourseEditSearch";
+import { TagType, selectTag, fetchTags } from '../../store/slices/tag';
+
 
 export default function PostCourse() {
     const {id} = useParams();
@@ -21,9 +23,13 @@ export default function PostCourse() {
   const [info, setInfo] = useState<MarkerProps | null>(null);
   const [markers, setMarkers] = useState<MarkerProps[]>([]);
   const [path, setPath] = useState<PositionProps[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [tagsToSubmit, setTagsToSubmit] = useState<number[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const tags = useSelector(selectTag);
+
 
   const { state } = useLocation();
 
@@ -33,6 +39,7 @@ export default function PostCourse() {
     setExpectedTime(Number((state.resultData.totalTime / 60).toFixed(0)));
     setDistance(Number((state.resultData.totalDistance / 1000).toFixed(1)));
     setFare(Number(state.resultData.totalFare));
+    dispatch(fetchTags());
   }, []);
 
   const mapBounds = useMemo(() => {
@@ -63,10 +70,11 @@ export default function PostCourse() {
       distance,
       path,
       markers,
+      tags:tagsToSubmit
     };
     try {
-      await dispatch(postCourse(data));
-      navigate('/courses');
+      axios.put(`/course/${id}/`, data);
+      navigate(`/course/${id}/`);
     } catch (error) {
       alert('ERROR');
     }
@@ -114,6 +122,19 @@ export default function PostCourse() {
             }}
           />
         </label>
+        <div>tags
+        <select onChange={(e)=>{ 
+          setSelectedTags([...selectedTags, e.target.value]);
+          setTagsToSubmit([...tagsToSubmit, tags.tags.find((t)=>{if (t.content===e.target.value) return true;})?.id!])
+        }}>
+          {tags.tags.map( (t) => {
+            return (
+              <option key={t.id} value={t.content}>{t.content}</option>
+            );
+          })}
+        </select>
+        <div>{selectedTags.toString()}</div>
+        </div>
         <label style={{ marginRight: '30px' }}>total fare : {`${fare} 원`}</label>
         <label style={{ marginRight: '30px' }}>expected time : {`${expectedTime} 분`}</label>
         <label>total distance : {`${distance} km`}</label>
