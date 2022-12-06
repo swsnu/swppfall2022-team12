@@ -26,7 +26,7 @@ function MainPage() {
   const [tagIds, setTagIds] = useState<string[]>(
     convertTagsStringToArray(window.sessionStorage.getItem('tags')),
   );
-  const [toOpenPopup, setToOpenPopup] = useState<boolean>(!!!window.sessionStorage.getItem('tags'));
+  const [toOpenPopup, setToOpenPopup] = useState<boolean>(!window.sessionStorage.getItem('tags'));
 
   useEffect(() => {
     setTagIds(convertTagsStringToArray(window.sessionStorage.getItem('tags')));
@@ -82,7 +82,6 @@ function MainPage() {
                   return <div>{course.title}</div>;
                 })}
               </>
-
             );
           })}
         </div>

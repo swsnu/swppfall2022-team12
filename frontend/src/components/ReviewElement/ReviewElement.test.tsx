@@ -28,15 +28,12 @@ describe('<ReviewElement />', () => {
     const star = screen.getAllByTestId('star');
     fireEvent.click(star[0]!);
 
-    const editting = screen.getByTestId("editting");
+    const editting = screen.getByTestId('editting');
     fireEvent.change(editting, { target: { value: 'TEST' } });
     const editButton2 = screen.getAllByText('edit');
     fireEvent.click(editButton2[1]!);
 
-
     const deleteButton = screen.getByText('delete');
     fireEvent.click(deleteButton!);
-
   });
 });
-
