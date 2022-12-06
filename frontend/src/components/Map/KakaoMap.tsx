@@ -30,10 +30,9 @@ function KakaoMap({
   const [selectedMarker, setSelectedMarker] = useState<number>();
 
   return (
-    <div key="uniqueID">
+    <div>
       {preview ? (
         <Map // 지도를 표시할 Container
-          key="kakao-map"
           center={{
             // 지도의 중심좌표
             lat: 37.405278291509404,
@@ -57,7 +56,7 @@ function KakaoMap({
             strokeStyle="solid" // 선의 스타일입니다
           />
           {previewMarkers?.map((marker, idx) => (
-            <div className={`marker${idx}`}>
+            <div>
               <MapMarker
                 key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
                 position={marker.position}
@@ -80,7 +79,6 @@ function KakaoMap({
         </Map>
       ) : (
         <Map
-          key="kakao-map"
           center={{
             lat: 37.566826,
             lng: 126.9786567,
@@ -127,5 +125,4 @@ function KakaoMap({
   );
 }
 
-// export default React.memo(KakaoMap);
-export default KakaoMap;
+export default React.memo(KakaoMap);
