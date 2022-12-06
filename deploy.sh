@@ -2,7 +2,7 @@ git pull origin main
 cd backend/team12
 pip3 install -r requirements.txt
 sudo systemctl restart nginx
-sudo gunicorn team12.wsgi --bind 0.0.0.0:8000 --daemon
+gunicorn team12.wsgi --bind 0.0.0.0:8000 --daemon
 cd ../../frontend
 yarn install
 yarn start
