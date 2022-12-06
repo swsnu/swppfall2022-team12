@@ -3,9 +3,13 @@ import axios from "axios";
 
 import LogoutButton from "./LogoutButton";
 
+const mockNavigate = jest.fn();
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
+  useNavigate: () => mockNavigate,
+}));
 
 describe("<LogoutButton />", () => {
-  const { reload } = window.location;
   beforeEach(() => {
     jest.clearAllMocks();
     jest.spyOn(window, 'alert').mockImplementation(() => {});
@@ -18,13 +22,16 @@ describe("<LogoutButton />", () => {
   });
 
   it("should handle onClick withour errors with user in session storage", async () => {
-    sessionStorage.setItem("user", "test");
+    jest.spyOn(axios, 'get').mockImplementation(() => 
+      Promise.resolve({ response: { status: 204 } })
+    );
+    sessionStorage.setItem("access", "test");
     render(<LogoutButton />);
     const logoutButton = screen.getByText("Logout");
 
     fireEvent.click(logoutButton);
-    await waitFor(() => expect(sessionStorage.getItem("user")).toEqual(null));
-    await waitFor(() => expect(window.location.reload).toHaveBeenCalled());
+    await waitFor(() => expect(sessionStorage.getItem("access")).toEqual(null));
+    await waitFor(() => expect(mockNavigate).toHaveBeenCalledwith('/login'));
   });
 
   it("should handle onClick withour errors without user in session storage", async () => {
@@ -32,7 +39,7 @@ describe("<LogoutButton />", () => {
     const logoutButton = screen.getByText("Logout");
 
     fireEvent.click(logoutButton);
-    await waitFor(() => expect(window.location.reload).toHaveBeenCalled());
+    await waitFor(expect(mockNavigate).toHaveBeenCalledwith('/login'));
   });
 
   it("should handle onClick withour errors with axios error", async () => {
