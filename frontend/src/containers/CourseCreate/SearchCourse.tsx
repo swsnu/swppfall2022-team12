@@ -271,12 +271,18 @@ export default function SearchCourse() {
         }}
       >
         {preview ? (
-          <button
-            style={{ backgroundColor: 'white', marginRight: '10px' }}
+          <Button
+            style={{
+              marginRight: 15,
+              height: 50,
+              boxShadow:
+                'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
+            }}
+            size="large"
             onClick={() => setPreview(false)}
           >
-            <h3>경로 만들기</h3>
-          </button>
+            <h4 style={{ margin: 0 }}>경로 만들기</h4>
+          </Button>
         ) : (
           <Button
             style={{

@@ -1,5 +1,6 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
+import { Input } from 'antd';
 import React, { useState } from 'react';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 
@@ -15,6 +16,8 @@ type SearchProps = {
   handleDrag: (result: DropResult) => void;
   preview: boolean;
 };
+
+const { Search } = Input;
 
 export default function SearchBar({
   markers,
@@ -34,8 +37,7 @@ export default function SearchBar({
     }
   };
 
-  const submitKeyword = (e: React.MouseEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const submitKeyword = () => {
     if (valueChecker()) {
       alert('검색어를 입력해주세요.');
     }
@@ -74,14 +76,16 @@ export default function SearchBar({
     >
       <h1>Search!</h1>
       {/* Keyword Input */}
-      <form onSubmit={submitKeyword}>
-        <input
+      <div>
+        <Search
+          size="large"
           placeholder="검색어를 입력해주세요"
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
+          onSearch={submitKeyword}
+          style={{ width: 300 }}
         />
-        <button>검색</button>
-      </form>
+      </div>
 
       {/* Selected Location List */}
       <DragDropContext onDragEnd={handleDrag}>
