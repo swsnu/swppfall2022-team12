@@ -64,7 +64,7 @@ export default function CourseDetail() {
       setRating(res.data.rate);
       console.log(res);
     });
-    
+
   }, [changeInside]);
 
   useEffect( () =>{
@@ -119,6 +119,7 @@ export default function CourseDetail() {
       className="Container"
       style={{
         width: '700px',
+        height: '100vh',
         zIndex: 1,
         backgroundColor: 'white',
       }}
@@ -160,8 +161,6 @@ export default function CourseDetail() {
           })}
           </div>
         </div>}
-        {
-        
         <KakaoMap
           setMap={setMap}
           path={path}
@@ -170,8 +169,6 @@ export default function CourseDetail() {
           setInfo={setInfo}
           preview={true}
         />
-        }
-        
     </div>
   );
 }
