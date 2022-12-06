@@ -1,8 +1,9 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { Route, Routes } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
-import isLogin from "../../utils/isLogin";
-import PrivateRoute from "./PrivateRoute";
+
+// import isLogin from '../../utils/isLogin';
+import PrivateRoute from './PrivateRoute';
 
 // jest.mock(
 //   '../../components/CourseListElement/CourseListElement',
@@ -28,28 +29,36 @@ jest.mock('react-router', () => ({
   useNavigate: () => mockNavigate,
 }));
 
-describe("<PrivateRoute />", () => {
+describe('<PrivateRoute />', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("should render component when logged in", () => {
+  it('should render component when logged in', () => {
     const isLogin = jest.fn();
     isLogin.mockReturnValue(true);
 
-    render(<BrowserRouter>
-      <Routes>
-        <Route path="/" element={<PrivateRoute element={<div>Test</div>} />} />
-      </Routes>
-    </BrowserRouter>);
+    render(
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<PrivateRoute element={<div>Test</div>} />} />
+        </Routes>
+      </BrowserRouter>,
+    );
     screen.getByText('Test');
   });
 
-  it("should navigate to /login when logged out", () => {
+  it('should navigate to /login when logged out', () => {
     const isLogin = jest.fn();
     isLogin.mockReturnValue(false);
 
-    render(<BrowserRouter><Routes><Route path="/" element={<PrivateRoute element={<div>Test</div>} />} /></Routes></BrowserRouter>);
+    render(
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<PrivateRoute element={<div>Test</div>} />} />
+        </Routes>
+      </BrowserRouter>,
+    );
     expect(mockNavigate).toHaveBeenCalledWith('/login');
   });
 });

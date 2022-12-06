@@ -15,7 +15,7 @@ export interface SignUpResponseType {
     access: string;
     refresh: string;
   };
-};
+}
 
 export default function SignUpTab() {
   // const dispatch = useDispatch<AppDispatch>();
