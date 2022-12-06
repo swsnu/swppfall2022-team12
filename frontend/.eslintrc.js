@@ -45,6 +45,7 @@ module.exports = {
         'react/destructuring-assignment': 'off',
         'react/react-in-jsx-scope': 'off',
         'jsx-a11y/click-events-have-key-events': 'off',
+        'react/jsx-props-no-spreading': 'off',
         'func-names': 'off',
         'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
         'import/no-extraneous-dependencies': [

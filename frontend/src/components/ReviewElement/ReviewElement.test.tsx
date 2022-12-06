@@ -11,7 +11,7 @@ describe('<ReviewElement />', () => {
   });
 
   it('should render without errors', () => {
-    render(
+    renderWithProviders(
       <ReviewElement
         id={3}
         content="test"
@@ -23,7 +23,20 @@ describe('<ReviewElement />', () => {
     );
     const likeButton = screen.getByText('like');
     fireEvent.click(likeButton!);
+    const editButton = screen.getByText('edit');
+    fireEvent.click(editButton!);
+    const star = screen.getAllByTestId('star');
+    fireEvent.click(star[0]!);
+
+    const editting = screen.getByTestId("editting");
+    fireEvent.change(editting, { target: { value: 'TEST' } });
+    const editButton2 = screen.getAllByText('edit');
+    fireEvent.click(editButton2[1]!);
+
+
     const deleteButton = screen.getByText('delete');
     fireEvent.click(deleteButton!);
+
   });
 });
+

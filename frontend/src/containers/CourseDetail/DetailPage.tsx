@@ -10,6 +10,16 @@ import ReviewPost from '../../components/ReviewPost/ReviewPost';
 import { MarkerProps, PositionProps } from '../CourseCreate/SearchCourse';
 /* eslint-disable */
 export default function CourseDetail() {
+
+  type reviewProps = {
+    id : number,
+    content : string,
+    likes : number,
+    author : string,
+    rate : number,
+    created_at : string
+  }
+
   const { id } = useParams(); // get the id of the course
   const [info, setInfo] = useState<MarkerProps | null>(null);
   const [markers, setMarkers] = useState<MarkerProps[]>([]);
@@ -37,24 +47,8 @@ export default function CourseDetail() {
     },
     idx: 0,
   });
-  const [reviewList, setReviewList] = useState([
-    {
-      id: 2,
-      content: 'test content reviews 2',
-      likes: 0,
-      author: 'hoosi',
-      rate: 3,
-      created_at: '2022-11-22T08:09:34.764017Z',
-    },
-    {
-      id: 1,
-      content: 'review content test!!',
-      likes: 1,
-      author: 'sihoo',
-      rate: 5,
-      created_at: '2022-11-22T06:23:16.984213Z',
-    },
-  ]);
+  const [reviewList, setReviewList] = useState<reviewProps[]>([]);
+  const [reviewState, setReviewState] = useState<string>("");
 
   useEffect(() => {
     axios.get(`/course/${id}/`).then((res) => {
@@ -69,12 +63,12 @@ export default function CourseDetail() {
       setRating(res.data.rate);
       console.log(res);
     });
-    axios.get(`/review/?course=${id}`).then((res) => {
+    axios.get(`/review/?course=${id}${reviewState}`).then((res) => {
       console.log(res);
       setReviewList(res.data);
       setRateNum(res.data.length);
     });
-  }, []);
+  }, [reviewState]);
 
   const onPlay = () => {
     console.log(reviewList);
@@ -114,8 +108,9 @@ export default function CourseDetail() {
   };
 
   return (
-      <>
-      <div>
+    <div style={{ display: 'flex'}}>
+      {<div className="Container">
+      <div style={{  height: '50px' , width:"50px"}}/>
         <h1>{title}</h1>
         <h3>tags : {tags.toString()} </h3>
         <h5>{description}</h5>
@@ -127,6 +122,13 @@ export default function CourseDetail() {
         <button onClick={onPlay}>go to navigation</button>
         <h3>Reviews</h3>
         <ReviewPost courseId={id} />
+        <div>
+          <button onClick={()=>{setReviewState("&filter=time_desc")}}>최신순</button>
+          <button onClick={()=>{setReviewState("&filter=time_asc")}}>오래된순</button>
+          <button onClick={()=>{setReviewState("&filter=rate_desc")}}>평점높은순</button>
+          <button onClick={()=>{setReviewState("&filter=rate_asc")}}>평점낮은순</button>
+          <button onClick={()=>{setReviewState("&filter=likes")}}>좋아요 순</button>
+          </div>
         <div>
           {reviewList.map((prop) => {
             return (
@@ -141,17 +143,21 @@ export default function CourseDetail() {
             );
           })}
           </div>
-        </div>
-        <div>
+        </div>}
+        {
+        <div className="Container" >
+        <div style={{  height: '600px' , width:"50px"}}/>
         <KakaoMap
           setMap={setMap}
           path={path}
           previewMarkers={markers}
           info={info}
           setInfo={setInfo}
-          preview
+          preview={true}
         />
         </div>
-      </>
+        }
+        
+    </div>
   );
 }

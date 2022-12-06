@@ -13,7 +13,8 @@ from review.serializers import ReviewSerializer, ReviewCreateSerializer
 from course.models import *
 from course.utils import reflect_rate
 
-from team12.exceptions import NotAllowed, FieldError
+from team12.exceptions import FieldError, NotAllowed
+from team12.permissions import IsOwnerOrCreateReadOnly
 
 class ReviewViewSet(
         viewsets.GenericViewSet,
@@ -23,7 +24,7 @@ class ReviewViewSet(
     Generic ViewSet of Review Object.
     """
     queryset = Review.objects.all()
-    permission_classes = []
+    permission_classes = [IsOwnerOrCreateReadOnly]
 
     def get_serializer_class(self):
         if self.action in ["list", "retrieve", "like", "update"]:
@@ -36,17 +37,10 @@ class ReviewViewSet(
     def create(self, request):
         """Create Review"""
         data = request.data
-        # TODO: remove anonymous cases
-        if not request.user.is_anonymous:
-            context = {
-                'course': data.get('course'),
-                'author': request.user
-            }
-        else:
-            context = {
-                'course': data.get('course'),
-                'author': User.objects.get(id=1)
-            }
+        context = {
+            'course': data.get('course'),
+            'author': User.objects.get(id=1)
+        }
         serializer = self.get_serializer(data=request.data, context=context)
         serializer.is_valid(raise_exception=True)
         review = serializer.save()
@@ -104,13 +98,13 @@ class ReviewViewSet(
 
     # PUT /review/like/:reviewId
     @transaction.atomic
-    @action(methods=['PUT'], detail=True)
+    @action(methods=['GET'], detail=True)
     def like(self, request, pk=None):
         """Like Reviews"""
         review = self.get_object()
         user = request.user
-        # if review.author == user:
-        #     raise NotAllowed("Author can't like the review.")
+        if review.author == user:
+            raise NotAllowed("Author can't like the review.")
         
         if user.like_reviews.filter(review=review).exists():
             user.like_reviews.get(review=review).delete()

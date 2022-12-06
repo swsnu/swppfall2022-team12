@@ -193,7 +193,7 @@ class CourseTestCase(TestCase):
         """
         target = self.courses[0]
         before_counts = target.u_counts
-        response = self.client.put(
+        response = self.client.get(
             f'/course/{target.id}/play/', 
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")

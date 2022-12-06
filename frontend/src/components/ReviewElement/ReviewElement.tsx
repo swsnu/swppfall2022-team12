@@ -21,8 +21,6 @@ export default function ReviewElement(prop: ReviewProp) {
   const [clicked, setClicked] = useState([false, false, false, false, false]);
   const [newRate, setNewRate] = useState<number>(5);
 
-
-
   useEffect(()=>{
     setNewText(prop.content);
     setNewRate(prop.rate);
@@ -42,7 +40,11 @@ export default function ReviewElement(prop: ReviewProp) {
         {prop.likes} people liked this comment
         <button
           onClick={() => {
-            axios.put(`/review/like/${prop.id}/`);
+            if (prop.author === window.sessionStorage.getItem('username')) {
+              alert('자신이 작성한 댓글은 좋아할수 없습니다')
+            }else{
+              axios.put(`/review/like/${prop.id}/`);
+            }
           }}
         >
           like
@@ -50,10 +52,11 @@ export default function ReviewElement(prop: ReviewProp) {
       </div>
       <button
         onClick={() => {
-          if (prop.author === 'sihoo') {// need to be fixed due to login issue
+          if (prop.author === window.sessionStorage.getItem('username')) {
             setEditting(true);
           } else {
             // make Modal to notice user that he can't edit the comment
+            alert('자신이 작성한 댓글만 수정 가능합니다')
           }
         }}
       >
@@ -64,7 +67,7 @@ export default function ReviewElement(prop: ReviewProp) {
         {clicked.map((currBoolean, idx) => {
           return (
             <FaStar
-              data-testid="star"
+              data-testid={"star"}
               size="15"
               onClick={() => {
                 setNewRate(idx + 1);
@@ -74,27 +77,29 @@ export default function ReviewElement(prop: ReviewProp) {
           );
         })}
       </div>
-        <input type={"text"} onChange={(e)=>setNewText(e.target.value)} value={newtext}></input>
-        <button onClick={()=>{
+        <input data-testid="editting" type={"text"} onChange={(e)=>setNewText(e.target.value)} value={newtext}></input>
+        <button  onClick={()=>{
           console.log(newtext)
           axios.put('/review/'+prop.id+"/", {
             content:newtext,
             rate:newRate
           }).then((res) => {
-            console.log(res)
             /* eslint no-restricted-globals: ["off"] */
-            location.reload();
+            setEditting(false);
             // test needed for reloading***
           });
-        }}>edit!</button>
+        }}>edit</button>
       </div> : <div />}</div>
       <button
         onClick={() => {
-          // need to be fixed due to login issue(Not everybody can delete!)
-          axios.delete(`/review/${prop.id}/`).then((res) => {
-            /* eslint no-restricted-globals: ["off"] */
-            location.reload();
-          });
+          if(prop.author === window.sessionStorage.getItem('username')){
+            axios.delete(`/review/${prop.id}/`).then((res) => {
+              /* eslint no-restricted-globals: ["off"] */
+              location.reload();
+            });
+          }else{
+            alert('자신이 작성한 댓글만 삭제 가능합니다')
+          }
         }}
       >
         delete
@@ -102,3 +107,4 @@ export default function ReviewElement(prop: ReviewProp) {
     </div>
   );
 }
+

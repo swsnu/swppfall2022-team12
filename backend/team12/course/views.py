@@ -12,6 +12,7 @@ from course.const import DRIVE
 from course.utils import create_points, set_tags
 
 from datetime import datetime
+from team12.permissions import IsOwnerOrCreateReadOnly
 
 class CourseViewSet(
         viewsets.GenericViewSet,
@@ -21,7 +22,7 @@ class CourseViewSet(
     Generic ViewSet of Course Object.
     """
     queryset = Course.objects.all()
-    permission_classes = []
+    permission_classes = [IsOwnerOrCreateReadOnly]
 
     def get_serializer_class(self):
         if self.action in ["retrieve", "play"]:
@@ -37,17 +38,13 @@ class CourseViewSet(
     @transaction.atomic
     def create(self, request):
         """Create Course"""
-        # TODO: remove anonymous cases
         context = {
             "markers": request.data.get("markers", []),
             "path": request.data.get("path", []),
             "tags": request.data.get("tags", [])
         }
         data = request.data.copy()
-        if request.user.is_anonymous:
-            user_id = 1
-        else:
-            user_id = request.user.id
+        user_id = request.user.id
         data['author'] = user_id
         serializer = self.get_serializer(data=data, context=context)
         serializer.is_valid(raise_exception=True)
@@ -114,7 +111,7 @@ class CourseViewSet(
         return Response(self.get_serializer(courses, many=True).data, status=status.HTTP_200_OK)
     
     # PUT /course/:courseId/play
-    @action(methods=['PUT'], detail=True)
+    @action(methods=['GET'], detail=True)
     @transaction.atomic
     def play(self, request, pk=None):
         course = self.get_object()
