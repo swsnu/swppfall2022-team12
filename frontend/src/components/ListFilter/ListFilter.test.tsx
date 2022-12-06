@@ -2,8 +2,8 @@ import { getByRole, fireEvent, render, screen, waitFor } from '@testing-library/
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 
-import ListFilter from './ListFilter';
 import { getMockStore } from '../../test-utils/mocks';
+import ListFilter from './ListFilter';
 
 const initialState = {
   course: {
@@ -12,7 +12,7 @@ const initialState = {
     tMapCourse: {
       tMapData: null,
       tMapFeatures: [],
-    }
+    },
   },
   user: {
     users: [],
@@ -22,32 +22,40 @@ const initialState = {
   tag: {
     tags: [],
     selectedTags: [],
-  }
+  },
 };
 
 const mockStore = getMockStore({ ...initialState });
 
-describe("<ListFilter />", () => {
+describe('<ListFilter />', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  
-  it("should render without errors", () => {
-    render(<Provider store={mockStore}><ListFilter /></Provider>);
-    screen.getByLabelText("Filter");
-    screen.getByText("-");
+
+  it('should render without errors', () => {
+    render(
+      <Provider store={mockStore}>
+        <ListFilter />
+      </Provider>,
+    );
+    screen.getByLabelText('Filter');
+    screen.getByText('-');
   });
 
-  it("should handle onChange withour errors", async () => {
-    render(<Provider store={mockStore}><ListFilter /></Provider>);
-    const listFilter = screen.getByTestId("list-filter-testId");
+  it('should handle onChange withour errors', async () => {
+    render(
+      <Provider store={mockStore}>
+        <ListFilter />
+      </Provider>,
+    );
+    const listFilter = screen.getByTestId('list-filter-testId');
 
-    userEvent.click(getByRole(listFilter, "button"));
-    await waitFor(() => fireEvent.click(screen.getByText("인기 순")));
-    await waitFor(() => expect(localStorage.getItem("FILTER")).toEqual("use"));
+    userEvent.click(getByRole(listFilter, 'button'));
+    await waitFor(() => fireEvent.click(screen.getByText('인기 순')));
+    await waitFor(() => expect(localStorage.getItem('FILTER')).toEqual('use'));
 
-    userEvent.click(getByRole(listFilter, "button"));
-    await waitFor(() => fireEvent.click(screen.getByText("-")));
-    await waitFor(() => expect(localStorage.getItem("FILTER")).toEqual(null));
+    userEvent.click(getByRole(listFilter, 'button'));
+    await waitFor(() => fireEvent.click(screen.getByText('-')));
+    await waitFor(() => expect(localStorage.getItem('FILTER')).toEqual(null));
   });
-})
+});

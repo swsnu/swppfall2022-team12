@@ -127,5 +127,4 @@ function KakaoMap({
   );
 }
 
-// export default React.memo(KakaoMap);
-export default KakaoMap;
+export default React.memo(KakaoMap);

@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { AppDispatch, store } from '../../store';
-import { signupUser, selectUser, UserType } from '../../store/slices/user';
 import { TagType } from '../../store/slices/tag';
+import { signupUser, selectUser, UserType } from '../../store/slices/user';
 
 export interface SignUpResponseType {
   email: string;
@@ -14,7 +14,7 @@ export interface SignUpResponseType {
     access: string;
     refresh: string;
   };
-};
+}
 
 export default function SignUpTab() {
   // const dispatch = useDispatch<AppDispatch>();

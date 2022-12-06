@@ -18,7 +18,7 @@ function MainPage() {
   const tagState = useSelector(selectTag);
   const courseState = useSelector(selectCourse);
   const [tagIds, setTagIds] = useState<string[]>([]);
-  const [toOpenPopup ,setToOpenPopup] = useState<boolean>(!!!window.sessionStorage.getItem('tags'));
+  const [toOpenPopup, setToOpenPopup] = useState<boolean>(!window.sessionStorage.getItem('tags'));
 
   const convertTagsStringToArray = (tags: string | null) => {
     if (tags === null) return [];
@@ -60,7 +60,7 @@ function MainPage() {
       <Button variant="outlined" onClick={onClickCreateCourse}>
         Create New Course
       </Button>
-      <TagSelectPopup toOpen={toOpenPopup} openHandler={setToOpenPopup}/>
+      <TagSelectPopup toOpen={toOpenPopup} openHandler={setToOpenPopup} />
       <div>
         <p>{window.sessionStorage.getItem('username')}님을 위한 맞춤 코스</p>
         <div>
@@ -75,15 +75,10 @@ function MainPage() {
             return (
               <>
                 <div>{tagContent}</div>
-                {coursesData.map((course) => {
-                  return (
-                    <div>
-                      {course.title}
-                    </div>
-                  );
+                {coursesData.map((data) => {
+                  return <div>{data.title}</div>;
                 })}
               </>
-
             );
           })}
         </div>
