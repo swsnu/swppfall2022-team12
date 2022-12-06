@@ -7,9 +7,9 @@ import Header from '../../components/Header/Header';
 import SearchBox from '../../components/SearchBox/SearchBox';
 import TagSelectPopup from '../../components/TagSelectPopup/TagSelectPopup';
 import { AppDispatch } from '../../store';
-import course, { fetchRecommendedCourse, selectCourse } from '../../store/slices/course';
-import tag, { selectTag } from '../../store/slices/tag';
-import user, { selectUser } from '../../store/slices/user';
+import { fetchRecommendedCourse, selectCourse } from '../../store/slices/course';
+import { selectTag } from '../../store/slices/tag';
+import { selectUser } from '../../store/slices/user';
 
 function MainPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -17,16 +17,19 @@ function MainPage() {
   const userState = useSelector(selectUser);
   const tagState = useSelector(selectTag);
   const courseState = useSelector(selectCourse);
-  const [tagIds, setTagIds] = useState<string[]>([]);
-  const [toOpenPopup ,setToOpenPopup] = useState<boolean>(!!!window.sessionStorage.getItem('tags'));
 
   const convertTagsStringToArray = (tags: string | null) => {
-    if (tags === null) return [];
+    if (tags === null || tags === '[]') return [];
     return tags.split(',');
   };
 
+  const [tagIds, setTagIds] = useState<string[]>(
+    convertTagsStringToArray(window.sessionStorage.getItem('tags')),
+  );
+  const [toOpenPopup, setToOpenPopup] = useState<boolean>(!!!window.sessionStorage.getItem('tags'));
+
   useEffect(() => {
-    // setTagIds(convertTagsStringToArray(window.sessionStorage.getItem('tags')));
+    setTagIds(convertTagsStringToArray(window.sessionStorage.getItem('tags')));
     // console.log(tagIds, tagIds.length, toOpenPopup);
     localStorage.removeItem('CATEGORY_KEY');
     localStorage.removeItem('SEARCH_KEY');
@@ -60,7 +63,7 @@ function MainPage() {
       <Button variant="outlined" onClick={onClickCreateCourse}>
         Create New Course
       </Button>
-      <TagSelectPopup toOpen={toOpenPopup} openHandler={setToOpenPopup}/>
+      <TagSelectPopup toOpen={toOpenPopup} openHandler={setToOpenPopup} />
       <div>
         <p>{window.sessionStorage.getItem('username')}님을 위한 맞춤 코스</p>
         <div>
@@ -76,11 +79,7 @@ function MainPage() {
               <>
                 <div>{tagContent}</div>
                 {coursesData.map((course) => {
-                  return (
-                    <div>
-                      {course.title}
-                    </div>
-                  );
+                  return <div>{course.title}</div>;
                 })}
               </>
 

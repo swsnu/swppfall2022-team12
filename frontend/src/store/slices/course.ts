@@ -56,7 +56,18 @@ export interface FetchCoursesParams {
 
 export interface TaggedCourse {
   tag: number;
-  courses: Pick<CourseType, "id" | "author" | "title" | "description" | "created_at" | "u_counts" | "e_time" | "distance" | "rate">[];
+  courses: Pick<
+    CourseType,
+    | 'id'
+    | 'author'
+    | 'title'
+    | 'description'
+    | 'created_at'
+    | 'u_counts'
+    | 'e_time'
+    | 'distance'
+    | 'rate'
+  >[];
 }
 
 export interface CourseState {
@@ -84,12 +95,13 @@ export const fetchCourses = createAsyncThunk(
 export const fetchRecommendedCourse = createAsyncThunk(
   'course/fetchRecommendedCourse',
   async () => {
-    const response = await axios.get<TaggedCourse[]>(
-      '/user/recommend/',
-      { params: { category: 'drive'}});
+    const response = await axios.get<TaggedCourse[]>('/user/recommend/', {
+      headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+      params: { category: 'drive'},
+    });
     return response.data;
-  }
-)
+  },
+);
 
 export const fetchCourse = createAsyncThunk('course/fetchCourse', async (id: CourseType['id']) => {
   const response = await axios.get<CourseType>(`/course/${id}/`);

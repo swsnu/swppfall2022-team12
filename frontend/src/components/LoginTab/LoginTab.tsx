@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { AppDispatch } from '../../store';
-import { UserType, loginUser, selectUser } from '../../store/slices/user';
 import { TagType } from '../../store/slices/tag';
+import { UserType, selectUser } from '../../store/slices/user';
+
 export interface LoginResponseType {
   email: string;
   username: string;
@@ -18,8 +19,8 @@ export interface LoginResponseType {
 }
 export default function LoginTab() {
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
-  const userState = useSelector(selectUser);
+  // const dispatch = useDispatch<AppDispatch>();
+  // const userState = useSelector(selectUser);
 
   const emailInputRef = useRef<HTMLInputElement>(null);
   const pwInputRef = useRef<HTMLInputElement>(null);
@@ -38,20 +39,20 @@ export default function LoginTab() {
     }
 
     const req = { email: emailInput, password: passwordInput };
-    await axios.put<LoginResponseType>(
-      '/user/login/',
-      req,
-    )
-    .then((response) => {
-      window.sessionStorage.setItem('username', response.data.username);
-      window.sessionStorage.setItem('access', response.data.token.access);
-      window.sessionStorage.setItem('refresh', response.data.token.refresh);
-      window.sessionStorage.setItem('tags', JSON.stringify(response.data.tags));
-      navigate('/main');
-    })
-    .catch((error) => {
-      if (error.response.data.detail) alert(error.response.data.detail);
-    })
+    await axios
+      .put<LoginResponseType>('/user/login/', req)
+      .then((response) => {
+        window.sessionStorage.setItem('username', response.data.username);
+        window.sessionStorage.setItem('access', response.data.token.access);
+        window.sessionStorage.setItem('refresh', response.data.token.refresh);
+        window.sessionStorage.setItem('tags', JSON.stringify(response.data.tags));
+        navigate('/main');
+      })
+      .catch((error) => {
+        // if (error.response.data.detail) 
+        console.log(error);
+        alert(error.response.data.detail ?? '로그인에 실패했습니다.');
+      });
   };
 
   return (

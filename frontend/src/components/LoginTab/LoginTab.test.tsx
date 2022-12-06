@@ -4,20 +4,17 @@ import LoginTab from "./LoginTab";
 
 import { Provider } from 'react-redux';
 import { getMockStore } from '../../test-utils/mocks';
+import axios from "axios";
 
-const initialState = {
-  course: {
-    courses: [],
-    selectedCourse: null,
-    tMapData: null,
-    tMapFeatures: [],
+const mockResponse = {
+  email: "test@test.com",
+  username: "test-username",
+  token: {
+    access: "testjwtaccesstoken",
+    refresh: "testjwtrefreshtoken",
   },
-  user: {
-    users: [],
-    loggedInUser: null,
-    selectedUser: null,
-  }
-};
+  tags: []
+}
 
 // const mockStore = getMockStore({ ...initialState });
 
@@ -27,6 +24,8 @@ jest.mock("react-router", () => ({
   useNavigate: () => mockNavigate,
 }));
 
+jest.mock('axios');
+
 describe("<LoginTab />", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -34,26 +33,57 @@ describe("<LoginTab />", () => {
 
   it("should render without errors", () => {
     render(<LoginTab />);
-    screen.getByText("Username");
+    screen.getByText("Email");
     screen.getByText("Password");
     screen.getByText("Login");
   });
 
-  it("should handle empty input when Login button is clicked", () => {
+  it("should handle empty input when Login button is clicked", async () => {
     render(<LoginTab />);
-    const nameInput = screen.getByLabelText("Username");
+    const emailInput = screen.getByLabelText("Email");
     const pwInput = screen.getByLabelText("Password");
     const loginButton = screen.getByText("Login");
 
     fireEvent.click(loginButton);
-    expect(nameInput).toHaveFocus();
+    expect(emailInput).toHaveFocus();
 
-    fireEvent.change(nameInput, { target : { value : "username-test" } });
+    fireEvent.change(emailInput, { target : { value : "test@test.com" } });
     fireEvent.click(loginButton);
     expect(pwInput).toHaveFocus();
+  });
 
+  it("should handle login with 200 response", async () => {
+    axios.put = jest.fn().mockResolvedValue({ data: mockResponse });
+
+    render(<LoginTab />);
+    const emailInput = screen.getByLabelText("Email");
+    const pwInput = screen.getByLabelText("Password");
+    const loginButton = screen.getByText("Login");
+
+    fireEvent.change(emailInput, { target : { value : "test@test.com" } });
     fireEvent.change(pwInput, { target : { value : "pw-test" } });
     fireEvent.click(loginButton);
-    expect(mockNavigate).toHaveBeenCalledWith("/main");
+
+    await waitFor(() => expect(axios.put).toBeCalled());
+    await waitFor(() => expect(window.sessionStorage.getItem('username')).toEqual("test-username"));
+    await waitFor(() => expect(window.sessionStorage.getItem('access')).toEqual("testjwtaccesstoken"));
+    await waitFor(() => expect(window.sessionStorage.getItem('refresh')).toEqual("testjwtrefreshtoken"));
+    await waitFor(() => expect(window.sessionStorage.getItem('tags')).toEqual("[]"));
   });
+
+  it("should handle login with 400 response", async () => {
+    axios.put = jest.fn().mockResolvedValue({ status: 400, data: { detail: "test-error" } });
+    jest.spyOn(window, 'alert').mockImplementation(() => {});
+
+    render(<LoginTab />);
+    const emailInput = screen.getByLabelText("Email");
+    const pwInput = screen.getByLabelText("Password");
+    const loginButton = screen.getByText("Login");
+
+    fireEvent.change(emailInput, { target : { value : "test@test.com" } });
+    fireEvent.change(pwInput, { target : { value : "pw-test" } });
+    fireEvent.click(loginButton);
+
+    await waitFor(() => expect(window.alert).toBeCalled());
+  })
 })

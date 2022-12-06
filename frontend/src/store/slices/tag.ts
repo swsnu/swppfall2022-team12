@@ -17,27 +17,22 @@ export interface TagState {
 const initialTagState: TagState = {
   tags: [],
   selectedTags: [],
-}
+};
 
-export const fetchTags = createAsyncThunk(
-  'tag/fetchTags',
-  async () => {
-    const response = await axios.get<TagType[]>('/tag/');
-    return response.data;
-  }
-);
+export const fetchTags = createAsyncThunk('tag/fetchTags', async () => {
+  const response = await axios.get<TagType[]>('/tag/');
+  return response.data;
+});
 
 export const tagSlice = createSlice({
   name: 'tag',
   initialState: initialTagState,
-  reducers: {
-
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchTags.fulfilled, (state, action) => {
       state.tags = action.payload;
     });
-  }
+  },
 });
 
 export const tagActions = tagSlice.actions;

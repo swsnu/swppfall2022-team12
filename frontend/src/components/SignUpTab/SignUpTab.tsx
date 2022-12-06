@@ -5,11 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { AppDispatch, store } from '../../store';
-import { signupUser, selectUser, UserType } from '../../store/slices/user';
 import { TagType } from '../../store/slices/tag';
+import { selectUser, UserType } from '../../store/slices/user';
 
 export interface SignUpResponseType {
   email: string;
+  username: string;
   token: {
     access: string;
     refresh: string;
@@ -53,7 +54,7 @@ export default function SignUpTab() {
     await axios
       .post<SignUpResponseType>('/user/signup/', req)
       .then((response) => {
-        window.sessionStorage.setItem('username', response.data.email);
+        window.sessionStorage.setItem('username', response.data.username);
         window.sessionStorage.setItem('access', response.data.token.access);
         window.sessionStorage.setItem('refresh', response.data.token.refresh);
         navigate('/main');

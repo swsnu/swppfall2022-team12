@@ -29,32 +29,33 @@ export default function TagSelectPopup(prop: TagPopupProp) {
   const dispatch = useDispatch<AppDispatch>();
   const tagState = useSelector(selectTag);
 
-  const [selectedTags, setSelectedTags] = useState<TagType["id"][]>([]);
+  const [selectedTags, setSelectedTags] = useState<TagType['id'][]>([]);
   // const [open, setOpen] = useState<boolean>(prop.toOpen);
   const { toOpen, openHandler } = prop;
-
 
   const onCloseModal = () => {
     openHandler(false);
   };
 
-  const onClickTag = (tagId: TagType["id"]) => {
+  const onClickTag = (tagId: TagType['id']) => {
     setSelectedTags([...selectedTags, tagId]);
   };
 
-  const onDeleteTag = (tagId: TagType["id"]) => {
-    setSelectedTags(selectedTags.filter((id: TagType["id"]) => id !== tagId));
+  const onDeleteTag = (tagId: TagType['id']) => {
+    setSelectedTags(selectedTags.filter((id: TagType['id']) => id !== tagId));
   };
 
   const onComplete = async () => {
-    await axios.put('/user/tags/',
-      { tags: selectedTags },
-      { headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` } })
-    .then((response) => {
-      // dispatch()
-      window.sessionStorage.setItem('tags', JSON.stringify(selectedTags));
-      openHandler(false);
-    });
+    await axios
+      .put(
+        '/user/tags/',
+        { tags: selectedTags },
+        { headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` } },
+      )
+      .then((response) => {
+        window.sessionStorage.setItem('tags', JSON.stringify(selectedTags));
+        openHandler(false);
+      });
   };
 
   return (
@@ -70,7 +71,7 @@ export default function TagSelectPopup(prop: TagPopupProp) {
               {tagState.tags.map((tag: TagType) => {
                 return selectedTags.includes(tag.id) ? (
                   <Chip label={tag.content} color="primary" variant="outlined" />
-                ) : ( null );
+                ) : null;
               })}
             </Stack>
           </div>

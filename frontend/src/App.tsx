@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 
 import './App.css';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import PostCourse from './containers/CourseCreate/PostCourse';
 import SearchCourse from './containers/CourseCreate/SearchCourse';
 import CourseDetail from './containers/CourseDetail/DetailPage';
@@ -11,15 +11,14 @@ import CourseList from './containers/CourseList/CourseList';
 import Login from './containers/LoginPage/LoginPage';
 import MainPage from './containers/MainPage/MainPage';
 import { AppDispatch } from './store';
-import { UserType, selectUser } from './store/slices/user';
 import { TagType, selectTag, fetchTags } from './store/slices/tag';
-import PrivateRoute from './components/PrivateRoute/PrivateRoute';
+import { UserType, selectUser } from './store/slices/user';
 import isLogin from './utils/isLogin';
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
   const userState = useSelector(selectUser);
-// Pick<UserType, 'email' | 'username' | 'tags'>
+  // Pick<UserType, 'email' | 'username' | 'tags'>
   // const [loggedInUser, setLoggedInUser] = useState<string | null>(
   //   null,
   // );
@@ -38,13 +37,22 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={isLogin() ? <Navigate replace to="/main" /> : <Login />} />
-          <Route path="/main" element={<PrivateRoute component={<MainPage />} />} />
-          <Route path="/courses" element={<PrivateRoute component={<CourseList />} />} />
-          <Route path="/course/:id" element={<PrivateRoute component={<CourseDetail />} />} />
-          <Route path="/course-create/search" element={<PrivateRoute component={<SearchCourse />} />} />
-          <Route path="/course-create/post" element={<PrivateRoute component={<PostCourse />} />} />
-          <Route path="/" element={isLogin() ? <Navigate replace to="/main" /> : <Navigate replace to="/login" />} />
-          <Route path="*" element={isLogin() ? <Navigate replace to="/main" /> : <Navigate replace to="/login" />} />
+          <Route path="/main" element={<PrivateRoute element={<MainPage />} />} />
+          <Route path="/courses" element={<PrivateRoute element={<CourseList />} />} />
+          <Route path="/course/:id" element={<PrivateRoute element={<CourseDetail />} />} />
+          <Route
+            path="/course-create/search"
+            element={<PrivateRoute element={<SearchCourse />} />}
+          />
+          <Route path="/course-create/post" element={<PrivateRoute element={<PostCourse />} />} />
+          <Route
+            path="/"
+            element={isLogin() ? <Navigate replace to="/main" /> : <Navigate replace to="/login" />}
+          />
+          <Route
+            path="*"
+            element={isLogin() ? <Navigate replace to="/main" /> : <Navigate replace to="/login" />}
+          />
         </Routes>
       </BrowserRouter>
     </div>
