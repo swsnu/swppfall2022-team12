@@ -108,8 +108,15 @@ export default function CourseDetail() {
   };
 
   return (
-    <div style={{ display: 'flex'}}>
-      {<div className="Container">
+    <div style={{ display: 'flex' }}>
+      {<div
+      className="Container"
+      style={{
+        width: '700px',
+        zIndex: 1,
+        backgroundColor: 'white',
+      }}
+    >
       <div style={{  height: '50px' , width:"50px"}}/>
         <h1>{title}</h1>
         <h3>tags : {tags.toString()} </h3>
@@ -145,8 +152,7 @@ export default function CourseDetail() {
           </div>
         </div>}
         {
-        <div className="Container" >
-        <div style={{  height: '600px' , width:"50px"}}/>
+        
         <KakaoMap
           setMap={setMap}
           path={path}
@@ -155,7 +161,6 @@ export default function CourseDetail() {
           setInfo={setInfo}
           preview={true}
         />
-        </div>
         }
         
     </div>
