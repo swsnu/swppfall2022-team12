@@ -1,9 +1,10 @@
 /* global kakao */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Map, MapMarker, Polyline } from 'react-kakao-maps-sdk';
 
 import { PositionProps, MarkerProps } from '../../containers/CourseCreate/SearchCourse';
+import EventMarker from './EventMarker';
 
 type MapProps = {
   setMap: (map: kakao.maps.Map) => void;
@@ -26,6 +27,8 @@ function KakaoMap({
   addLocation,
   preview,
 }: MapProps) {
+  const [selectedMarker, setSelectedMarker] = useState<number>();
+
   return (
     <div key="uniqueID">
       {preview ? (
@@ -91,23 +94,38 @@ function KakaoMap({
           level={3}
           onCreate={setMap}
         >
-          {searchMarkers?.map((marker) => (
-            <MapMarker
-              key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
-              position={marker.position}
-              onMouseOver={() => setInfo(marker)}
-              onMouseOut={() => setInfo(null)}
-              onClick={() => (addLocation ? addLocation(marker) : {})}
-            >
-              {info && info?.content === marker.content && (
-                <div style={{ color: '#000' }}>{marker.content}</div>
-              )}
-            </MapMarker>
-          ))}
+          {searchMarkers?.map((marker, index) =>
+            marker.selected ? (
+              <EventMarker
+                marker={marker}
+                index={index}
+                onClick={() => setSelectedMarker(index)}
+                isClicked={selectedMarker === index}
+                info={info}
+              />
+            ) : (
+              <MapMarker
+                key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
+                position={marker.position}
+                onMouseOver={() => setInfo(marker)}
+                onMouseOut={() => setInfo(null)}
+                onClick={() => {
+                  if (addLocation) addLocation(marker);
+                }}
+              >
+                {info && info?.content === marker.content && (
+                  <div style={{ width: '100%', padding: '5px', color: '#000' }}>
+                    {marker.content}
+                  </div>
+                )}
+              </MapMarker>
+            ),
+          )}
         </Map>
       )}
     </div>
   );
 }
 
-export default React.memo(KakaoMap);
+// export default React.memo(KakaoMap);
+export default KakaoMap;

@@ -132,12 +132,6 @@ export default function SearchBar({
           style={{ position: 'relative', overflow: 'auto', height: '100vh' }}
         >
           <h2>Route</h2>
-          {/* <div> */}
-          {/*  <input placeholder="출발" /> */}
-          {/* </div> */}
-          {/* <div> */}
-          {/*  <input placeholder="도착" /> */}
-          {/* </div> */}
           <div className="title">
             <strong>Search</strong> Results
           </div>
