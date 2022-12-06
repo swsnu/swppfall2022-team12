@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { AppDispatch } from '../../store';
-import { logoutUser, selectUser } from '../../store/slices/user';
+import { selectUser } from '../../store/slices/user';
 
 export default function LogoutButton() {
   const navigate = useNavigate();

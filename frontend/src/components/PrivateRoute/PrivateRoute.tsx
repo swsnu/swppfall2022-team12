@@ -3,12 +3,11 @@ import { Route, Navigate } from 'react-router-dom';
 
 import isLogin from '../../utils/isLogin';
 
-interface PrivateProp {
-  component: JSX.Element;
-}
-function PrivateRoute(props: PrivateProp) {
-  const { component } = props;
-  return isLogin() ? component : <Navigate to="/login" />;
+interface PropsInterface {
+  element: JSX.Element;
 }
 
-export default PrivateRoute;
+export default function PrivateRoute(props: PropsInterface) {
+  const { element } = props;
+  return isLogin() ? element : <Navigate to="/login" />;
+}

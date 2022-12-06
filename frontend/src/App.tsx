@@ -37,14 +37,14 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={isLogin() ? <Navigate replace to="/main" /> : <Login />} />
-          <Route path="/main" element={<PrivateRoute component={<MainPage />} />} />
-          <Route path="/courses" element={<PrivateRoute component={<CourseList />} />} />
-          <Route path="/course/:id" element={<PrivateRoute component={<CourseDetail />} />} />
+          <Route path="/main" element={<PrivateRoute element={<MainPage />} />} />
+          <Route path="/courses" element={<PrivateRoute element={<CourseList />} />} />
+          <Route path="/course/:id" element={<PrivateRoute element={<CourseDetail />} />} />
           <Route
             path="/course-create/search"
-            element={<PrivateRoute component={<SearchCourse />} />}
+            element={<PrivateRoute element={<SearchCourse />} />}
           />
-          <Route path="/course-create/post" element={<PrivateRoute component={<PostCourse />} />} />
+          <Route path="/course-create/post" element={<PrivateRoute element={<PostCourse />} />} />
           <Route
             path="/"
             element={isLogin() ? <Navigate replace to="/main" /> : <Navigate replace to="/login" />}

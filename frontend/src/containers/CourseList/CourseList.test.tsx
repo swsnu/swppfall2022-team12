@@ -29,10 +29,12 @@ const courseInitState: CourseState = {
   courses: [
     {
       id: 1,
+      author: 'AUTHOR1',
       title: 'COURSE_TITLE1',
       description: 'COURSE_DESCRIPTION1',
       category: 'DRIVE',
       created_at: '23:00',
+      rate: 5,
       u_counts: 10,
       distance: 1,
       e_time: 6000,
@@ -41,10 +43,12 @@ const courseInitState: CourseState = {
     },
     {
       id: 2,
+      author: 'AUTHOR2',
       title: 'COURSE_TITLE2',
       description: 'COURSE_DESCRIPTION2',
       category: 'DRIVE',
       created_at: '23:00',
+      rate: 4,
       u_counts: 20,
       distance: 6,
       e_time: 10,
@@ -53,6 +57,7 @@ const courseInitState: CourseState = {
     },
   ],
   selectedCourse: null,
+  recommendedCourses: [],
   tMapCourse: { tMapData: null, tMapFeatures: [] },
 };
 

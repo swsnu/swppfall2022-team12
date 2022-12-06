@@ -53,7 +53,6 @@ export default function TagSelectPopup(prop: TagPopupProp) {
         { headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` } },
       )
       .then((response) => {
-        // dispatch()
         window.sessionStorage.setItem('tags', JSON.stringify(selectedTags));
         openHandler(false);
       });

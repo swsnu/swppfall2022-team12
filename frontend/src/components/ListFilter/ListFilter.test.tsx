@@ -8,6 +8,7 @@ import ListFilter from './ListFilter';
 const initialState = {
   course: {
     courses: [],
+    recommendedCourses: [],
     selectedCourse: null,
     tMapCourse: {
       tMapData: null,
