@@ -17,7 +17,7 @@ function MainPage() {
   const userState = useSelector(selectUser);
   const tagState = useSelector(selectTag);
   const courseState = useSelector(selectCourse);
-  
+
   const convertTagsStringToArray = (tags: string | null) => {
     if (tags === null || tags === "[]") return [];
     return tags.split(',');
@@ -36,9 +36,9 @@ function MainPage() {
     dispatch(fetchRecommendedCourse());
   }, []);
 
-  useEffect(() => {
-    setTagIds(convertTagsStringToArray(window.sessionStorage.getItem('tags')));
-  }, [window.sessionStorage]);
+  // useEffect(() => {
+  //   setTagIds(convertTagsStringToArray(window.sessionStorage.getItem('tags')));
+  // }, [window.sessionStorage]);
 
   const onClickCreateCourse = () => {
     navigate('/course-create/search');
