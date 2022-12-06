@@ -20,10 +20,12 @@ describe('course reducer', () => {
   >;
   const mockCourse: CourseType = {
     id: 1,
+    author: 'AUTHOR1',
     title: 'MOCK_TITLE1',
     description: 'MOCK_DESCRIPTION1',
     category: 'DRIVE',
     created_at: '00:00',
+    rate: 0,
     u_counts: 10,
     distance: 1,
     e_time: 300,
@@ -83,6 +85,7 @@ describe('course reducer', () => {
       category: 'drive',
       search_keyword: null,
       filter: null,
+      tags: null,
     };
 
     await store.dispatch(fetchCourses(mockFetchParam));

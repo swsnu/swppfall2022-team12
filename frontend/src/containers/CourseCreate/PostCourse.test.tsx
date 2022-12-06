@@ -6,7 +6,9 @@ import { Provider } from 'react-redux';
 import { useLocation } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 
-import { CourseState } from '../../store/slices/course';
+import course, { CourseState } from '../../store/slices/course';
+import tagReducer, { TagState } from '../../store/slices/tag';
+import userReducer, { UserState } from '../../store/slices/user';
 import { getMockStore } from '../../test-utils/mocks';
 import PostCourse from './PostCourse';
 import { MarkerProps, PositionProps } from './SearchCourse';
@@ -15,10 +17,12 @@ const courseInitState: CourseState = {
   courses: [
     {
       id: 1,
+      author: 'AUTHOR1',
       title: 'TEST_TITLE1',
       description: 'TEST_DESCRIPTION1',
       category: 'DRIVE',
       created_at: '00:00',
+      rate: 3,
       u_counts: 5,
       distance: 10,
       e_time: 200,
@@ -27,10 +31,12 @@ const courseInitState: CourseState = {
     },
     {
       id: 2,
+      author: 'AUTHOR2',
       title: 'TEST_TITLE2',
       description: 'TEST_DESCRIPTION2',
       category: 'DRIVE',
       created_at: '00:00',
+      rate: 5,
       u_counts: 10,
       distance: 20,
       e_time: 300,
@@ -38,8 +44,20 @@ const courseInitState: CourseState = {
       markers: [],
     },
   ],
+  recommendedCourses: [],
   selectedCourse: null,
   tMapCourse: { tMapData: null, tMapFeatures: [] },
+};
+
+const userInitState: UserState = {
+  users: [],
+  loggedInUser: null,
+  selectedUser: null,
+};
+
+const tagInitState: TagState = {
+  tags: [],
+  selectedTags: [],
 };
 
 const mockSelected: MarkerProps[] = [
@@ -72,6 +90,8 @@ const mockResultData = {
 
 const mockStore = getMockStore({
   course: courseInitState,
+  user: userInitState,
+  tag: tagInitState,
 });
 
 const mockNavigate = jest.fn();
