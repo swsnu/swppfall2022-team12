@@ -19,18 +19,21 @@ describe('<Header />', () => {
     jest.clearAllMocks();
   });
 
-  it('should render without errors', () => {
-    renderWithProviders(<Header />);
-    screen.getByText('Course Adviser');
-    const driveButton = screen.getByText('드라이브');
-    const bikeButton = screen.getByText('바이크');
-    const cycleButton = screen.getByText('자전거');
-    const runButton = screen.getByText('런닝');
-    expect(driveButton).toBeInTheDocument();
-    expect(bikeButton).toBeInTheDocument();
-    expect(cycleButton).toBeInTheDocument();
-    expect(runButton).toBeInTheDocument();
-  });
+    it("should render without errors", () => {
+        renderWithProviders(<Header />);
+        screen.getByText("Course Adviser");
+        const driveButton = screen.getByText("드라이브");
+        const bikeButton = screen.getByText("바이크");
+        const cycleButton = screen.getByText("자전거");
+        const runButton = screen.getByText("런닝");
+        const logoutButton = screen.getByText("Logout");
+
+        expect(driveButton).toBeInTheDocument();
+        expect(bikeButton).toBeInTheDocument();
+        expect(cycleButton).toBeInTheDocument();
+        expect(runButton).toBeInTheDocument();
+        expect(logoutButton).toBeInTheDocument();
+    });
 
   it('should handle onClickCategory when button is clicked', async () => {
     renderWithProviders(<Header />);

@@ -1,9 +1,11 @@
+import { Logout } from '@mui/icons-material';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { AppDispatch } from '../../store';
 import { FetchCoursesParams, fetchCourses } from '../../store/slices/course';
+import LogoutButton from '../LogoutButton/LogoutButton';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -21,6 +23,7 @@ export default function Header() {
       category: localStorage.getItem('CATEGORY_KEY')!,
       search_keyword: null,
       filter: null,
+      tags: null,
     };
 
     await dispatch(fetchCourses(params));
@@ -36,6 +39,7 @@ export default function Header() {
         <button onClick={() => onClickCategory('bike')}>바이크</button>
         <button onClick={() => onClickCategory('cycle')}>자전거</button>
         <button onClick={() => onClickCategory('run')}>런닝</button>
+        <LogoutButton />
       </div>
     </div>
   );

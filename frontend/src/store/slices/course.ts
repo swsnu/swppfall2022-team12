@@ -11,11 +11,12 @@ import { RootState } from '../index';
 
 export interface CourseType {
   id: number;
+  author: string;
   title: string;
   description: string;
-  category: string;
+  category: string | null;
   created_at: string;
-  // grade: number;
+  rate: number;
   // f_count: number;
   u_counts: number;
   e_time: number;
@@ -50,16 +51,24 @@ export interface FetchCoursesParams {
   category: string;
   search_keyword: string | null;
   filter: string | null;
+  tags: number[] | null;
+}
+
+export interface TaggedCourse {
+  tag: number;
+  courses: Pick<CourseType, "id" | "author" | "title" | "description" | "created_at" | "u_counts" | "e_time" | "distance" | "rate">[];
 }
 
 export interface CourseState {
   courses: CourseType[];
+  recommendedCourses: TaggedCourse[];
   selectedCourse: CourseType | null;
   tMapCourse: { tMapData: DataProps | null; tMapFeatures: FeatureProps[] };
 }
 
 const initialCourseState: CourseState = {
   courses: [],
+  recommendedCourses: [],
   selectedCourse: null,
   tMapCourse: { tMapData: null, tMapFeatures: [] },
 };
@@ -71,6 +80,16 @@ export const fetchCourses = createAsyncThunk(
     return response.data;
   },
 );
+
+export const fetchRecommendedCourse = createAsyncThunk(
+  'course/fetchRecommendedCourse',
+  async () => {
+    const response = await axios.get<TaggedCourse[]>(
+      '/user/recommend/',
+      { params: { category: 'drive'}});
+    return response.data;
+  }
+)
 
 export const fetchCourse = createAsyncThunk('course/fetchCourse', async (id: CourseType['id']) => {
   const response = await axios.get<CourseType>(`/course/${id}/`);
@@ -159,6 +178,9 @@ export const courseSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchCourses.fulfilled, (state, action) => {
       state.courses = action.payload;
+    });
+    builder.addCase(fetchRecommendedCourse.fulfilled, (state, action) => {
+      state.recommendedCourses = action.payload ?? [];
     });
     builder.addCase(fetchCourse.fulfilled, (state, action) => {
       state.selectedCourse = action.payload;

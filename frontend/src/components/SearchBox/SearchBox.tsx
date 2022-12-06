@@ -31,6 +31,7 @@ export default function SearchBox(prop: SearchProp) {
         category: localStorage.getItem('CATEGORY_KEY') ?? 'drive',
         search_keyword: localStorage.getItem('SEARCH_KEY') ?? null,
         filter: localStorage.getItem('FILTER') ?? null,
+        tags: null,
       };
 
       await dispatch(fetchCourses(params));
