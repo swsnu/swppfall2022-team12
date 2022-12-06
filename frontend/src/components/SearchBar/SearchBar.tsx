@@ -1,6 +1,6 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
-import { Input } from 'antd';
+import { Input, List } from 'antd';
 import React, { useState } from 'react';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 
@@ -135,10 +135,14 @@ export default function SearchBar({
           className="rst mCustomScrollbar"
           style={{ position: 'relative', overflow: 'auto', height: '100vh' }}
         >
-          <h2>Route</h2>
           <div className="title">
             <strong>Search</strong> Results
           </div>
+          {/* <List */}
+          {/*  itemLayout="horizontal" */}
+          {/*  dataSource={markers} */}
+          {/*  renderItem={(item) => <List.Item>{item.content}</List.Item>} */}
+          {/* /> */}
           <ul
             id="searchResult"
             style={{
