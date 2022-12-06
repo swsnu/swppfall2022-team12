@@ -1,5 +1,6 @@
 /* global kakao */
 
+import { Button } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { DropResult } from 'react-beautiful-dnd';
 import { useDispatch, useSelector } from 'react-redux';
@@ -277,16 +278,30 @@ export default function SearchCourse() {
             <h3>경로 만들기</h3>
           </button>
         ) : (
-          <button
-            style={{ backgroundColor: 'white', marginRight: '10px' }}
+          <Button
+            style={{
+              marginRight: 15,
+              height: 50,
+              boxShadow:
+                'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
+            }}
+            size="large"
             onClick={() => setPreview(true)}
           >
-            <h3>경로 미리보기</h3>
-          </button>
+            <h4 style={{ margin: 0 }}>경로 미리보기</h4>
+          </Button>
         )}
-        <button style={{ backgroundColor: 'white' }} onClick={storeCourse}>
-          <h3>경로 완성</h3>
-        </button>
+        <Button
+          style={{
+            height: 50,
+            boxShadow:
+              'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
+          }}
+          size="large"
+          onClick={storeCourse}
+        >
+          <h4 style={{ margin: 0 }}>경로 완성</h4>
+        </Button>
       </div>
       <div className="Container" style={{ display: 'flex', position: 'fixed' }}>
         <SearchBar
