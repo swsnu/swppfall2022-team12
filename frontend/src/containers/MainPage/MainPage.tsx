@@ -10,6 +10,7 @@ import { AppDispatch } from '../../store';
 import { fetchRecommendedCourse, selectCourse } from '../../store/slices/course';
 import { selectTag } from '../../store/slices/tag';
 import { selectUser } from '../../store/slices/user';
+import isLogin from '../../utils/isLogin';
 
 function MainPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -56,29 +57,35 @@ function MainPage() {
       <div style={{ height: '20px' }}> </div>
       <SearchBox searchKey={localStorage.getItem('SEARCH_KEY') ?? ''} />
       <div style={{ height: '20px' }}> </div>
-      <TagSelectPopup toOpen={toOpenPopup} openHandler={setToOpenPopup} />
-      <div>
-        <p>{window.sessionStorage.getItem('username')}님을 위한 맞춤 코스</p>
-        <div>
-          {tagIds.length === 0 && <span>아직 선택한 태그가 없어요. 태그를 골라주세요!</span>}
-          <Button onClick={() => setToOpenPopup(true)}>태그 선택</Button>
-        </div>
-        <div>
-          {courseState.recommendedCourses.map((set) => {
-            const tagContent = set.tag;
-            const coursesData = set.courses;
-            if (coursesData.length === 0) return;
-            return (
-              <>
-                <div>{tagContent}</div>
-                {coursesData.map((course) => {
-                  return <div>{course.title}</div>;
-                })}
-              </>
-            );
-          })}
-        </div>
-      </div>
+      {isLogin() ? (
+        <>
+          <TagSelectPopup toOpen={toOpenPopup} openHandler={setToOpenPopup} />
+          <div>
+            <p>{window.sessionStorage.getItem('username')}님을 위한 맞춤 코스</p>
+            <div>
+              {tagIds.length === 0 && <span>아직 선택한 태그가 없어요. 태그를 골라주세요!</span>}
+              <Button onClick={() => setToOpenPopup(true)}>태그 선택</Button>
+            </div>
+            <div>
+              {courseState.recommendedCourses.map((set) => {
+                const tagContent = set.tag;
+                const coursesData = set.courses;
+                if (coursesData.length === 0) return;
+                return (
+                  <>
+                    <div>{tagContent}</div>
+                    {coursesData.map((course) => {
+                      return <div>{course.title}</div>;
+                    })}
+                  </>
+                );
+              })}
+            </div>
+          </div>
+        </>
+      ) : (
+        <div>맞춤형 코스 추천을 보고 싶다면 로그인하세요!</div>
+      )}
     </div>
   );
 }
