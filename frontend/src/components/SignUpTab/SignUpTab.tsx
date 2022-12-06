@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { AppDispatch, store } from '../../store';
-import { selectUser, UserType } from '../../store/slices/user';
 import { TagType } from '../../store/slices/tag';
+import { selectUser, UserType } from '../../store/slices/user';
 
 export interface SignUpResponseType {
   email: string;
