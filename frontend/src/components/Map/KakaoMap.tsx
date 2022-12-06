@@ -1,6 +1,6 @@
 /* global kakao */
 
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Map, MapMarker, Polyline } from 'react-kakao-maps-sdk';
 
 import { PositionProps, MarkerProps } from '../../containers/CourseCreate/SearchCourse';
