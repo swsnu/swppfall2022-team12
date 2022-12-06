@@ -55,6 +55,7 @@ export default function CourseDetail() {
       created_at: '2022-11-22T06:23:16.984213Z',
     },
   ]);
+  const [reviewState, setReviewState] = useState<string>("");
 
   useEffect(() => {
     axios.get(`/course/${id}/`).then((res) => {
@@ -69,12 +70,12 @@ export default function CourseDetail() {
       setRating(res.data.rate);
       console.log(res);
     });
-    axios.get(`/review/?course=${id}`).then((res) => {
+    axios.get(`/review/?course=${id}${reviewState}`).then((res) => {
       console.log(res);
       setReviewList(res.data);
       setRateNum(res.data.length);
     });
-  }, []);
+  }, [reviewState]);
 
   const onPlay = () => {
     console.log(reviewList);
@@ -127,6 +128,13 @@ export default function CourseDetail() {
         <button onClick={onPlay}>go to navigation</button>
         <h3>Reviews</h3>
         <ReviewPost courseId={id} />
+        <div>
+          <button onClick={()=>{setReviewState("&filter=time_desc")}}>최신순</button>
+          <button onClick={()=>{setReviewState("&filter=time_asc")}}>오래된순</button>
+          <button onClick={()=>{setReviewState("&filter=rate_desc")}}>평점높은순</button>
+          <button onClick={()=>{setReviewState("&filter=rate_asc")}}>평점낮은순</button>
+          <button onClick={()=>{setReviewState("&filter=likes")}}>좋아요 순</button>
+          </div>
         <div>
           {reviewList.map((prop) => {
             return (

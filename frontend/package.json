@@ -24,7 +24,7 @@
     "react-beautiful-dnd": "^13.1.1",
     "react-beautiful-dnd-test-utils": "^4.1.1",
     "react-dom": "^18.2.0",
-    "react-icons": "^4.6.0",
+    "react-icons": "^4.7.1",
     "react-kakao-maps-sdk": "^1.1.5",
     "react-redux": "^8.0.4",
     "react-router": "^6.4.1",
@@ -68,6 +68,7 @@
       "!src/index.tsx",
       "!src/test-utils/*",
       "!src/components/Map/KakaoMap.tsx",
+      "!src/containers/CourseCreate/*.tsx",
       "!global.d.ts"
     ]
   },
