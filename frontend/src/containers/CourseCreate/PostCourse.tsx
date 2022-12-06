@@ -25,14 +25,6 @@ export default function PostCourse() {
 
   const { state } = useLocation();
 
-  useEffect(() => {
-    setMarkers(state.selected);
-    setPath(state.path);
-    setExpectedTime(Number((state.resultData.totalTime / 60).toFixed(0)));
-    setDistance(Number((state.resultData.totalDistance / 1000).toFixed(1)));
-    setFare(Number(state.resultData.totalFare));
-  }, []);
-
   const mapBounds = useMemo(() => {
     const bounds = new kakao.maps.LatLngBounds();
 
@@ -43,8 +35,16 @@ export default function PostCourse() {
   }, [markers]);
 
   useEffect(() => {
-    map?.setBounds(mapBounds, 400, 50, 100, 50);
+    setMarkers(state.selected);
+    setPath(state.path);
+    setExpectedTime(Number((state.resultData.totalTime / 60).toFixed(0)));
+    setDistance(Number((state.resultData.totalDistance / 1000).toFixed(1)));
+    setFare(Number(state.resultData.totalFare));
   }, []);
+
+  useEffect(() => {
+    if (markers) map?.setBounds(mapBounds, 200, 0, 50, 500);
+  }, [markers]);
 
   const handleSubmitCourse = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();

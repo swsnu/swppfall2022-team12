@@ -75,6 +75,19 @@ export default function CourseDetail() {
     });
   }, [reviewState, changeInside])
 
+  const mapBounds = useMemo(() => {
+    const bounds = new kakao.maps.LatLngBounds();
+
+    markers?.forEach((point) => {
+      bounds.extend(new kakao.maps.LatLng(point.position.lat, point.position.lng));
+    });
+    return bounds;
+  }, [markers]);
+
+  useEffect(() => {
+    if (markers) map?.setBounds(mapBounds, 200, 0, 50, 500);
+  }, [markers]);
+
   const onPlay = () => {
     console.log(reviewList);
     axios.put(`/course/${id}/play/`,{},
@@ -115,7 +128,7 @@ export default function CourseDetail() {
 
   return (
     <div style={{ display: 'flex' }}>
-      {<div
+      <div
       className="Container"
       style={{
         width: '700px',
@@ -160,7 +173,7 @@ export default function CourseDetail() {
             );
           })}
           </div>
-        </div>}
+        </div>
         <KakaoMap
           setMap={setMap}
           path={path}
