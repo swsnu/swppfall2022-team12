@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { Route, Routes } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
+import LoginPage from '../../containers/LoginPage/LoginPage';
 
 // import isLogin from '../../utils/isLogin';
 import PrivateRoute from './PrivateRoute';
@@ -35,13 +36,13 @@ describe('<PrivateRoute />', () => {
   });
 
   it('should render component when logged in', () => {
-    const isLogin = jest.fn();
-    isLogin.mockReturnValue(true);
+    window.sessionStorage.setItem('access', 'test-jwt')
 
     render(
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<PrivateRoute element={<div>Test</div>} />} />
+          <Route path="/login" element={<LoginPage />} />
         </Routes>
       </BrowserRouter>,
     );
@@ -49,16 +50,16 @@ describe('<PrivateRoute />', () => {
   });
 
   it('should navigate to /login when logged out', () => {
-    const isLogin = jest.fn();
-    isLogin.mockReturnValue(false);
-
+    window.sessionStorage.clear();
+    
     render(
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<PrivateRoute element={<div>Test</div>} />} />
+          <Route path="/login" element={<LoginPage />} />
         </Routes>
       </BrowserRouter>,
     );
-    expect(mockNavigate).toHaveBeenCalledWith('/login');
+    screen.getByText('로그인');
   });
 });
