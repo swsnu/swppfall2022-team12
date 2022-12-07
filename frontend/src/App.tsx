@@ -42,9 +42,15 @@ function App() {
           <Route path="/main" element={<PrivateRoute element={<MainPage />} />} />
           <Route path="/courses" element={<PrivateRoute element={<CourseList />} />} />
           <Route path="/course/:id" element={<PrivateRoute element={<CourseDetail />} />} />
-          <Route path="/course/edit-search/:id" element={<PrivateRoute element={<CourseEditSearch />} />} />
-          <Route path="/course/edit-post/:id" element={<PrivateRoute element={<CourseEditPost />} />} />
-          
+          <Route
+            path="/course/edit-search/:id"
+            element={<PrivateRoute element={<CourseEditSearch />} />}
+          />
+          <Route
+            path="/course/edit-post/:id"
+            element={<PrivateRoute element={<CourseEditPost />} />}
+          />
+
           <Route
             path="/course-create/search"
             element={<PrivateRoute element={<SearchCourse />} />}

@@ -51,8 +51,7 @@ export interface MarkerProps {
 }
 
 export default function CourseEditSearch() {
-
-    const {id} = useParams();
+  const { id } = useParams();
   const [map, setMap] = useState<kakao.maps.Map>();
   const [searchMarkers, setSearchMarkers] = useState<MarkerProps[]>([]);
   const [previewMarkers, setPreviewMarkers] = useState<MarkerProps[]>([]);
@@ -247,11 +246,9 @@ export default function CourseEditSearch() {
       setResultData({
         totalDistance: res.data.distance,
         totalTime: res.data.e_time,
-        totalFare: "0"
+        totalFare: '0',
       });
-      
     });
-    
   }, []);
 
   useEffect(() => {
