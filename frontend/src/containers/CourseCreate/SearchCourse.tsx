@@ -59,6 +59,7 @@ export default function SearchCourse() {
   const [preview, setPreview] = useState<boolean>(false);
   const [resultData, setResultData] = useState<DataProps | null>(null);
   const [resultFeatures, setResultFeatures] = useState<FeatureProps[]>([]);
+  const [okayToPost, setOkayToPost] = useState<boolean>(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const courseState = useSelector(selectCourse);
@@ -227,6 +228,10 @@ export default function SearchCourse() {
   };
 
   const storeCourse = () => {
+    if(!okayToPost){
+      alert("경로 미리보기를 눌러주세요!");
+      return;
+    }
     if (selected.length) {
       setMarkerImage(selected);
       navigate('/course-create/post', { state: { selected, path, resultData } });
@@ -272,7 +277,7 @@ export default function SearchCourse() {
         {preview ? (
           <button
             style={{ backgroundColor: 'white', marginRight: '10px' }}
-            onClick={() => setPreview(false)}
+            onClick={() => {setPreview(false); setOkayToPost(true);}}
           >
             <h3>경로 만들기</h3>
           </button>

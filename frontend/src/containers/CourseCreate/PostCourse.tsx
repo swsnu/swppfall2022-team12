@@ -52,6 +52,7 @@ export default function PostCourse() {
   }, [markers]);
 
   const handleSubmitCourse = async (e: React.MouseEvent<HTMLElement>) => {
+    
     e.preventDefault();
     console.log(tagsToSubmit);
     const data = {
@@ -93,7 +94,7 @@ export default function PostCourse() {
   };
 
   return (
-    <div>
+    <div style={{ display: 'flex' }}>
       <div
         className="buttons"
         style={{
@@ -107,6 +108,15 @@ export default function PostCourse() {
           <h3>경로 완성</h3>
         </button>
       </div>
+      <div
+      className="Container"
+      style={{
+        width: '700px',
+        height: '100vh',
+        zIndex: 1,
+        backgroundColor: 'white',
+      }}
+    >
       <div>
         <label>
           Title
@@ -157,6 +167,7 @@ export default function PostCourse() {
         <label style={{ marginRight: '30px' }}>total fare : {`${fare} 원`}</label>
         <label style={{ marginRight: '30px' }}>expected time : {`${expectedTime} 분`}</label>
         <label>total distance : {`${distance} km`}</label>
+      </div>
       </div>
       <div style={{ height: '30px' }} />
       <KakaoMap

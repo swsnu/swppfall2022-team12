@@ -32,12 +32,21 @@ export default function PostCourse() {
   const { state } = useLocation();
 
   useEffect(() => {
+    axios.get(`/course/${id}/`).then((res) => {
+        setTitle(res.data.title);
+        setDescription(res.data.description);
+    });
     setMarkers(state.selected);
     setPath(state.path);
     setExpectedTime(Number((state.resultData.totalTime / 60).toFixed(0)));
     setDistance(Number((state.resultData.totalDistance / 1000).toFixed(1)));
     setFare(Number(state.resultData.totalFare));
     dispatch(fetchTags());
+    axios.get(`/course/${id}/`).then((res) => {
+        //tag fetch
+        setSelectedTags(res.data.tags);
+      });
+    
   }, []);
 
   const mapBounds = useMemo(() => {
@@ -50,15 +59,16 @@ export default function PostCourse() {
   }, [markers]);
 
   useEffect(() => {
-    map?.setBounds(mapBounds, 400, 50, 100, 50);
-    axios.get(`/course/${id}/`).then((res) => {
-      setTitle(res.data.title);
-      setDescription(res.data.description);
-    });
-  }, []);
+    if (markers) map?.setBounds(mapBounds, 200, 0, 50, 500);
+    
+  }, [markers]);
 
   const handleSubmitCourse = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
+    setTagsToSubmit(
+        selectedTags.map(st =>{ return tags.tags.find((t)=>{if(t.content===st) return true; else false;})?.id! })
+    );
+    console.log(tagsToSubmit);
     const data = {
       title,
       description,
@@ -71,7 +81,7 @@ export default function PostCourse() {
     };
     try {
       axios.put(`/course/${id}/`, data);
-      navigate(`/course/${id}/`);
+      navigate(`/courses/`);
     } catch (error) {
       alert('ERROR');
     }
@@ -82,7 +92,7 @@ export default function PostCourse() {
   };
 
   return (
-    <div>
+    <div style={{ display: 'flex' }}>
       <div
         className="buttons"
         style={{
@@ -96,7 +106,15 @@ export default function PostCourse() {
           <h3>경로 완성</h3>
         </button>
       </div>
-      <div>
+      <div
+      className="Container"
+      style={{
+        width: '700px',
+        height: '100vh',
+        zIndex: 1,
+        backgroundColor: 'white',
+      }}
+    >
         <label>
           Title
           <input
@@ -124,13 +142,10 @@ export default function PostCourse() {
           <select
             onChange={(e) => {
               setSelectedTags([...selectedTags, e.target.value]);
-              setTagsToSubmit([
-                ...tagsToSubmit,
-                tags.tags.find((t) => {
-                  if (t.content === e.target.value) return true;
-                  return false;
-                })?.id!,
-              ]);
+              setTagsToSubmit(
+                [...selectedTags, e.target.value].map(st => { return tags.tags.find((t)=>{if(t.content===st) return true; else false;})?.id! })
+              );
+              console.log(tagsToSubmit);
             }}
           >
             {tags.tags.map((t) => {

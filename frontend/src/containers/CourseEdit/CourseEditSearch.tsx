@@ -61,6 +61,8 @@ export default function CourseEditSearch() {
   const [preview, setPreview] = useState<boolean>(false);
   const [resultData, setResultData] = useState<DataProps | null>(null);
   const [resultFeatures, setResultFeatures] = useState<FeatureProps[]>([]);
+  const [okayToPost, setOkayToPost] = useState<boolean>(false);
+
 
   const dispatch = useDispatch<AppDispatch>();
   const courseState = useSelector(selectCourse);
@@ -229,6 +231,10 @@ export default function CourseEditSearch() {
   };
 
   const storeCourse = () => {
+    if(!preview && !okayToPost){
+      alert("경로 미리보기를 눌러주세요!");
+      return;
+    }
     if (selected.length) {
       setMarkerImage(selected);
       navigate(`/course/edit-post/${id}/`, { state: { selected, path, resultData } });

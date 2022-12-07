@@ -76,7 +76,7 @@ describe('<CourseDetail /', () => {
       return Promise.resolve(d);
     });
     render(<CourseDetail />);
-    const button = screen.getByText('go to navigation');
+    const button = screen.getByText('네이버지도앱에 경로표시');
     fireEvent.click(button!);
     // expect(button).toBeCalled();
   });

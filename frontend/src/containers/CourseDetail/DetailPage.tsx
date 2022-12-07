@@ -135,7 +135,6 @@ export default function CourseDetail() {
       className="Container"
       style={{
         width: '700px',
-        height: '100vh',
         zIndex: 1,
         backgroundColor: 'white',
       }}
@@ -161,7 +160,7 @@ export default function CourseDetail() {
           rating : {rating}({rateNum})
         </h6>
         <h6>expected time : {e_time}</h6>
-        <button onClick={onPlay}>go to navigation</button>
+        <button onClick={onPlay}>네이버지도앱에 경로표시</button>
         <h3>Reviews</h3>
         <ReviewPost courseId={id} setChange={setChangeInside} />
         <div>
