@@ -1,6 +1,6 @@
 /* global kakao */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 
@@ -25,6 +25,15 @@ export default function PostCourse() {
 
   const { state } = useLocation();
 
+  const mapBounds = useMemo(() => {
+    const bounds = new kakao.maps.LatLngBounds();
+
+    markers.forEach((point) => {
+      bounds.extend(new kakao.maps.LatLng(point.position.lat, point.position.lng));
+    });
+    return bounds;
+  }, [markers]);
+
   useEffect(() => {
     setMarkers(state.selected);
     setPath(state.path);
@@ -34,16 +43,8 @@ export default function PostCourse() {
   }, []);
 
   useEffect(() => {
-    const mapBounds = () => {
-      const bounds = new kakao.maps.LatLngBounds();
-
-      markers.forEach((point) => {
-        bounds.extend(new kakao.maps.LatLng(point.position.lat, point.position.lng));
-      });
-      return bounds;
-    };
-    if (map) map.setBounds(mapBounds(), 400, 50, 100, 50);
-  }, [map]);
+    if (markers) map?.setBounds(mapBounds, 200, 0, 50, 500);
+  }, [markers]);
 
   const handleSubmitCourse = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();

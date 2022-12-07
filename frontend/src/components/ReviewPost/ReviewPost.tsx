@@ -6,6 +6,7 @@ import { NavLink, useNavigate, useParams } from 'react-router-dom';
 
 interface ReviewPostProp {
   courseId: string | undefined;
+  setChange: (argv: number) => void;
 }
 
 export default function ReviewPost(prop: ReviewPostProp) {
@@ -23,11 +24,18 @@ export default function ReviewPost(prop: ReviewPostProp) {
       rate,
       content,
     };
-    axios.post('/review/', data).then((res) => {
-      /* eslint no-restricted-globals: ["off"] */
-      location.reload();
-      // test needed for reloading***
-    });
+    axios
+      .post('/review/', data, {
+        headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+      })
+      .then((res) => {
+        /* eslint no-restricted-globals: ["off"] */
+        prop.setChange(Math.random());
+        setContent('');
+        setRate(5);
+        setClicked([false, false, false, false, false]);
+        // test needed for reloading***
+      });
   };
 
   return (
