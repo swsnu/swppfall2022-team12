@@ -87,7 +87,7 @@ function MainPage() {
                     }}
                   >
                     <h5>{tagContent} 코스 추천</h5>
-                    <div style={{ display: 'flex', flexDirection: 'row', overflowX: 'auto'}}>
+                    <div style={{ display: 'flex', flexDirection: 'row', overflowX: 'auto' }}>
                       {coursesData.map((course) => {
                         return (
                           <div
