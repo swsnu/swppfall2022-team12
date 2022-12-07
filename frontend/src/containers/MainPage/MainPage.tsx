@@ -26,12 +26,11 @@ function MainPage() {
   };
 
   const [tagIds, setTagIds] = useState<string[]>(
-    convertTagsStringToArray(window.sessionStorage.getItem('tags')),
+    JSON.parse(window.sessionStorage.getItem('tags') ?? '[]'),
   );
   const [toOpenPopup, setToOpenPopup] = useState<boolean>(!window.sessionStorage.getItem('tags'));
 
   useEffect(() => {
-    setTagIds(convertTagsStringToArray(window.sessionStorage.getItem('tags')));
     // console.log(tagIds, tagIds.length, toOpenPopup);
     localStorage.removeItem('CATEGORY_KEY');
     localStorage.removeItem('SEARCH_KEY');
@@ -44,9 +43,10 @@ function MainPage() {
     navigate(`/course/${courseId}`);
   };
 
-  // useEffect(() => {
-  //   setTagIds(convertTagsStringToArray(window.sessionStorage.getItem('tags')));
-  // }, [window.sessionStorage]);
+  useEffect(() => {
+    setTagIds(JSON.parse(window.sessionStorage.getItem('tags') ?? '[]'));
+    dispatch(fetchRecommendedCourse());
+  }, [toOpenPopup]);
 
   return (
     <div
@@ -87,7 +87,7 @@ function MainPage() {
                     }}
                   >
                     <h5>{tagContent} 코스 추천</h5>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <div style={{ display: 'flex', flexDirection: 'row', overflowX: 'auto'}}>
                       {coursesData.map((course) => {
                         return (
                           <div
