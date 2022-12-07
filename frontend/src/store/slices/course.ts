@@ -23,6 +23,7 @@ export interface CourseType {
   distance: number;
   path: PositionProps[];
   markers: MarkerProps[];
+  tags: number[] | null;
 }
 
 interface ViaPointType {
@@ -113,10 +114,12 @@ export const postCourse = createAsyncThunk(
   async (
     course: Pick<
       CourseType,
-      'title' | 'description' | 'category' | 'e_time' | 'distance' | 'path' | 'markers'
+      'title' | 'description' | 'category' | 'e_time' | 'distance' | 'path' | 'markers' | 'tags'
     >,
   ) => {
-    const response = await axios.post<CourseType>(`/course/`, course);
+    const response = await axios.post<CourseType>(`/course/`, course, {
+      headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+    });
     return response.data;
   },
 );

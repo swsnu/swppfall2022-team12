@@ -1,9 +1,10 @@
 /* global kakao */
 
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { DropResult } from 'react-beautiful-dnd';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 import KakaoMap from '../../components/Map/KakaoMap';
 import SearchBar from '../../components/SearchBar/SearchBar';
@@ -49,7 +50,8 @@ export interface MarkerProps {
   selected?: boolean;
 }
 
-export default function SearchCourse() {
+export default function CourseEditSearch() {
+  const { id } = useParams();
   const [map, setMap] = useState<kakao.maps.Map>();
   const [searchMarkers, setSearchMarkers] = useState<MarkerProps[]>([]);
   const [previewMarkers, setPreviewMarkers] = useState<MarkerProps[]>([]);
@@ -228,17 +230,31 @@ export default function SearchCourse() {
   };
 
   const storeCourse = () => {
-    if (!okayToPost) {
+    if (!preview && !okayToPost) {
       alert('경로 미리보기를 눌러주세요!');
       return;
     }
     if (selected.length) {
       setMarkerImage(selected);
-      navigate('/course-create/post', { state: { selected, path, resultData } });
+      navigate(`/course/edit-post/${id}/`, { state: { selected, path, resultData } });
     } else {
       alert('경로를 작성해주세요');
     }
   };
+
+  useEffect(() => {
+    axios.get(`/course/${id}/`).then((res) => {
+      setPreviewMarkers(res.data.markers);
+      setSelected(res.data.markers);
+      setPath(res.data.path);
+      setPreview(true);
+      setResultData({
+        totalDistance: res.data.distance,
+        totalTime: res.data.e_time,
+        totalFare: '0',
+      });
+    });
+  }, []);
 
   useEffect(() => {
     if (!map) return;
@@ -277,10 +293,7 @@ export default function SearchCourse() {
         {preview ? (
           <button
             style={{ backgroundColor: 'white', marginRight: '10px' }}
-            onClick={() => {
-              setPreview(false);
-              setOkayToPost(true);
-            }}
+            onClick={() => setPreview(false)}
           >
             <h3>경로 만들기</h3>
           </button>
