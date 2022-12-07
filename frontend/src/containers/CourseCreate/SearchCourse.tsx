@@ -287,7 +287,10 @@ export default function SearchCourse() {
         ) : (
           <button
             style={{ backgroundColor: 'white', marginRight: '10px' }}
-            onClick={() => setPreview(true)}
+            onClick={() => {
+              setPreview(true);
+              setOkayToPost(true);
+            }}
           >
             <h3>경로 미리보기</h3>
           </button>
