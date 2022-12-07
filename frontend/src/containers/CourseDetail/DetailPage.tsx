@@ -67,7 +67,7 @@ export default function CourseDetail() {
       setAuthor(res.data.author);
       console.log(res);
     });
-    
+
   }, [changeInside]);
 
   useEffect( () =>{
@@ -77,6 +77,19 @@ export default function CourseDetail() {
       setRateNum(res.data.length);
     });
   }, [reviewState, changeInside])
+
+  const mapBounds = useMemo(() => {
+    const bounds = new kakao.maps.LatLngBounds();
+
+    markers?.forEach((point) => {
+      bounds.extend(new kakao.maps.LatLng(point.position.lat, point.position.lng));
+    });
+    return bounds;
+  }, [markers]);
+
+  useEffect(() => {
+    if (markers) map?.setBounds(mapBounds, 200, 0, 50, 500);
+  }, [markers]);
 
   const onPlay = () => {
     console.log(reviewList);
@@ -118,10 +131,11 @@ export default function CourseDetail() {
 
   return (
     <div style={{ display: 'flex' }}>
-      {<div
+      <div
       className="Container"
       style={{
         width: '700px',
+        height: '100vh',
         zIndex: 1,
         backgroundColor: 'white',
       }}
@@ -175,9 +189,7 @@ export default function CourseDetail() {
             );
           })}
           </div>
-        </div>}
-        {
-        
+        </div>
         <KakaoMap
           setMap={setMap}
           path={path}
@@ -186,8 +198,6 @@ export default function CourseDetail() {
           setInfo={setInfo}
           preview={true}
         />
-        }
-        
     </div>
   );
 }
