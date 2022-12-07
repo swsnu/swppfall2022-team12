@@ -20,11 +20,6 @@ function MainPage() {
   const tagState = useSelector(selectTag);
   const courseState = useSelector(selectCourse);
 
-  const convertTagsStringToArray = (tags: string | null) => {
-    if (tags === null || tags === '[]') return [];
-    return tags.split(',');
-  };
-
   const [tagIds, setTagIds] = useState<string[]>(
     JSON.parse(window.sessionStorage.getItem('tags') ?? '[]'),
   );
