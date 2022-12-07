@@ -19,6 +19,8 @@ describe('<ReviewElement />', () => {
         author="test author"
         rate={5}
         created_at="2022-11-23T02:37:12.007952Z"
+        change={0}
+        setChange={jest.fn()}
       />,
     );
     const likeButton = screen.getByText('like');

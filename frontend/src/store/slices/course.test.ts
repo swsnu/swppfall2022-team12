@@ -31,6 +31,7 @@ describe('course reducer', () => {
     e_time: 300,
     path: [],
     markers: [],
+    tags: [],
   };
   const mockMarkers: MarkerProps[] = [
     { position: { lat: 10, lng: 20 }, content: 'TEST1' },
