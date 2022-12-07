@@ -51,7 +51,7 @@ class ReviewTestCase(TestCase):
         # 1) create success.
         before_rate = self.course.rate 
         response = self.client.post(
-            '/review/', 
+            '/api/review/', 
             data=self.post_data,
             HTTP_AUTHORIZATION = self.user_token,
             content_type="application/json")
@@ -67,7 +67,7 @@ class ReviewTestCase(TestCase):
         wrong_data = self.post_data.copy()
         wrong_data['course'] = 9999
         response = self.client.post(
-            '/review/', 
+            '/api/review/', 
             data=wrong_data,
             HTTP_AUTHORIZATION = self.user_token,
             content_type="application/json")
@@ -77,7 +77,7 @@ class ReviewTestCase(TestCase):
         wrong_data = self.post_data.copy()
         wrong_data['rate'] = 6
         response = self.client.post(
-            '/review/', 
+            '/api/review/', 
             data=wrong_data,
             HTTP_AUTHORIZATION = self.user_token,
             content_type="application/json")
@@ -87,7 +87,7 @@ class ReviewTestCase(TestCase):
 
         # 4) ['course'] fields missing.
         response = self.client.post(
-            '/review/', 
+            '/api/review/', 
             data={
                 'rate': 5,
                 'content': 'test content'
@@ -104,7 +104,7 @@ class ReviewTestCase(TestCase):
         """
         target = self.reviews[0]
         response = self.client.delete(
-            f'/review/{target.id}/', 
+            f'/api/review/{target.id}/', 
             HTTP_AUTHORIZATION = self.user_token,
             content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
@@ -117,7 +117,7 @@ class ReviewTestCase(TestCase):
         """
         target = self.reviews[0]
         response = self.client.get(
-            f'/review/{target.id}/', 
+            f'/api/review/{target.id}/', 
             HTTP_AUTHORIZATION = self.user_token,
             content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -140,7 +140,7 @@ class ReviewTestCase(TestCase):
         target = self.reviews[0]
         before_rate = self.course.rate
         response = self.client.put(
-            f'/review/{target.id}/', 
+            f'/api/review/{target.id}/', 
             data = update_data,
             HTTP_AUTHORIZATION = self.user_token,
             content_type="application/json")
@@ -164,7 +164,7 @@ class ReviewTestCase(TestCase):
         target = self.reviews[0]
         before_likes = target.likes
         response = self.client.get(
-            f'/review/{target.id}/like/', 
+            f'/api/review/{target.id}/like/', 
             HTTP_AUTHORIZATION = self.stranger_token,
             content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -180,7 +180,7 @@ class ReviewTestCase(TestCase):
             'course': self.course.id
         }
         response = self.client.get(
-            '/review/', 
+            '/api/review/', 
             HTTP_AUTHORIZATION=self.user_token,
             data=params,
             content_type="application/json")
@@ -194,7 +194,7 @@ class ReviewTestCase(TestCase):
 
         params['filter'] = "time_asc"
         response = self.client.get(
-            '/review/', 
+            '/api/review/', 
             data=params,
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
@@ -208,7 +208,7 @@ class ReviewTestCase(TestCase):
 
         params['filter'] = "time_desc"
         response = self.client.get(
-            '/review/', 
+            '/api/review/', 
             data=params,
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
@@ -222,7 +222,7 @@ class ReviewTestCase(TestCase):
 
         params['filter'] = "rate_desc"
         response = self.client.get(
-            '/review/', 
+            '/api/review/', 
             data=params,
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
@@ -236,7 +236,7 @@ class ReviewTestCase(TestCase):
 
         params['filter'] = "rate_asc"
         response = self.client.get(
-            '/review/', 
+            '/api/review/', 
             data=params,
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
@@ -250,7 +250,7 @@ class ReviewTestCase(TestCase):
 
         params['filter'] = "likes"
         response = self.client.get(
-            '/review/', 
+            '/api/review/', 
             data=params,
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
@@ -263,7 +263,7 @@ class ReviewTestCase(TestCase):
             self.assertEqual(review['id'], self.reviews[idx].id)
 
         response = self.client.get(
-            '/review/', 
+            '/api/review/', 
             data={},
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")

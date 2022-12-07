@@ -33,7 +33,7 @@ class UserTestCase(TestCase):
             "gender": "male"
         }
         response = self.client.post(
-            '/user/signup/', 
+            '/api/user/signup/', 
             data=signup_data,
             content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -54,7 +54,7 @@ class UserTestCase(TestCase):
             "password": "12345678"
         }
         response = self.client.put(
-            '/user/login/', 
+            '/api/user/login/', 
             data=login_data,
             content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -71,7 +71,7 @@ class UserTestCase(TestCase):
             "password": "12345678"
         }
         response = self.client.put(
-            '/user/login/', 
+            '/api/user/login/', 
             data=login_data,
             content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -83,7 +83,7 @@ class UserTestCase(TestCase):
         Logout test case.
         """
         response = self.client.get(
-            '/user/logout/', 
+            '/api/user/logout/', 
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
@@ -96,7 +96,7 @@ class UserTestCase(TestCase):
             "tags": [1, 2, 3, 4, 5]
         }
         response = self.client.put(
-            '/user/tags/', 
+            '/api/user/tags/', 
             HTTP_AUTHORIZATION=self.user_token,
             data=data,
             content_type="application/json")
@@ -123,7 +123,7 @@ class UserTestCase(TestCase):
             cnt-=1
 
         response = self.client.get(
-            '/user/recommend/', 
+            '/api/user/recommend/', 
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)

@@ -30,7 +30,7 @@ class TagTestCase(TestCase):
             ]
         }
         response = self.client.post(
-            '/tag/', 
+            '/api/tag/', 
             data=post_data,
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
@@ -46,7 +46,7 @@ class TagTestCase(TestCase):
         """
         create_tags()
         response = self.client.get(
-            '/tag/', 
+            '/api/tag/', 
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -65,7 +65,7 @@ class TagTestCase(TestCase):
             ]
         }
         response = self.client.put(
-            '/tag/remove/', 
+            '/api/tag/remove/', 
             data=remove_data,
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")

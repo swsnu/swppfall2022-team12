@@ -74,7 +74,7 @@ class CourseTestCase(TestCase):
         Create course test case.
         """
         response = self.client.post(
-            '/course/', 
+            '/api/course/', 
             data=self.post_data, 
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
@@ -112,7 +112,7 @@ class CourseTestCase(TestCase):
         wrong_data = self.post_data.copy()
         wrong_data['description'] = "short"
         response = self.client.post(
-            '/course/', 
+            '/api/course/', 
             HTTP_AUTHORIZATION=self.user_token,
             data=wrong_data, 
             content_type="application/json")
@@ -123,7 +123,7 @@ class CourseTestCase(TestCase):
         wrong_data = self.post_data.copy()
         wrong_data['markers'] = wrong_data['markers'][:1]
         response = self.client.post(
-            '/course/', 
+            '/api/course/', 
             data=wrong_data, 
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
@@ -132,7 +132,7 @@ class CourseTestCase(TestCase):
         self.assertEqual(data['detail'], "markers should be more than 2.")
 
         response = self.client.post(
-            '/course/', 
+            '/api/course/', 
             data={}, 
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
@@ -147,7 +147,7 @@ class CourseTestCase(TestCase):
         """
         target = self.courses[0]
         response = self.client.get(
-            f'/course/{target.id}/', 
+            f'/api/course/{target.id}/', 
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -180,7 +180,7 @@ class CourseTestCase(TestCase):
         """
         target = self.courses[0]
         response = self.client.delete(
-            f'/course/{target.id}/', 
+            f'/api/course/{target.id}/', 
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
@@ -194,7 +194,7 @@ class CourseTestCase(TestCase):
         target = self.courses[0]
         before_counts = target.u_counts
         response = self.client.get(
-            f'/course/{target.id}/play/', 
+            f'/api/course/{target.id}/play/', 
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -206,7 +206,7 @@ class CourseTestCase(TestCase):
         List courses test case.
         """
         response = self.client.get(
-            '/course/', 
+            '/api/course/', 
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -223,7 +223,7 @@ class CourseTestCase(TestCase):
             'category': WALK
         }
         response = self.client.get(
-            '/course/', 
+            '/api/course/', 
             data=params,
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
@@ -241,7 +241,7 @@ class CourseTestCase(TestCase):
             'search_keyword': "title...1"
         }
         response = self.client.get(
-            '/course/', 
+            '/api/course/', 
             data=params,
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
@@ -255,7 +255,7 @@ class CourseTestCase(TestCase):
             'search_keyword': "description...1"
         }
         response = self.client.get(
-            '/course/', 
+            '/api/course/', 
             data=params,
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
@@ -269,7 +269,7 @@ class CourseTestCase(TestCase):
             'filter': 'use'
         }
         response = self.client.get(
-            '/course/', 
+            '/api/course/', 
             data=params,
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
@@ -285,7 +285,7 @@ class CourseTestCase(TestCase):
             'filter': 'time_asc'
         }
         response = self.client.get(
-            '/course/', 
+            '/api/course/', 
             data=params,
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
@@ -301,7 +301,7 @@ class CourseTestCase(TestCase):
             'filter': 'time_desc'
         }
         response = self.client.get(
-            '/course/', 
+            '/api/course/', 
             data=params,
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
@@ -317,7 +317,7 @@ class CourseTestCase(TestCase):
             'filter': 'distance_asc'
         }
         response = self.client.get(
-            '/course/', 
+            '/api/course/', 
             data=params,
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
@@ -333,7 +333,7 @@ class CourseTestCase(TestCase):
             'filter': 'distance_desc'
         }
         response = self.client.get(
-            '/course/', 
+            '/api/course/', 
             data=params,
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
@@ -351,7 +351,7 @@ class CourseTestCase(TestCase):
             'tags': target_tags
         }
         response = self.client.get(
-            '/course/', 
+            '/api/course/', 
             data=params,
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
@@ -417,7 +417,7 @@ class CourseTestCase(TestCase):
             "tags": [1, 2, 3]
         }
         response = self.client.put(
-            f"/course/{target.id}/", 
+            f"/api/course/{target.id}/", 
             data=update_data,
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
