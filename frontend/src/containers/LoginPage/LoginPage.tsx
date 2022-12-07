@@ -22,18 +22,18 @@ export default function LoginPage() {
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
-        alignContent: 'center',
+        alignItems: 'flex-start',
       }}
     >
       {isLoginTab ? (
         <div id="login-container">
           <LoginTab />
-          New to Course Adviser? <Button onClick={onClickSignUpButton}>Sign up</Button>
+          아직 계정이 없으신가요? <Button onClick={onClickSignUpButton}>회원가입</Button>
         </div>
       ) : (
         <div id="signup-container">
           <SignUpTab />
-          Already have an account? <Button onClick={onClickSignInButton}>Sign in</Button>
+          이미 계정이 있으신가요? <Button onClick={onClickSignInButton}>로그인</Button>
         </div>
       )}
     </div>

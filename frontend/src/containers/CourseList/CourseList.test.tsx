@@ -16,7 +16,7 @@ jest.mock(
             <p>{props.id}</p>
             <button onClick={props.showDetail}>{props.title}</button>
             {/* <MuiRating rate={props.grade}/> */}
-            <span>{props.grade}</span>
+            <span>{props.rate}</span>
           </div>
           <span> played {props.usageCounts} times</span>
           <span> expected time: {props.expectedTime}</span>

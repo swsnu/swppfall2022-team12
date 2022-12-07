@@ -13,11 +13,6 @@ const mockResponse = {
     access: 'testjwtaccesstoken',
     refresh: 'testjwtrefreshtoken',
   },
-  user: {
-    users: [],
-    loggedInUser: null,
-    selectedUser: null,
-  },
   tags: [],
 };
 

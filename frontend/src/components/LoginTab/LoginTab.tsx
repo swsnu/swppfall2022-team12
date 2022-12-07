@@ -1,10 +1,8 @@
-import { Button } from '@mui/material';
+import { Button, FormControl, InputLabel, OutlinedInput } from '@mui/material';
 import axios from 'axios';
 import React, { useState, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
-import { AppDispatch } from '../../store';
 import { TagType } from '../../store/slices/tag';
 import { UserType, selectUser } from '../../store/slices/user';
 
@@ -74,26 +72,30 @@ export default function LoginTab() {
           justifyContent: 'center',
         }}
       >
-        <label>
-          Email
-          <input
+        <FormControl variant="outlined" margin="normal">
+          <InputLabel htmlFor="login-email-input">Email</InputLabel>
+          <OutlinedInput
+            id="login-email-input"
+            label="Email"
             type="email"
             value={emailInput}
             onChange={(e) => setEmailInput(e.target.value)}
-            ref={emailInputRef}
+            inputRef={emailInputRef}
           />
-        </label>
-        <label>
-          Password
-          <input
+        </FormControl>
+        <FormControl variant="outlined">
+          <InputLabel htmlFor="login-pw-input">Password</InputLabel>
+          <OutlinedInput
+            id="login-pw-input"
+            label="Password"
             type="password"
             value={passwordInput}
             onChange={(e) => setPasswordInput(e.target.value)}
-            ref={pwInputRef}
+            inputRef={pwInputRef}
           />
-        </label>
+        </FormControl>
       </div>
-      <Button onClick={onClickLogin}>Login</Button>
+      <Button onClick={onClickLogin}>로그인</Button>
     </div>
   );
 }

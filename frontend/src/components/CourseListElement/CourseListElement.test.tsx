@@ -9,7 +9,7 @@ describe('<CourseListElement />', () => {
         id={99}
         title="CLE_TEST_TITLE"
         description="CLE_TEST_DESCRIPTION"
-        grade={3}
+        rate={3}
         usageCounts={50}
         expectedTime={100}
         showDetail={() => null}

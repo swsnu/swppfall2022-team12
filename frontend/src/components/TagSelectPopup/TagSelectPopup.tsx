@@ -29,7 +29,9 @@ export default function TagSelectPopup(prop: TagPopupProp) {
   const dispatch = useDispatch<AppDispatch>();
   const tagState = useSelector(selectTag);
 
-  const [selectedTags, setSelectedTags] = useState<TagType['id'][]>([]);
+  const existing = JSON.parse(window.sessionStorage.getItem('tags') ?? '[]');
+
+  const [selectedTags, setSelectedTags] = useState<TagType['id'][]>(existing);
   // const [open, setOpen] = useState<boolean>(prop.toOpen);
   const { toOpen, openHandler } = prop;
 

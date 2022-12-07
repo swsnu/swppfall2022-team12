@@ -25,7 +25,7 @@ describe('course reducer', () => {
     description: 'MOCK_DESCRIPTION1',
     category: 'DRIVE',
     created_at: '00:00',
-    rate: 0,
+    rate: 5,
     u_counts: 10,
     distance: 1,
     e_time: 300,
