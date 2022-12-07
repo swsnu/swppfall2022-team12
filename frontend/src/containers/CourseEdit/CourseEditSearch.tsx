@@ -63,7 +63,6 @@ export default function CourseEditSearch() {
   const [resultFeatures, setResultFeatures] = useState<FeatureProps[]>([]);
   const [okayToPost, setOkayToPost] = useState<boolean>(false);
 
-
   const dispatch = useDispatch<AppDispatch>();
   const courseState = useSelector(selectCourse);
   const navigate = useNavigate();
@@ -231,8 +230,8 @@ export default function CourseEditSearch() {
   };
 
   const storeCourse = () => {
-    if(!preview && !okayToPost){
-      alert("경로 미리보기를 눌러주세요!");
+    if (!preview && !okayToPost) {
+      alert('경로 미리보기를 눌러주세요!');
       return;
     }
     if (selected.length) {

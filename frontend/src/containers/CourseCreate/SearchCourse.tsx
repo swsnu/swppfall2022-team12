@@ -228,8 +228,8 @@ export default function SearchCourse() {
   };
 
   const storeCourse = () => {
-    if(!okayToPost){
-      alert("경로 미리보기를 눌러주세요!");
+    if (!okayToPost) {
+      alert('경로 미리보기를 눌러주세요!');
       return;
     }
     if (selected.length) {
@@ -277,7 +277,10 @@ export default function SearchCourse() {
         {preview ? (
           <button
             style={{ backgroundColor: 'white', marginRight: '10px' }}
-            onClick={() => {setPreview(false); setOkayToPost(true);}}
+            onClick={() => {
+              setPreview(false);
+              setOkayToPost(true);
+            }}
           >
             <h3>경로 만들기</h3>
           </button>

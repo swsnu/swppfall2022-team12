@@ -33,8 +33,8 @@ export default function PostCourse() {
 
   useEffect(() => {
     axios.get(`/course/${id}/`).then((res) => {
-        setTitle(res.data.title);
-        setDescription(res.data.description);
+      setTitle(res.data.title);
+      setDescription(res.data.description);
     });
     setMarkers(state.selected);
     setPath(state.path);
@@ -43,10 +43,9 @@ export default function PostCourse() {
     setFare(Number(state.resultData.totalFare));
     dispatch(fetchTags());
     axios.get(`/course/${id}/`).then((res) => {
-        //tag fetch
-        setSelectedTags(res.data.tags);
-      });
-    
+      // tag fetch
+      setSelectedTags(res.data.tags);
+    });
   }, []);
 
   const mapBounds = useMemo(() => {
@@ -60,13 +59,17 @@ export default function PostCourse() {
 
   useEffect(() => {
     if (markers) map?.setBounds(mapBounds, 200, 0, 50, 500);
-    
   }, [markers]);
 
   const handleSubmitCourse = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     setTagsToSubmit(
-        selectedTags.map(st =>{ return tags.tags.find((t)=>{if(t.content===st) return true; else false;})?.id! })
+      selectedTags.map((st) => {
+        return tags.tags.find((t) => {
+          if (t.content === st) return true;
+          return false;
+        })?.id!;
+      }),
     );
     console.log(tagsToSubmit);
     const data = {
@@ -107,14 +110,14 @@ export default function PostCourse() {
         </button>
       </div>
       <div
-      className="Container"
-      style={{
-        width: '700px',
-        height: '100vh',
-        zIndex: 1,
-        backgroundColor: 'white',
-      }}
-    >
+        className="Container"
+        style={{
+          width: '700px',
+          height: '100vh',
+          zIndex: 1,
+          backgroundColor: 'white',
+        }}
+      >
         <label>
           Title
           <input
@@ -143,7 +146,12 @@ export default function PostCourse() {
             onChange={(e) => {
               setSelectedTags([...selectedTags, e.target.value]);
               setTagsToSubmit(
-                [...selectedTags, e.target.value].map(st => { return tags.tags.find((t)=>{if(t.content===st) return true; else false;})?.id! })
+                [...selectedTags, e.target.value].map((st) => {
+                  return tags.tags.find((t) => {
+                    if (t.content === st) return true;
+                    return false;
+                  })?.id!;
+                }),
               );
               console.log(tagsToSubmit);
             }}

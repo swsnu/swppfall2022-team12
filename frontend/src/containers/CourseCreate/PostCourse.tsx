@@ -52,7 +52,6 @@ export default function PostCourse() {
   }, [markers]);
 
   const handleSubmitCourse = async (e: React.MouseEvent<HTMLElement>) => {
-    
     e.preventDefault();
     console.log(tagsToSubmit);
     const data = {
@@ -109,65 +108,65 @@ export default function PostCourse() {
         </button>
       </div>
       <div
-      className="Container"
-      style={{
-        width: '700px',
-        height: '100vh',
-        zIndex: 1,
-        backgroundColor: 'white',
-      }}
-    >
-      <div>
-        <label>
-          Title
-          <input
-            style={{ marginRight: '30px' }}
-            type="text"
-            value={title}
-            onChange={(e) => {
-              setTitle(e.target.value);
-            }}
-          />
-        </label>
-        <label>
-          Description
-          <input
-            style={{ marginRight: '30px' }}
-            type="text"
-            value={description}
-            onChange={(e) => {
-              setDescription(e.target.value);
-            }}
-          />
-        </label>
+        className="Container"
+        style={{
+          width: '700px',
+          height: '100vh',
+          zIndex: 1,
+          backgroundColor: 'white',
+        }}
+      >
         <div>
-          tags
-          <select
-            onChange={(e) => {
-              setSelectedTags([...selectedTags, e.target.value]);
-              setTagsToSubmit([
-                ...tagsToSubmit,
-                tags.tags.find((t) => {
-                  if (t.content === e.target.value) return true;
-                  return false;
-                })?.id!,
-              ]);
-            }}
-          >
-            {tags.tags.map((t) => {
-              return (
-                <option key={t.id} value={t.content}>
-                  {t.content}
-                </option>
-              );
-            })}
-          </select>
-          <div>{selectedTags.toString()}</div>
+          <label>
+            Title
+            <input
+              style={{ marginRight: '30px' }}
+              type="text"
+              value={title}
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+            />
+          </label>
+          <label>
+            Description
+            <input
+              style={{ marginRight: '30px' }}
+              type="text"
+              value={description}
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+            />
+          </label>
+          <div>
+            tags
+            <select
+              onChange={(e) => {
+                setSelectedTags([...selectedTags, e.target.value]);
+                setTagsToSubmit([
+                  ...tagsToSubmit,
+                  tags.tags.find((t) => {
+                    if (t.content === e.target.value) return true;
+                    return false;
+                  })?.id!,
+                ]);
+              }}
+            >
+              {tags.tags.map((t) => {
+                return (
+                  <option key={t.id} value={t.content}>
+                    {t.content}
+                  </option>
+                );
+              })}
+            </select>
+            <div>{selectedTags.toString()}</div>
+          </div>
+          <label style={{ marginRight: '30px' }}>total fare : {`${fare} 원`}</label>
+          <label style={{ marginRight: '30px' }}>expected time : {`${expectedTime} 분`}</label>
+          <label>total distance : {`${distance} km`}</label>
         </div>
-        <label style={{ marginRight: '30px' }}>total fare : {`${fare} 원`}</label>
-        <label style={{ marginRight: '30px' }}>expected time : {`${expectedTime} 분`}</label>
-        <label>total distance : {`${distance} km`}</label>
-      </div>
       </div>
       <div style={{ height: '30px' }} />
       <KakaoMap
