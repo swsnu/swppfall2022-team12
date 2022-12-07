@@ -117,7 +117,9 @@ export const postCourse = createAsyncThunk(
       'title' | 'description' | 'category' | 'e_time' | 'distance' | 'path' | 'markers' | 'tags'
     >,
   ) => {
-    const response = await axios.post<CourseType>(`/course/`, course);
+    const response = await axios.post<CourseType>(`/course/`, course, {
+      headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+    });
     return response.data;
   },
 );

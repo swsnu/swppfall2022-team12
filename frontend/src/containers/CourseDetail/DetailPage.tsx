@@ -144,9 +144,8 @@ export default function CourseDetail() {
         <h1>{title}</h1>
         
       {
-        author != window.sessionStorage.getItem('username')?
-        <div></div>
-        :
+        author !== window.sessionStorage.getItem('username')?
+        <div/>:
         <div>
         <button onClick={() => {
           navigate(`/course/edit-search/${id}/`)
