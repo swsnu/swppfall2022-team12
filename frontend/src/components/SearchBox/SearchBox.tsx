@@ -70,7 +70,7 @@ export default function SearchBox(prop: SearchProp) {
           label="어디로 가볼까요?"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          ref={inputFocus}
+          inputRef={inputFocus}
           variant="standard"
           InputProps={{
             startAdornment: (

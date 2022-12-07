@@ -1,13 +1,14 @@
-import { Button } from '@mui/material';
+import { Button, Card, CardContent, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import Header from '../../components/Header/Header';
+import MuiRating from '../../components/MuiRate/MuiRating';
 import SearchBox from '../../components/SearchBox/SearchBox';
 import TagSelectPopup from '../../components/TagSelectPopup/TagSelectPopup';
 import { AppDispatch } from '../../store';
-import { fetchRecommendedCourse, selectCourse } from '../../store/slices/course';
+import { CourseType, fetchRecommendedCourse, selectCourse } from '../../store/slices/course';
 import { selectTag } from '../../store/slices/tag';
 import { selectUser } from '../../store/slices/user';
 import isLogin from '../../utils/isLogin';
@@ -38,6 +39,10 @@ function MainPage() {
 
     dispatch(fetchRecommendedCourse());
   }, []);
+
+  const onClickCourseDetail = (courseId: CourseType['id']) => {
+    navigate(`/course/${courseId}`);
+  };
 
   // useEffect(() => {
   //   setTagIds(convertTagsStringToArray(window.sessionStorage.getItem('tags')));
@@ -72,12 +77,43 @@ function MainPage() {
                 const coursesData = set.courses;
                 if (coursesData.length === 0) return;
                 return (
-                  <>
-                    <div>{tagContent}</div>
-                    {coursesData.map((course) => {
-                      return <div>{course.title}</div>;
-                    })}
-                  </>
+                  <div
+                    style={{
+                      height: '350px',
+                      width: '90%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
+                    }}
+                  >
+                    <h5>{tagContent} 코스 추천</h5>
+                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                      {coursesData.map((course) => {
+                        return (
+                          <div
+                            style={{
+                              height: '200px',
+                              width: '275px',
+                              marginRight: '10px',
+                            }}
+                            key={`recommended-course-${course.id}`}
+                          >
+                            <Card sx={{ minHeight: '100%', minWidth: '100%' }}>
+                              <CardContent>
+                                <Typography variant="subtitle1">{course.title}</Typography>
+                                <Typography variant="body1">{course.u_counts}번 이용됨</Typography>
+                                <MuiRating rate={course.rate} />
+                                <div> </div>
+                                <Button onClick={() => onClickCourseDetail(course.id)}>
+                                  코스 보기
+                                </Button>
+                              </CardContent>
+                            </Card>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
                 );
               })}
             </div>

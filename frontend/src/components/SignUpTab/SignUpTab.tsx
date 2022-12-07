@@ -1,10 +1,8 @@
-import { Button } from '@mui/material';
+import { Button, FormControl, InputLabel, OutlinedInput } from '@mui/material';
 import axios from 'axios';
-import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router';
 
-import { AppDispatch, store } from '../../store';
 import { TagType } from '../../store/slices/tag';
 import { selectUser, UserType } from '../../store/slices/user';
 
@@ -57,6 +55,7 @@ export default function SignUpTab() {
         window.sessionStorage.setItem('username', response.data.username);
         window.sessionStorage.setItem('access', response.data.token.access);
         window.sessionStorage.setItem('refresh', response.data.token.refresh);
+        window.sessionStorage.setItem('tags', '[]');
         navigate('/main');
       })
       .catch((error) => {
@@ -89,44 +88,52 @@ export default function SignUpTab() {
           justifyContent: 'center',
         }}
       >
-        <label>
-          Username
-          <input
+        <FormControl variant="outlined" margin="normal">
+          <InputLabel htmlFor="signup-name-input">Username</InputLabel>
+          <OutlinedInput
+            id="signup-name-input"
+            label="Username"
             type="text"
             value={usernameInput}
             onChange={(e) => setUsernameInput(e.target.value)}
-            ref={nameInputRef}
+            inputRef={nameInputRef}
           />
-        </label>
-        <label>
-          Email
-          <input
+        </FormControl>
+        <FormControl variant="outlined">
+          <InputLabel htmlFor="signup-email-input">Email</InputLabel>
+          <OutlinedInput
+            id="signup-email-input"
+            label="Email"
             type="email"
             value={emailInput}
             onChange={(e) => setEmailInput(e.target.value)}
-            ref={emailInputRef}
+            inputRef={emailInputRef}
           />
-        </label>
-        <label>
-          Password
-          <input
+        </FormControl>
+        <FormControl variant="outlined" margin="normal">
+          <InputLabel htmlFor="lsignup-pw-input">Password</InputLabel>
+          <OutlinedInput
+            id="signup-pw-input"
+            label="Password"
             type="password"
             value={passwordInput}
             onChange={(e) => setPasswordInput(e.target.value)}
-            ref={pwInputRef1}
+            inputRef={pwInputRef1}
           />
-        </label>
-        <label>
-          Check Password
-          <input
+        </FormControl>
+        <FormControl variant="outlined">
+          <InputLabel htmlFor="signup-check-pw-input">Check Password</InputLabel>
+          <OutlinedInput
+            id="signup-check-pw-input"
+            label="Check Password"
             type="password"
             value={checkPwInput}
             onChange={(e) => setCheckPwInput(e.target.value)}
-            ref={pwInputRef2}
+            inputRef={pwInputRef2}
           />
-        </label>
+        </FormControl>
       </div>
-      <Button onClick={onClickSignUpButton}>Sign Up</Button>
+      <Button onClick={onClickSignUpButton}>회원가입</Button>
     </div>
   );
 }
