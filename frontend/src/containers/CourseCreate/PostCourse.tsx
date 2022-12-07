@@ -1,5 +1,7 @@
 /* global kakao */
 
+import { yellow } from '@mui/material/colors';
+import { Button, Input, Card, Col, Row } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
@@ -8,6 +10,8 @@ import KakaoMap from '../../components/Map/KakaoMap';
 import { AppDispatch } from '../../store';
 import { postCourse } from '../../store/slices/course';
 import { MarkerProps, PositionProps } from './SearchCourse';
+
+const { TextArea } = Input;
 
 export default function PostCourse() {
   const [title, setTitle] = useState('');
@@ -82,36 +86,76 @@ export default function PostCourse() {
           margin: '10px',
         }}
       >
-        <button style={{ backgroundColor: 'white' }} onClick={handleSubmitCourse}>
-          <h3>경로 완성</h3>
-        </button>
+        <Button
+          style={{
+            marginRight: 15,
+            height: 50,
+            boxShadow:
+              'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
+          }}
+          size="large"
+          onClick={handleSubmitCourse}
+        >
+          <h4 style={{ margin: 0 }}>경로 완성</h4>
+        </Button>
       </div>
       <div>
-        <label>
+        <div>
           Title
-          <input
+          <TextArea
             style={{ marginRight: '30px' }}
-            type="text"
+            placeholder="제목"
             value={title}
-            onChange={(e) => {
-              setTitle(e.target.value);
-            }}
+            onChange={(e) => setTitle(e.target.value)}
+            autoSize
           />
-        </label>
-        <label>
+        </div>
+        <div>
           Description
-          <input
+          <TextArea
             style={{ marginRight: '30px' }}
-            type="text"
+            placeholder="글을 작성해주세요"
             value={description}
             onChange={(e) => {
               setDescription(e.target.value);
             }}
+            rows={4}
           />
-        </label>
-        <label style={{ marginRight: '30px' }}>total fare : {`${fare} 원`}</label>
-        <label style={{ marginRight: '30px' }}>expected time : {`${expectedTime} 분`}</label>
-        <label>total distance : {`${distance} km`}</label>
+        </div>
+        <div className="site-card-wrapper">
+          <Row gutter={10}>
+            <Col span={4}>
+              <Card
+                title="총 요금"
+                size="small"
+                headStyle={{ backgroundColor: '#a0d911' }}
+                style={{ width: '200px' }}
+              >
+                {`${fare} 원`}
+              </Card>
+            </Col>
+            <Col span={4}>
+              <Card
+                title="예상 소요 시간"
+                size="small"
+                headStyle={{ backgroundColor: '#91caff' }}
+                style={{ width: '200px' }}
+              >
+                {`${expectedTime} 분`}
+              </Card>
+            </Col>
+            <Col span={4}>
+              <Card
+                title="총 거리"
+                size="small"
+                headStyle={{ backgroundColor: '#ff85c0' }}
+                style={{ width: '200px' }}
+              >
+                {`${distance} km`}
+              </Card>
+            </Col>
+          </Row>
+        </div>
       </div>
       <div style={{ height: '30px' }} />
       <KakaoMap
