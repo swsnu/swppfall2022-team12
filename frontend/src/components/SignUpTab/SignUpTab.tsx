@@ -50,7 +50,7 @@ export default function SignUpTab() {
 
     const req = { username: usernameInput, email: emailInput, password: passwordInput };
     await axios
-      .post<SignUpResponseType>('/user/signup/', req)
+      .post<SignUpResponseType>('/api/user/signup/', req)
       .then((response) => {
         window.sessionStorage.setItem('username', response.data.username);
         window.sessionStorage.setItem('access', response.data.token.access);

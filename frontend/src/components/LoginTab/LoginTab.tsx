@@ -38,7 +38,7 @@ export default function LoginTab() {
 
     const req = { email: emailInput, password: passwordInput };
     await axios
-      .put<LoginResponseType>('/user/login/', req)
+      .put<LoginResponseType>('/api/user/login/', req)
       .then((response) => {
         window.sessionStorage.setItem('username', response.data.username);
         window.sessionStorage.setItem('access', response.data.token.access);

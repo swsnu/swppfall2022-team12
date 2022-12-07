@@ -243,7 +243,7 @@ export default function CourseEditSearch() {
   };
 
   useEffect(() => {
-    axios.get(`/course/${id}/`).then((res) => {
+    axios.get(`/api/course/${id}/`).then((res) => {
       setPreviewMarkers(res.data.markers);
       setSelected(res.data.markers);
       setPath(res.data.path);

@@ -32,7 +32,7 @@ export default function PostCourse() {
   const { state } = useLocation();
 
   useEffect(() => {
-    axios.get(`/course/${id}/`).then((res) => {
+    axios.get(`/api/course/${id}/`).then((res) => {
       setTitle(res.data.title);
       setDescription(res.data.description);
     });
@@ -42,7 +42,7 @@ export default function PostCourse() {
     setDistance(Number((state.resultData.totalDistance / 1000).toFixed(1)));
     setFare(Number(state.resultData.totalFare));
     dispatch(fetchTags());
-    axios.get(`/course/${id}/`).then((res) => {
+    axios.get(`/api/course/${id}/`).then((res) => {
       // tag fetch
       setSelectedTags(res.data.tags);
     });
@@ -83,7 +83,7 @@ export default function PostCourse() {
       tags: tagsToSubmit,
     };
     try {
-      axios.put(`/course/${id}/`, data);
+      axios.put(`/api/course/${id}/`, data);
       navigate(`/courses/`);
     } catch (error) {
       alert('ERROR');
