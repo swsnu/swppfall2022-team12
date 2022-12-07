@@ -74,7 +74,7 @@ export default function CourseList() {
       <div className="course-list">
         {courseState.courses.map((course) => {
           // eslint-disable-next-line
-          const { id, title, description, u_counts, e_time } = course;
+          const { id, title, description, rate, u_counts, e_time } = course;
 
           return (
             <CourseListElement
@@ -82,7 +82,7 @@ export default function CourseList() {
               id={id}
               title={title}
               description={description}
-              grade={4.5}
+              rate={rate}
               usageCounts={u_counts}
               expectedTime={e_time}
               showDetail={() => clickTitle(id)}
