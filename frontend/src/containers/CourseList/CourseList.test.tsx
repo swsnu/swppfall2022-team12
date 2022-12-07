@@ -40,6 +40,7 @@ const courseInitState: CourseState = {
       e_time: 6000,
       path: [],
       markers: [],
+      tags: [],
     },
     {
       id: 2,
@@ -54,6 +55,7 @@ const courseInitState: CourseState = {
       e_time: 10,
       path: [],
       markers: [],
+      tags: [],
     },
   ],
   selectedCourse: null,
