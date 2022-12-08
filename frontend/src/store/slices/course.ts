@@ -96,7 +96,7 @@ export const fetchCourses = createAsyncThunk(
 export const fetchRecommendedCourse = createAsyncThunk(
   'course/fetchRecommendedCourse',
   async () => {
-    const response = await axios.get<TaggedCourse[]>('/user/recommend/', {
+    const response = await axios.get<TaggedCourse[]>('/api/user/recommend/', {
       headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
       params: { category: 'drive' },
     });
