@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMap, MapMarker } from 'react-kakao-maps-sdk';
+import { MapMarker } from 'react-kakao-maps-sdk';
 
 import { MarkerProps } from '../../containers/CourseCreate/SearchCourse'; // 스프라이트 이미지에서 마커간 간격
 
