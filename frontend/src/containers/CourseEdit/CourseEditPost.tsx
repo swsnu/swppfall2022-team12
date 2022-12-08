@@ -32,20 +32,28 @@ export default function PostCourse() {
   const { state } = useLocation();
 
   useEffect(() => {
-    axios.get(`/api/course/${id}/`).then((res) => {
-      setTitle(res.data.title);
-      setDescription(res.data.description);
-    });
+    axios
+      .get(`/api/course/${id}/`, {
+        headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+      })
+      .then((res) => {
+        setTitle(res.data.title);
+        setDescription(res.data.description);
+      });
     setMarkers(state.selected);
     setPath(state.path);
     setExpectedTime(Number((state.resultData.totalTime / 60).toFixed(0)));
     setDistance(Number((state.resultData.totalDistance / 1000).toFixed(1)));
     setFare(Number(state.resultData.totalFare));
     dispatch(fetchTags());
-    axios.get(`/api/course/${id}/`).then((res) => {
-      // tag fetch
-      setSelectedTags(res.data.tags);
-    });
+    axios
+      .get(`/api/course/${id}/`, {
+        headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+      })
+      .then((res) => {
+        // tag fetch
+        setSelectedTags(res.data.tags);
+      });
   }, []);
 
   const mapBounds = useMemo(() => {
@@ -83,7 +91,9 @@ export default function PostCourse() {
       tags: tagsToSubmit,
     };
     try {
-      axios.put(`/api/course/${id}/`, data);
+      axios.put(`/api/course/${id}/`, data, {
+        headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+      });
       navigate(`/courses/`);
     } catch (error) {
       alert('ERROR');

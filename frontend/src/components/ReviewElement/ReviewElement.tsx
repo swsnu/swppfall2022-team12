@@ -76,6 +76,8 @@ export default function ReviewElement(prop: ReviewProp) {
           axios.put('/api/review/'+prop.id+"/", {
             content:newtext,
             rate:newRate
+          }, {
+            headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
           }).then((res) => {
             /* eslint no-restricted-globals: ["off"] */
             setEditting(false);
@@ -103,7 +105,9 @@ export default function ReviewElement(prop: ReviewProp) {
       <button
         onClick={() => {
           if(prop.author === window.sessionStorage.getItem('username')){
-            axios.delete(`/api/review/${prop.id}/`).then((res) => {
+            axios.delete(`/api/review/${prop.id}/`, {
+              headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+            }).then((res) => {
               /* eslint no-restricted-globals: ["off"] */
               prop.setChange(Math.random());
             });

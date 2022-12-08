@@ -54,7 +54,9 @@ export default function CourseDetail() {
   const [reviewState, setReviewState] = useState<string>("");
 
   useEffect(() => {
-    axios.get(`/api/course/${id}/`).then((res) => {
+    axios.get(`/api/course/${id}/`, {
+      headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+    }).then((res) => {
       setTitle(res.data.title);
       setDescription(res.data.description);
       setTime(res.data.e_time);
@@ -71,7 +73,9 @@ export default function CourseDetail() {
   }, [changeInside]);
 
   useEffect( () =>{
-    axios.get(`/api/review/?course=${id}${reviewState}`).then((res) => {
+    axios.get(`/api/review/?course=${id}${reviewState}`, {
+      headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+    }).then((res) => {
       console.log(res);
       setReviewList(res.data);
       setRateNum(res.data.length);
