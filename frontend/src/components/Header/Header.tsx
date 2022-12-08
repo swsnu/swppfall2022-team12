@@ -22,20 +22,18 @@ export default function Header() {
   };
 
   const onClickLogout = async () => {
-    if (isLogin()) {
-      await axios
-        .get('/user/logout/', {
-          headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
-        })
-        .then((response) => {
-          window.sessionStorage.clear();
-          navigate('/main');
-        })
-        .catch((error) => {
-          alert(error.response.data.detail);
-          navigate('/main');
-        });
-    }
+    await axios
+      .get('/user/logout/', {
+        headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+      })
+      .then((response) => {
+        window.sessionStorage.clear();
+        navigate('/main');
+      })
+      .catch((error) => {
+        alert(error.response.data.detail);
+        navigate('/main');
+      });
   };
 
   const onClickCategory = async (category: string) => {

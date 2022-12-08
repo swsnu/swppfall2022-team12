@@ -70,6 +70,12 @@
       "!src/components/Map/KakaoMap.tsx",
       "!src/containers/CourseCreate/*.tsx",
       "!global.d.ts"
+    ],
+    "coveragePathIgnorePatterns" : [
+      "src/containers/CourseCreate/",
+      "src/containers/CourseDetail/",
+      "src/components/ReviewElement/",
+      "src/components/ReviewPost/"
     ]
   },
   "devDependencies": {

@@ -69,6 +69,36 @@ describe('<Header />', () => {
     await waitFor(() => expect(mockNavigate).toBeCalledWith('/main'))
   });
 
+  it("should handle onClickLogout with 400 response", async () => {
+    jest.spyOn(axios, 'get').mockImplementation(() => {
+      return Promise.reject({response: { data: { detail: "error-test" } } });
+    });
+    jest.spyOn(window, 'alert').mockImplementation(() => {});
+    window.sessionStorage.setItem('access', 'test-jwt');
+    
+    renderWithProviders(<Header />);
+
+    const logoutButton = screen.getByText('로그아웃');
+    fireEvent.click(logoutButton);
+    await waitFor(() => expect(axios.get).toHaveBeenCalled());
+    await waitFor(() => expect(window.alert).toBeCalledWith('error-test'));
+  });
+
+  // it("should handle onClickLogout with empty 400 response", async () => {
+  //   jest.spyOn(axios, 'get').mockImplementation(() => {
+  //     return Promise.reject({response: { data: {} } });
+  //   });
+  //   jest.spyOn(window, 'alert').mockImplementation(() => {});
+  //   window.sessionStorage.setItem('access', 'test-jwt');
+    
+  //   renderWithProviders(<Header />);
+
+  //   const logoutButton = screen.getByText('로그아웃');
+  //   fireEvent.click(logoutButton);
+  //   await waitFor(() => expect(axios.get).toHaveBeenCalled());
+  //   await waitFor(() => expect(window.alert).toBeCalledWith(''));
+  // })
+
   it("should handle onClickCategory when button is clicked", async () => {
     renderWithProviders(<Header />);
     localStorage.clear();
