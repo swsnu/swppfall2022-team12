@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import React from 'react';
 import { Route, Routes } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 import LoginPage from '../../containers/LoginPage/LoginPage';

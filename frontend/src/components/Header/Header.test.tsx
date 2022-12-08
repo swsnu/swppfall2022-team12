@@ -5,12 +5,16 @@ import { renderWithProviders } from '../../test-utils/mocks';
 import Header from './Header';
 
 const mockNavigate = jest.fn();
+// jest.mock('react-router', () => ({
+//   ...jest.requireActual('react-router'),
+//   Navigate: (props: any) => {
+//     mockNavigate(props.to);
+//     return null;
+//   },
+//   useNavigate: () => mockNavigate,
+// }));
 jest.mock('react-router', () => ({
   ...jest.requireActual('react-router'),
-  Navigate: (props: any) => {
-    mockNavigate(props.to);
-    return null;
-  },
   useNavigate: () => mockNavigate,
 }));
 
@@ -24,18 +28,11 @@ describe('<Header />', () => {
 
   it('should render without errors', () => {
     renderWithProviders(<Header />);
-    // screen.getByText('Course Adviser');
     const driveButton = screen.getByText('드라이브 전체보기');
-    // const bikeButton = screen.getByText('바이크');
-    // const cycleButton = screen.getByText('자전거');
-    // const runButton = screen.getByText('런닝');
     const loginButton = screen.getByText('로그인');
     const createCourseButton = screen.getByText('나만의 코스 만들기')
 
     expect(driveButton).toBeInTheDocument();
-    // expect(bikeButton).toBeInTheDocument();
-    // expect(cycleButton).toBeInTheDocument();
-    // expect(runButton).toBeInTheDocument();
     expect(loginButton).toBeInTheDocument();
     expect(createCourseButton).toBeInTheDocument();
   });
@@ -57,7 +54,10 @@ describe('<Header />', () => {
   });
 
   it("should handle onClickLogout when logged in", async () => {
-    axios.get = jest.fn().mockResolvedValue({status : 204});
+    // axios.get = jest.fn().mockResolvedValue({status : 204});
+    jest.spyOn(axios, 'get').mockImplementation(() => {
+      return Promise.resolve({ status: 204 });
+    })
     window.sessionStorage.setItem('access', 'test-jwt');
     
     renderWithProviders(<Header />);
@@ -66,10 +66,10 @@ describe('<Header />', () => {
     fireEvent.click(logoutButton);
     await waitFor(() => expect(axios.get).toHaveBeenCalled());
     await waitFor(() => expect(window.sessionStorage.getItem('access')).toEqual(null));
-    await waitFor(() => expect(mockNavigate).toBeCalledWith('main'))
+    await waitFor(() => expect(mockNavigate).toBeCalledWith('/main'))
   });
 
-  it('should handle onClickCategory when button is clicked', async () => {
+  it("should handle onClickCategory when button is clicked", async () => {
     renderWithProviders(<Header />);
     localStorage.clear();
 
@@ -79,21 +79,13 @@ describe('<Header />', () => {
     await waitFor(() => expect(localStorage.getItem('SEARCH_KEY')).toEqual(null));
     await waitFor(() => expect(localStorage.getItem('FILTER')).toEqual(null));
     await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/courses'));
+  });
 
-    // const bikeButton = screen.getByText('바이크');
-    // fireEvent.click(bikeButton);
-    // await waitFor(() => expect(localStorage.getItem('CATEGORY_KEY')).toEqual('bike'));
-    // await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/courses'));
+  it("should handle onClickCreateCourse", () => {
+    renderWithProviders(<Header />);
 
-    // const cycleButton = screen.getByText('자전거');
-    // fireEvent.click(cycleButton);
-    // await waitFor(() => expect(localStorage.getItem('CATEGORY_KEY')).toEqual('cycle'));
-    // await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/courses'));
-
-    // const runButton = screen.getByText('런닝');
-    // fireEvent.click(runButton);
-    // await waitFor(() => expect(localStorage.getItem('CATEGORY_KEY')).toEqual('run'));
-    // await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/courses'));
-
+    const createCourseButton = screen.getByText('나만의 코스 만들기');
+    fireEvent.click(createCourseButton);
+    expect(mockNavigate).toBeCalledWith('/course-create/search');
   });
 });

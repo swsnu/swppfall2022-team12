@@ -22,7 +22,7 @@ export default function Header() {
   };
 
   const onClickLogout = async () => {
-    if (window.sessionStorage.getItem('username') !== null) {
+    if (isLogin()) {
       await axios
         .get('/user/logout/', {
           headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
