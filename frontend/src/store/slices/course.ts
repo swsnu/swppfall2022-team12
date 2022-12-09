@@ -89,7 +89,6 @@ export const fetchCourses = createAsyncThunk(
   'course/fetchCourses',
   async (props: FetchCoursesParams) => {
     const response = await axios.get<CourseType[]>('/api/course/', {
-      
       params: props,
     });
     return response.data;
@@ -100,7 +99,7 @@ export const fetchRecommendedCourse = createAsyncThunk(
   'course/fetchRecommendedCourse',
   async () => {
     const response = await axios.get<TaggedCourse[]>('/api/user/recommend/', {
-      params: { category: 'drive' }
+      params: { category: 'drive' },
     });
     return response.data;
   },
