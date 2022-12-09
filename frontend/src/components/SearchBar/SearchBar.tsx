@@ -1,9 +1,12 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
+import { Input, List } from 'antd';
 import React, { useState } from 'react';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 
 import { MarkerProps } from '../../containers/CourseCreate/SearchCourse';
+
+const { Search } = Input;
 
 type SearchProps = {
   markers: MarkerProps[];
@@ -34,8 +37,7 @@ export default function SearchBar({
     }
   };
 
-  const submitKeyword = (e: React.MouseEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const submitKeyword = () => {
     if (valueChecker()) {
       alert('검색어를 입력해주세요.');
     }
@@ -68,20 +70,24 @@ export default function SearchBar({
       className="SearchBar"
       style={{
         width: '390px',
+        height: '100vh',
         zIndex: 1,
         backgroundColor: 'white',
+        boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
       }}
     >
       <h1>Search!</h1>
       {/* Keyword Input */}
-      <form onSubmit={submitKeyword}>
-        <input
+      <div>
+        <Search
+          size="large"
           placeholder="검색어를 입력해주세요"
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
+          onSearch={submitKeyword}
+          style={{ width: 300 }}
         />
-        <button>검색</button>
-      </form>
+      </div>
 
       {/* Selected Location List */}
       <DragDropContext onDragEnd={handleDrag}>
@@ -129,40 +135,25 @@ export default function SearchBar({
       <div className="rst_wrap">
         <div
           className="rst mCustomScrollbar"
-          style={{ position: 'relative', overflow: 'auto', height: '100vh' }}
+          style={{ position: 'relative', overflow: 'auto', height: '80vh' }}
         >
           <h2>Route</h2>
           <div className="title">
             <strong>Search</strong> Results
           </div>
-          <ul
-            id="searchResult"
-            style={{
-              listStyle: 'none',
-              margin: 0,
-              padding: 0,
-              height: '110vh',
-            }}
-          >
-            {markers.map((marker) => (
-              <button
-                key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
-                id={marker.content}
-                style={{
-                  border: 0,
-                  padding: '20px 10px 8px',
-                  outline: '1px solid blue',
-                  backgroundColor: 'white',
-                  width: '100%',
-                }}
-                onMouseEnter={() => setInfo(marker)}
+          <List
+            itemLayout="horizontal"
+            dataSource={markers}
+            renderItem={(item) => (
+              <List.Item
+                onMouseEnter={() => setInfo(item)}
                 onMouseLeave={() => setInfo(null)}
-                onClick={() => addLocation(marker)}
+                onClick={() => addLocation(item)}
               >
-                {marker.content}
-              </button>
-            ))}
-          </ul>
+                {item.content}
+              </List.Item>
+            )}
+          />
         </div>
       </div>
     </div>
