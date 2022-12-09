@@ -1,12 +1,13 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
-import { Input, List } from 'antd';
+import { Input, List, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 
 import { MarkerProps } from '../../containers/CourseCreate/SearchCourse';
 
 const { Search } = Input;
+const { Text } = Typography;
 
 type SearchProps = {
   markers: MarkerProps[];
@@ -45,24 +46,26 @@ export default function SearchBar({
     searchPlaces(keyword);
   };
 
-  const grid = 5;
+  const grid = 3;
 
   const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
     // some basic styles to make the items look a bit nicer
     userSelect: 'none',
     padding: grid * 2,
-    margin: `0 0 ${grid}px 0`,
+    margin: `0 10px ${grid}px 10px`,
     listStyle: 'none',
 
     // change background colour if dragging
-    background: isDragging ? 'lightgreen' : 'lightgray',
+    background: isDragging ? '#c0d7fa' : 'white',
+    border: '2px solid #E5EBF2',
+    borderRadius: '10px 10px 10px 10px',
 
     // styles we need to apply on draggables
     ...draggableStyle,
   });
 
   const getListStyle = (isDraggingOver: boolean) => ({
-    background: isDraggingOver ? 'lightblue' : 'white',
+    // background: isDraggingOver ? 'lightblue' : 'white',
     padding: grid,
   });
 
@@ -77,7 +80,7 @@ export default function SearchBar({
         boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
       }}
     >
-      <h1>Search!</h1>
+      <h2>장소 찾아보기</h2>
       {/* Keyword Input */}
       <div>
         <Search
@@ -122,14 +125,25 @@ export default function SearchBar({
                           {...item.draggableProps}
                           style={getItemStyle(snapshots.isDragging, item.draggableProps.style)}
                         >
-                          {marker.content}{' '}
-                          <IconButton
-                            aria-label="delete"
-                            disabled={preview}
-                            onClick={() => removeLocation(marker)}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
+                          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <Text
+                              style={{
+                                display: 'inherit',
+                                alignItems: 'center',
+                                paddingLeft: '10px',
+                                fontSize: 15,
+                              }}
+                            >
+                              {marker.content}
+                            </Text>
+                            <IconButton
+                              aria-label="delete"
+                              disabled={preview}
+                              onClick={() => removeLocation(marker)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </div>
                         </li>
                       )}
                     </Draggable>
