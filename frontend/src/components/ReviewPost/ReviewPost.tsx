@@ -65,7 +65,7 @@ export default function ReviewPost(prop: ReviewPostProp) {
       />
 
       <button type="button" onClick={post}>
-        post
+        등록
       </button>
     </div>
   );
