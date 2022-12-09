@@ -360,7 +360,26 @@ class CourseTestCase(TestCase):
         for course in data:
             self.assertTrue(
                     set(Course.objects.get(id=course['id']).tags.values_list("id", flat=True)) & set(target_tags))
-    
+
+        params = {
+            'history': 'true'
+        }
+
+        response = self.client.get(
+            '/api/course/', 
+            data=params,
+            HTTP_AUTHORIZATION=self.user_token,
+            content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+
+        self.assertEqual(len(data), 3)
+
+        self.courses.sort(key=lambda x: x.created_at, reverse=True)
+
+        for idx, course in enumerate(data):
+            self.assertEqual(course['id'], self.courses[idx].id)
+
     def test_update_course(self):
         """
         Update courses test case.
@@ -441,3 +460,9 @@ class CourseTestCase(TestCase):
             self.assertEqual(data['markers'][idx]['content'], marker['content'])
             self.assertEqual(data['markers'][idx]['position']['lat'], marker['position']['lat'])
             self.assertEqual(data['markers'][idx]['position']['lng'], marker['position']['lng'])
+
+        response = self.client.put(
+            f"/api/course/{target.id}/", 
+            HTTP_AUTHORIZATION=self.user_token,
+            content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

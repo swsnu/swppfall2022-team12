@@ -44,11 +44,13 @@ class ReviewTestCase(TestCase):
         """
         Create review test case.
             1) create success.
-            2) course not found.
-            3) rate must be between 1 and 5.
-            4) ['course'] fields missing.
+            2) author can't create review.
+            3) course not found.
+            4) rate must be between 1 and 5.
+            5) ['course'] fields missing.
         """
         # 1) create success.
+        # TODO: user_token -> stranger_token
         before_rate = self.course.rate 
         response = self.client.post(
             '/api/review/', 
@@ -63,7 +65,15 @@ class ReviewTestCase(TestCase):
         self.course.refresh_from_db()
         self.assertNotEqual(before_rate, self.course.rate)
 
-        # 2) course not found.
+        # # 2) author can't create review.
+        # response = self.client.post(
+        #     '/api/review/', 
+        #     data=self.post_data,
+        #     HTTP_AUTHORIZATION = self.user_token,
+        #     content_type="application/json")
+        # self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        # 3) course not found.
         wrong_data = self.post_data.copy()
         wrong_data['course'] = 9999
         response = self.client.post(
@@ -73,7 +83,7 @@ class ReviewTestCase(TestCase):
             content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-        # 3) rate must be between 1 and 5.
+        # 4) rate must be between 1 and 5.
         wrong_data = self.post_data.copy()
         wrong_data['rate'] = 6
         response = self.client.post(
@@ -85,7 +95,7 @@ class ReviewTestCase(TestCase):
         data = response.json()
         self.assertEqual(data['detail'], "rate must be between 1 and 5.")
 
-        # 4) ['course'] fields missing.
+        # 5) ['course'] fields missing.
         response = self.client.post(
             '/api/review/', 
             data={
@@ -156,6 +166,12 @@ class ReviewTestCase(TestCase):
         self.assertEqual(data['content'], target.content)
         self.assertIn("created_at", data)
 
+        response = self.client.put(
+            f'/api/review/{target.id}/', 
+            HTTP_AUTHORIZATION = self.user_token,
+            content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
         
     def test_like_review(self):
         """
@@ -171,6 +187,21 @@ class ReviewTestCase(TestCase):
         target.refresh_from_db()
 
         self.assertEqual(before_likes+1, target.likes)
+
+        response = self.client.get(
+            f'/api/review/{target.id}/like/', 
+            HTTP_AUTHORIZATION = self.stranger_token,
+            content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        target.refresh_from_db()
+
+        self.assertEqual(before_likes, target.likes)
+
+        response = self.client.get(
+            f'/api/review/{target.id}/like/', 
+            HTTP_AUTHORIZATION = self.user_token,
+            content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_list_review(self):
         """

@@ -38,6 +38,12 @@ class TagTestCase(TestCase):
 
         created_tags = TAGLIST + post_data['contents']
         self.assertFalse(Tag.objects.exclude(content__in=created_tags).exists())
+
+        response = self.client.post(
+            '/api/tag/', 
+            HTTP_AUTHORIZATION=self.user_token,
+            content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         
 
     def test_list_tags(self):
@@ -62,6 +68,7 @@ class TagTestCase(TestCase):
                 "연인과 함께",
                 "부모님과 함께",
                 "로맨틱한",
+                "없는 테그",
             ]
         }
         response = self.client.put(
@@ -71,3 +78,9 @@ class TagTestCase(TestCase):
             content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertFalse(Tag.objects.filter(content__in=remove_data['contents']).exists())
+
+        response = self.client.put(
+            '/api/tag/remove/', 
+            HTTP_AUTHORIZATION=self.user_token,
+            content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from review.models import Review
 from course.models import Course
-from team12.exceptions import FieldError
+from team12.exceptions import FieldError, NotOwner
 from django.shortcuts import get_object_or_404
 
 
@@ -40,6 +40,8 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
             missing_fields.append('course')
         else: 
             course = get_object_or_404(Course, id=self.context['course'])
+            # if course.author == self.context['author']:
+            #     raise NotOwner("Author can't create the review.")
             data['course'] = course
         if not 0 < data['rate'] < 6:
             raise FieldError("rate must be between 1 and 5.")
