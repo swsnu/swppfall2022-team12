@@ -3,8 +3,10 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
+import { JsonObjectExpression } from 'typescript';
 
 import KakaoMap from '../../components/Map/KakaoMap';
+import MuiRating from '../../components/MuiRate/MuiRating';
 import ReviewElement from '../../components/ReviewElement/ReviewElement';
 import ReviewPost from '../../components/ReviewPost/ReviewPost';
 import { MarkerProps, PositionProps } from '../CourseCreate/SearchCourse';
@@ -39,6 +41,8 @@ export default function CourseDetail() {
   const [e_time, setTime] = useState(50);
   const [tags, setTags] = useState([]);
   const [author, setAuthor] = useState<string>("");
+  const [distance, setDistance] = useState<number>(0);
+  //const [fare, setFare] = useState<number>(0);
   // const [created_at, setCreateAt] = useState("");
   // const [link, setLink] = useState("");
   const [element, setElement] = useState({
@@ -67,6 +71,8 @@ export default function CourseDetail() {
       setTags(res.data.tags);
       setRating(res.data.rate);
       setAuthor(res.data.author);
+      setDistance(res.data.distance);
+      //setFare(res.data.fare);
       console.log(res);
     });
 
@@ -97,7 +103,7 @@ export default function CourseDetail() {
 
   const onPlay = () => {
     console.log(reviewList);
-    axios.put(`/api/course/${id}/play/`,{},
+    axios.get(`/api/course/${id}/play/`,
     {headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` }}).then((res)=>{console.log(res)});
     const tempArray = ['nmap://navigation?'];
     const elementArray = [
@@ -141,6 +147,9 @@ export default function CourseDetail() {
         width: '700px',
         zIndex: 1,
         backgroundColor: 'white',
+        textAlign: 'center',
+        fontFamily: 'Arial',
+        display: "display-listitem"
       }}
     >
       <div style={{  height: '50px' , width:"50px"}}/>
@@ -153,17 +162,19 @@ export default function CourseDetail() {
         <button onClick={() => {
           navigate(`/course/edit-search/${id}/`)
         }}
-      >edit this course
+      >코스 변경하기
       </button>
         </div>
         }
-        <h3>tags : {tags.toString()} </h3>
-        <h5>{description}</h5>
-        <h6>{u_counts} people used this course!</h6>
+        <h3>태그 : {tags.toString()} </h3>
+        <h5>코스 설명 : {description}</h5>
+        <h6>{u_counts} 명이 이 코스를 방문했어요!</h6>
         <h6>
-          rating : {rating}({rateNum})
+          코스 평점 : {<MuiRating rate={rating}></MuiRating>} {rating} 점({rateNum}명이 평가했어요)
         </h6>
-        <h6>expected time : {e_time}</h6>
+        <h6>경로 길이 : {distance} km</h6>
+        <h6>예상 소요 시간 : {e_time} 분 </h6>
+
         <button onClick={onPlay}>네이버지도앱에 경로표시</button>
         <h3>Reviews</h3>
         <ReviewPost courseId={id} setChange={setChangeInside} />
