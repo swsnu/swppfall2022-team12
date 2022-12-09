@@ -47,8 +47,6 @@ export default function LoginTab() {
         navigate('/main');
       })
       .catch((error) => {
-        // if (error.response.data.detail)
-        console.log(error);
         alert(error.response.data.detail ?? '로그인에 실패했습니다.');
       });
   };
