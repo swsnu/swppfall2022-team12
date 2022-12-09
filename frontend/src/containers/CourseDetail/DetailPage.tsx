@@ -58,9 +58,7 @@ export default function CourseDetail() {
   const [reviewState, setReviewState] = useState<string>("");
 
   useEffect(() => {
-    axios.get(`/api/course/${id}/`, {
-      headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
-    }).then((res) => {
+    axios.get(`/api/course/${id}/`).then((res) => {
       setTitle(res.data.title);
       setDescription(res.data.description);
       setTime(res.data.e_time);
@@ -79,9 +77,7 @@ export default function CourseDetail() {
   }, [changeInside]);
 
   useEffect( () =>{
-    axios.get(`/api/review/?course=${id}${reviewState}`, {
-      headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
-    }).then((res) => {
+    axios.get(`/api/review/?course=${id}${reviewState}`).then((res) => {
       console.log(res);
       setReviewList(res.data);
       setRateNum(res.data.length);
@@ -103,8 +99,8 @@ export default function CourseDetail() {
 
   const onPlay = () => {
     console.log(reviewList);
-    axios.get(`/api/course/${id}/play/`,
-    {headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` }}).then((res)=>{console.log(res)});
+    axios.get(`/api/course/${id}/play/`
+    ).then((res)=>{console.log(res)});
     const tempArray = ['nmap://navigation?'];
     const elementArray = [
       {
