@@ -20,9 +20,7 @@ const initialTagState: TagState = {
 };
 
 export const fetchTags = createAsyncThunk('tag/fetchTags', async () => {
-  const response = await axios.get<TagType[]>('/api/tag/',{
-    headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
-  });
+  const response = await axios.get<TagType[]>('/api/tag/');
   return response.data;
 });
 
