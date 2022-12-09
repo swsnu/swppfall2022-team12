@@ -111,7 +111,7 @@ export default function SignUpTab() {
           />
         </FormControl>
         <FormControl variant="outlined" margin="normal">
-          <InputLabel htmlFor="lsignup-pw-input">Password</InputLabel>
+          <InputLabel htmlFor="signup-pw-input">Password</InputLabel>
           <OutlinedInput
             id="signup-pw-input"
             label="Password"
