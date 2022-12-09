@@ -1,15 +1,17 @@
 /* global kakao */
 
-import { useSelect } from '@mui/base';
-import React, { useEffect, useMemo, useState } from 'react';
+import { Button, Input, Card, Col, Row, Tag, Select, SelectProps } from 'antd';
+import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 
 import KakaoMap from '../../components/Map/KakaoMap';
 import { AppDispatch } from '../../store';
 import { postCourse } from '../../store/slices/course';
-import { TagType, selectTag, fetchTags } from '../../store/slices/tag';
+import { selectTag } from '../../store/slices/tag';
 import { MarkerProps, PositionProps } from './SearchCourse';
+
+const { TextArea } = Input;
 
 export default function PostCourse() {
   const [title, setTitle] = useState('');
@@ -51,9 +53,23 @@ export default function PostCourse() {
     if (markers) map?.setBounds(mapBounds, 200, 0, 50, 500);
   }, [markers]);
 
+  const removeTag = (tag: string) => {
+    const removed = selectedTags.filter((item) => item !== tag);
+    setSelectedTags(removed);
+  };
+
+  const handleChange = (tag: string) => {
+    setSelectedTags([...selectedTags, tag]);
+    setTagsToSubmit([
+      ...tagsToSubmit,
+      tags.tags.find((t) => {
+        return t.content === tag;
+      })?.id!,
+    ]);
+  };
+
   const handleSubmitCourse = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    console.log(tagsToSubmit);
     const data = {
       title,
       description,
@@ -64,32 +80,18 @@ export default function PostCourse() {
       markers,
       tags: tagsToSubmit,
     };
-    try {
-      await dispatch(postCourse(data));
+    // try {
+    //   await dispatch(postCourse(data));
+    //   navigate('/courses');
+    // } catch (error) {
+    //   alert('ERROR');
+    // }
+    const result = await dispatch(postCourse(data));
+    if (result.type === `${postCourse.typePrefix}/fulfilled`) {
       navigate('/courses');
-    } catch (error) {
+    } else {
       alert('ERROR');
     }
-    // const result = await dispatch(postCourse(data));
-    // if (result.type === `${postCourse.typePrefix}/fulfilled`) {
-    //   navigate('/courses');
-    // }
-  };
-
-  const tagBox = () => {
-    return (
-      <div>
-        <select>
-          {tags.tags.map((t) => {
-            return (
-              <option key={t.id} value={t.content}>
-                t.content
-              </option>
-            );
-          })}
-        </select>
-      </div>
-    );
   };
 
   return (
@@ -103,9 +105,18 @@ export default function PostCourse() {
           margin: '10px',
         }}
       >
-        <button style={{ backgroundColor: 'white' }} onClick={handleSubmitCourse}>
-          <h3>경로 완성</h3>
-        </button>
+        <Button
+          style={{
+            marginRight: 15,
+            height: 50,
+            boxShadow:
+              'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
+          }}
+          size="large"
+          onClick={handleSubmitCourse}
+        >
+          <h4 style={{ margin: 0 }}>경로 완성</h4>
+        </Button>
       </div>
       <div
         className="Container"
@@ -116,56 +127,78 @@ export default function PostCourse() {
           backgroundColor: 'white',
         }}
       >
-        <div>
-          <label>
-            Title
-            <input
+        <div style={{ margin: '30px 30px 0 30px' }}>
+          <div style={{ marginBottom: '50px' }}>
+            <h3 style={{ textAlign: 'left' }}>제목</h3>
+            <TextArea
               style={{ marginRight: '30px' }}
-              type="text"
+              placeholder="제목을 작성해주세요"
               value={title}
-              onChange={(e) => {
-                setTitle(e.target.value);
-              }}
+              onChange={(e) => setTitle(e.target.value)}
+              autoSize
             />
-          </label>
-          <label>
-            Description
-            <input
+          </div>
+          <div style={{ marginBottom: ' 50px' }}>
+            <h3 style={{ textAlign: 'left' }}>내용</h3>
+            <TextArea
               style={{ marginRight: '30px' }}
-              type="text"
+              placeholder="글을 작성해주세요"
               value={description}
               onChange={(e) => {
                 setDescription(e.target.value);
               }}
+              rows={4}
             />
-          </label>
-          <div>
-            tags
-            <select
-              onChange={(e) => {
-                setSelectedTags([...selectedTags, e.target.value]);
-                setTagsToSubmit([
-                  ...tagsToSubmit,
-                  tags.tags.find((t) => {
-                    if (t.content === e.target.value) return true;
-                    return false;
-                  })?.id!,
-                ]);
-              }}
-            >
-              {tags.tags.map((t) => {
-                return (
-                  <option key={t.id} value={t.content}>
-                    {t.content}
-                  </option>
-                );
-              })}
-            </select>
-            <div>{selectedTags.toString()}</div>
           </div>
-          <label style={{ marginRight: '30px' }}>total fare : {`${fare} 원`}</label>
-          <label style={{ marginRight: '30px' }}>expected time : {`${expectedTime} 분`}</label>
-          <label>total distance : {`${distance} km`}</label>
+          <div className="Tags" style={{ height: '100px' }}>
+            태그
+            <Select
+              mode="tags"
+              placeholder="태그를 선택해주세요"
+              onChange={handleChange}
+              style={{ width: '100%' }}
+            >
+              {tags.tags.map((item) => (
+                <Select.Option key={item.id} value={item.content}>
+                  {item.content}
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
+          <div className="site-card-wrapper">
+            <Row gutter={15}>
+              <Col>
+                <Card
+                  title="총 요금"
+                  size="small"
+                  headStyle={{ backgroundColor: '#a0d911' }}
+                  style={{ width: '200px' }}
+                >
+                  {`${fare} 원`}
+                </Card>
+              </Col>
+              <Col>
+                <Card
+                  title="예상 소요 시간"
+                  size="small"
+                  headStyle={{ backgroundColor: '#91caff' }}
+                  style={{ width: '200px' }}
+                >
+                  {`${expectedTime} 분`}
+                </Card>
+              </Col>
+              <Col>
+                <Card
+                  title="총 거리"
+                  size="small"
+                  headStyle={{ backgroundColor: '#ff85c0' }}
+                  style={{ width: '200px' }}
+                >
+                  {`${distance} km`}
+                </Card>
+              </Col>
+            </Row>
+          </div>
         </div>
       </div>
       <div style={{ height: '30px' }} />
