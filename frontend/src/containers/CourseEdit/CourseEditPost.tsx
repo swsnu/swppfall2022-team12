@@ -174,35 +174,40 @@ export default function PostCourse() {
               );
             })}
           </select>
-          <div>{selectedTags.map((s)=>{
-            return(
+          <div>
+            {selectedTags.map((s) => {
+              return (
                 <div>
-                    {s}
-                    <button onClick={
-                        ()=>{
-                            setSelectedTags(selectedTags.filter(tagNotMatched=>{
-                                if(s!==tagNotMatched) return true;
-                                else return false
-                            }));
-                            setTagsToSubmit(
-                                [...selectedTags.filter(tagNotMatched=>{
-                                    if(s!==tagNotMatched) return true;
-                                    else return false
-                                })].map((st) => {
-                                  return tags.tags.find((t) => {
-                                    if (t.content === st) return true;
-                                    return false;
-                                  })?.id!;
-                                }),
-                            );
-                        }
-                    }>
-                        X
-                    </button>
+                  {s}
+                  <button
+                    onClick={() => {
+                      setSelectedTags(
+                        selectedTags.filter((tagNotMatched) => {
+                          if (s !== tagNotMatched) return true;
+                          return false;
+                        }),
+                      );
+                      setTagsToSubmit(
+                        [
+                          ...selectedTags.filter((tagNotMatched) => {
+                            if (s !== tagNotMatched) return true;
+                            return false;
+                          }),
+                        ].map((st) => {
+                          return tags.tags.find((t) => {
+                            if (t.content === st) return true;
+                            return false;
+                          })?.id!;
+                        }),
+                      );
+                    }}
+                  >
+                    X
+                  </button>
                 </div>
-
-            );
-          })}</div>
+              );
+            })}
+          </div>
         </div>
         <label style={{ marginRight: '30px' }}>total fare : {`${fare} 원`}</label>
         <label style={{ marginRight: '30px' }}>expected time : {`${expectedTime} 분`}</label>
