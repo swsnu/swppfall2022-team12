@@ -70,6 +70,14 @@ export default function PostCourse() {
   }, [markers]);
 
   const handleSubmitCourse = async (e: React.MouseEvent<HTMLElement>) => {
+    if (description.length < 10) {
+      alert('설명을 10자 이상 입력해주세요');
+      return;
+    }
+    if (title.length === 0) {
+      alert('제목을 비우지 말아주세요');
+      return;
+    }
     e.preventDefault();
     setTagsToSubmit(
       selectedTags.map((st) => {
