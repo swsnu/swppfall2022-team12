@@ -50,7 +50,7 @@ export default function TagSelectPopup(prop: TagPopupProp) {
   const onComplete = async () => {
     await axios
       .put(
-        '/user/tags/',
+        '/api/user/tags/',
         { tags: selectedTags },
         { headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` } },
       )

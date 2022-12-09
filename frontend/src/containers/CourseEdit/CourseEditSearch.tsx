@@ -243,17 +243,21 @@ export default function CourseEditSearch() {
   };
 
   useEffect(() => {
-    axios.get(`/course/${id}/`).then((res) => {
-      setPreviewMarkers(res.data.markers);
-      setSelected(res.data.markers);
-      setPath(res.data.path);
-      setPreview(true);
-      setResultData({
-        totalDistance: res.data.distance,
-        totalTime: res.data.e_time,
-        totalFare: '0',
+    axios
+      .get(`/api/course/${id}/`, {
+        headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+      })
+      .then((res) => {
+        setPreviewMarkers(res.data.markers);
+        setSelected(res.data.markers);
+        setPath(res.data.path);
+        setPreview(true);
+        setResultData({
+          totalDistance: res.data.distance,
+          totalTime: res.data.e_time,
+          totalFare: '0',
+        });
       });
-    });
   }, []);
 
   useEffect(() => {

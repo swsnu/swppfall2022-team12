@@ -25,7 +25,7 @@ export default function ReviewPost(prop: ReviewPostProp) {
       content,
     };
     axios
-      .post('/review/', data, {
+      .post('/api/review/', data, {
         headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
       })
       .then((res) => {
@@ -65,7 +65,7 @@ export default function ReviewPost(prop: ReviewPostProp) {
       />
 
       <button type="button" onClick={post}>
-        post
+        등록
       </button>
     </div>
   );

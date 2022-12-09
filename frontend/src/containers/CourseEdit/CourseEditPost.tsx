@@ -32,20 +32,28 @@ export default function PostCourse() {
   const { state } = useLocation();
 
   useEffect(() => {
-    axios.get(`/course/${id}/`).then((res) => {
-      setTitle(res.data.title);
-      setDescription(res.data.description);
-    });
+    axios
+      .get(`/api/course/${id}/`, {
+        headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+      })
+      .then((res) => {
+        setTitle(res.data.title);
+        setDescription(res.data.description);
+      });
     setMarkers(state.selected);
     setPath(state.path);
     setExpectedTime(Number((state.resultData.totalTime / 60).toFixed(0)));
     setDistance(Number((state.resultData.totalDistance / 1000).toFixed(1)));
     setFare(Number(state.resultData.totalFare));
     dispatch(fetchTags());
-    axios.get(`/course/${id}/`).then((res) => {
-      // tag fetch
-      setSelectedTags(res.data.tags);
-    });
+    axios
+      .get(`/api/course/${id}/`, {
+        headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+      })
+      .then((res) => {
+        // tag fetch
+        setSelectedTags(res.data.tags);
+      });
   }, []);
 
   const mapBounds = useMemo(() => {
@@ -62,6 +70,14 @@ export default function PostCourse() {
   }, [markers]);
 
   const handleSubmitCourse = async (e: React.MouseEvent<HTMLElement>) => {
+    if (description.length < 10) {
+      alert('설명을 10자 이상 입력해주세요');
+      return;
+    }
+    if (title.length === 0) {
+      alert('제목을 비우지 말아주세요');
+      return;
+    }
     e.preventDefault();
     setTagsToSubmit(
       selectedTags.map((st) => {
@@ -83,7 +99,9 @@ export default function PostCourse() {
       tags: tagsToSubmit,
     };
     try {
-      axios.put(`/course/${id}/`, data);
+      axios.put(`/api/course/${id}/`, data, {
+        headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+      });
       navigate(`/courses/`);
     } catch (error) {
       alert('ERROR');
@@ -164,7 +182,40 @@ export default function PostCourse() {
               );
             })}
           </select>
-          <div>{selectedTags.toString()}</div>
+          <div>
+            {selectedTags.map((s) => {
+              return (
+                <div>
+                  {s}
+                  <button
+                    onClick={() => {
+                      setSelectedTags(
+                        selectedTags.filter((tagNotMatched) => {
+                          if (s !== tagNotMatched) return true;
+                          return false;
+                        }),
+                      );
+                      setTagsToSubmit(
+                        [
+                          ...selectedTags.filter((tagNotMatched) => {
+                            if (s !== tagNotMatched) return true;
+                            return false;
+                          }),
+                        ].map((st) => {
+                          return tags.tags.find((t) => {
+                            if (t.content === st) return true;
+                            return false;
+                          })?.id!;
+                        }),
+                      );
+                    }}
+                  >
+                    X
+                  </button>
+                </div>
+              );
+            })}
+          </div>
         </div>
         <label style={{ marginRight: '30px' }}>total fare : {`${fare} 원`}</label>
         <label style={{ marginRight: '30px' }}>expected time : {`${expectedTime} 분`}</label>

@@ -46,7 +46,7 @@ export default function ReviewElement(prop: ReviewProp) {
             if (prop.author === window.sessionStorage.getItem('username')) {
               alert('자신이 작성한 댓글은 좋아할수 없습니다')
             }else{
-              axios.put(`/review/${prop.id}/like/`,{},{ headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` } });
+              axios.get(`/api/review/${prop.id}/like/`, { headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` } });
               prop.setChange(Math.random());
             }
           }}
@@ -73,9 +73,11 @@ export default function ReviewElement(prop: ReviewProp) {
         <input data-testid="editting" type={"text"} onChange={(e)=>setNewText(e.target.value)} value={newtext}></input>
         <button  onClick={()=>{
           console.log(newtext)
-          axios.put('/review/'+prop.id+"/", {
+          axios.put('/api/review/'+prop.id+"/", {
             content:newtext,
             rate:newRate
+          }, {
+            headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
           }).then((res) => {
             /* eslint no-restricted-globals: ["off"] */
             setEditting(false);
@@ -103,7 +105,9 @@ export default function ReviewElement(prop: ReviewProp) {
       <button
         onClick={() => {
           if(prop.author === window.sessionStorage.getItem('username')){
-            axios.delete(`/review/${prop.id}/`).then((res) => {
+            axios.delete(`/api/review/${prop.id}/`, {
+              headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+            }).then((res) => {
               /* eslint no-restricted-globals: ["off"] */
               prop.setChange(Math.random());
             });

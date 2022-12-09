@@ -10,6 +10,8 @@ describe('<CourseDetail /', () => {
   const d = {
     data: {
       id: 117,
+      author: 'test',
+      rate: 5,
       markers: [
         {
           content: '[0] 출발지',
@@ -58,6 +60,7 @@ describe('<CourseDetail /', () => {
       u_counts: 0,
       e_time: '03:30',
       distance: 2,
+      tags: ['a', 'b'],
     },
   };
   it('should render CourseDetail without error', () => {

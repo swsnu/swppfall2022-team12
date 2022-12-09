@@ -89,8 +89,11 @@ class CourseViewSet(
         search_keyword = request.query_params.get("search_keyword", "")
         f_param = request.query_params.get("filter", False)
         tags = request.query_params.getlist("tags", False)
+        history = request.query_params.get("history", False)
         
         courses = Course.objects.filter(category=category)
+        if history:
+            courses = courses.filter(users__user = request.user)
         if search_keyword:
             courses = courses.filter(
                 Q(title__icontains=search_keyword) | 

@@ -88,7 +88,10 @@ const initialCourseState: CourseState = {
 export const fetchCourses = createAsyncThunk(
   'course/fetchCourses',
   async (props: FetchCoursesParams) => {
-    const response = await axios.get<CourseType[]>('/course/', { params: props });
+    const response = await axios.get<CourseType[]>('/api/course/', {
+      headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+      params: props,
+    });
     return response.data;
   },
 );
@@ -96,7 +99,7 @@ export const fetchCourses = createAsyncThunk(
 export const fetchRecommendedCourse = createAsyncThunk(
   'course/fetchRecommendedCourse',
   async () => {
-    const response = await axios.get<TaggedCourse[]>('/user/recommend/', {
+    const response = await axios.get<TaggedCourse[]>('/api/user/recommend/', {
       headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
       params: { category: 'drive' },
     });
@@ -105,7 +108,9 @@ export const fetchRecommendedCourse = createAsyncThunk(
 );
 
 export const fetchCourse = createAsyncThunk('course/fetchCourse', async (id: CourseType['id']) => {
-  const response = await axios.get<CourseType>(`/course/${id}/`);
+  const response = await axios.get<CourseType>(`/api/course/${id}/`, {
+    headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+  });
   return response.data ?? null;
 });
 
@@ -117,7 +122,7 @@ export const postCourse = createAsyncThunk(
       'title' | 'description' | 'category' | 'e_time' | 'distance' | 'path' | 'markers' | 'tags'
     >,
   ) => {
-    const response = await axios.post<CourseType>(`/course/`, course, {
+    const response = await axios.post<CourseType>(`/api/course/`, course, {
       headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
     });
     return response.data;
