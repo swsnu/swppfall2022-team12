@@ -1,7 +1,7 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import { Input, List } from 'antd';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 
 import { MarkerProps } from '../../containers/CourseCreate/SearchCourse';
@@ -30,6 +30,7 @@ export default function SearchBar({
   preview,
 }: SearchProps) {
   const [keyword, setKeyword] = useState('');
+  const homeRef = useRef<HTMLDivElement>(null);
 
   const valueChecker = () => {
     if (keyword === '') {
@@ -89,71 +90,78 @@ export default function SearchBar({
         />
       </div>
 
-      {/* Selected Location List */}
-      <DragDropContext onDragEnd={handleDrag}>
-        <Droppable droppableId="selected">
-          {(provided, snapshot) => (
-            <ul
-              className="selected"
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              style={getListStyle(snapshot.isDraggingOver)}
-            >
-              {selected.map((marker, index) => (
-                <Draggable
-                  key={`${marker.content}`}
-                  draggableId={marker.content}
-                  index={index}
-                  isDragDisabled={preview}
+      <div
+        style={{
+          position: 'relative',
+          height: '85vh',
+          overflow: 'auto',
+        }}
+      >
+        {/* Selected Location List */}
+        <DragDropContext onDragEnd={handleDrag}>
+          <Droppable droppableId="selected">
+            {(provided, snapshot) => (
+              <div ref={homeRef}>
+                <ul
+                  className="selected"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  style={getListStyle(snapshot.isDraggingOver)}
                 >
-                  {(item, snapshots) => (
-                    <li
-                      ref={item.innerRef}
-                      {...item.dragHandleProps}
-                      {...item.draggableProps}
-                      style={getItemStyle(snapshots.isDragging, item.draggableProps.style)}
+                  {selected.map((marker, index) => (
+                    <Draggable
+                      key={`${marker.content}`}
+                      draggableId={marker.content}
+                      index={index}
+                      isDragDisabled={preview}
                     >
-                      {marker.content}{' '}
-                      <IconButton
-                        aria-label="delete"
-                        disabled={preview}
-                        onClick={() => removeLocation(marker)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </li>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </ul>
-          )}
-        </Droppable>
-      </DragDropContext>
-
-      {/* Search Result List */}
-      <div className="rst_wrap">
-        <div
-          className="rst mCustomScrollbar"
-          style={{ position: 'relative', overflow: 'auto', height: '80vh' }}
-        >
-          <h2>Route</h2>
-          <div className="title">
-            <strong>Search</strong> Results
-          </div>
-          <List
-            itemLayout="horizontal"
-            dataSource={markers}
-            renderItem={(item) => (
-              <List.Item
-                onMouseEnter={() => setInfo(item)}
-                onMouseLeave={() => setInfo(null)}
-                onClick={() => addLocation(item)}
-              >
-                {item.content}
-              </List.Item>
+                      {(item, snapshots) => (
+                        <li
+                          ref={item.innerRef}
+                          {...item.dragHandleProps}
+                          {...item.draggableProps}
+                          style={getItemStyle(snapshots.isDragging, item.draggableProps.style)}
+                        >
+                          {marker.content}{' '}
+                          <IconButton
+                            aria-label="delete"
+                            disabled={preview}
+                            onClick={() => removeLocation(marker)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </li>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </ul>
+              </div>
             )}
-          />
+          </Droppable>
+        </DragDropContext>
+
+        {/* Search Result List */}
+        <div className="rst_wrap">
+          <div className="rst mCustomScrollbar">
+            <h3>검색 결과</h3>
+            <List
+              itemLayout="horizontal"
+              dataSource={markers}
+              renderItem={(item) => (
+                <List.Item
+                  onMouseEnter={() => setInfo(item)}
+                  onMouseLeave={() => setInfo(null)}
+                  onClick={() => {
+                    addLocation(item);
+                    homeRef.current?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
+                  {item.content}
+                </List.Item>
+              )}
+            />
+          </div>
         </div>
       </div>
     </div>
