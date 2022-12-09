@@ -1,7 +1,7 @@
 /* global kakao */
 
-import { Button, Input, Card, Col, Row, Tag, Select, SelectProps } from 'antd';
-import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { Button, Input, Card, Col, Row, Select } from 'antd';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 
