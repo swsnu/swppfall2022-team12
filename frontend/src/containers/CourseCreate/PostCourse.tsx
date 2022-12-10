@@ -65,12 +65,11 @@ export default function PostCourse() {
   };
 
   const handleSubmitCourse = async (e: React.MouseEvent<HTMLElement>) => {
-    if (description.length < 10) {
-      toast.warning('설명을 10자 이상 입력해주세요');
-      return;
-    }
-    if (title.length === 0) {
-      toast.warning('제목을 비우지 말아주세요');
+    if (title.length === 0 || title.length > 100) {
+      toast.warning('제목을 100 이하로 작성해주세요');
+      if (description.length < 10 || description.length > 1000) {
+        toast.warning('내용을 10자 이상, 1000자 이하로 입력해주세요');
+      }
       return;
     }
     e.preventDefault();

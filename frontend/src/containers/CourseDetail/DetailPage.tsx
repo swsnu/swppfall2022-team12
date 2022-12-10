@@ -54,9 +54,7 @@ export default function CourseDetail() {
   const [description, setDescription] = useState('dummy description');
   const [points, setPoints] = useState([]);
   const [changeInside, setChangeInside] = useState<number>(0);
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   const [usageCounts, setUsageCounts] = useState(45);
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   const [expectedTime, setExpectedTime] = useState(50);
   const [tags, setTags] = useState([]);
   const [author, setAuthor] = useState<string>('');
