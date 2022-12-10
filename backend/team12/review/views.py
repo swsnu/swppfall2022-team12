@@ -13,7 +13,7 @@ from review.serializers import ReviewSerializer, ReviewCreateSerializer
 from course.models import *
 from course.utils import reflect_rate
 
-from team12.exceptions import FieldError, NotOwner
+from team12.exceptions import FieldError, NotOwner, AnonymousError
 from team12.permissions import IsOwnerOrCreateReadOnly
 
 class ReviewViewSet(
@@ -102,6 +102,8 @@ class ReviewViewSet(
     def like(self, request, pk=None):
         """Like Reviews"""
         review = self.get_object()
+        if request.user.is_anonymous:
+            raise AnonymousError()
         user = request.user
         if review.author == user:
             raise NotOwner("Author can't like the review.")
