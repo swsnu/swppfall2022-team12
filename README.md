@@ -10,7 +10,7 @@ cd backend/team12
 
 python3 manage.py runserver
 
-cd ../..
+cd ../../frontend
 
 yarn start
 ```
@@ -21,7 +21,7 @@ cd backend/team12
 
 python3 manage.py test
 
-cd ../..
+cd ../../frontend
 
 yarn && yarn test —coverage —watchAll=false
 ```
