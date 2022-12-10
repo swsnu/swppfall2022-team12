@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-
 import './App.css';
+
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import PostCourse from './containers/CourseCreate/PostCourse';
 import SearchCourse from './containers/CourseCreate/SearchCourse';
