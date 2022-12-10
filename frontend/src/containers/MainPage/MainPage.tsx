@@ -9,15 +9,11 @@ import SearchBox from '../../components/SearchBox/SearchBox';
 import TagSelectPopup from '../../components/TagSelectPopup/TagSelectPopup';
 import { AppDispatch } from '../../store';
 import { CourseType, fetchRecommendedCourse, selectCourse } from '../../store/slices/course';
-import { selectTag } from '../../store/slices/tag';
-import { selectUser } from '../../store/slices/user';
 import isLogin from '../../utils/isLogin';
 
 function MainPage() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const userState = useSelector(selectUser);
-  const tagState = useSelector(selectTag);
   const courseState = useSelector(selectCourse);
 
   const [tagIds, setTagIds] = useState<string[]>(
@@ -26,7 +22,6 @@ function MainPage() {
   const [toOpenPopup, setToOpenPopup] = useState<boolean>(!window.sessionStorage.getItem('tags'));
 
   useEffect(() => {
-    // console.log(tagIds, tagIds.length, toOpenPopup);
     localStorage.removeItem('CATEGORY_KEY');
     localStorage.removeItem('SEARCH_KEY');
     localStorage.removeItem('FILTER');
@@ -52,7 +47,6 @@ function MainPage() {
         alignItems: 'center',
       }}
     >
-      <h2>Main Page</h2>
       <Header />
       <div style={{ height: '20px' }}> </div>
       <SearchBox searchKey={localStorage.getItem('SEARCH_KEY') ?? ''} />
@@ -81,7 +75,7 @@ function MainPage() {
                       alignItems: 'flex-start',
                     }}
                   >
-                    <h5>{tagContent} 코스 추천</h5>
+                    <h3>{tagContent} 코스 추천</h3>
                     <div style={{ display: 'flex', flexDirection: 'row', overflowX: 'auto' }}>
                       {coursesData.map((course) => {
                         return (
