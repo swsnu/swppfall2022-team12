@@ -53,11 +53,6 @@ export default function PostCourse() {
     if (markers) map?.setBounds(mapBounds, 200, 0, 50, 500);
   }, [markers]);
 
-  const removeTag = (tag: string) => {
-    const removed = selectedTags.filter((item) => item !== tag);
-    setSelectedTags(removed);
-  };
-
   const handleChange = (tag: string) => {
     setSelectedTags([...selectedTags, tag]);
     setTagsToSubmit([
