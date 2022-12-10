@@ -1,8 +1,9 @@
+import { Input, Button } from 'antd';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { FaStar } from 'react-icons/fa';
-import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
+
+const { TextArea } = Input;
 
 interface ReviewPostProp {
   courseId: string | undefined;
@@ -39,7 +40,7 @@ export default function ReviewPost(prop: ReviewPostProp) {
   };
 
   return (
-    <div>
+    <div style={{ display: 'flex' }}>
       <div>
         {clicked.map((currBoolean, idx) => {
           return (
@@ -49,24 +50,28 @@ export default function ReviewPost(prop: ReviewPostProp) {
               onClick={() => {
                 setRate(idx + 1);
               }}
-              color={rate >= idx + 1 ? '#d57358' : 'lightgray'}
+              color={rate >= idx + 1 ? '#FFC000' : 'lightgray'}
             />
           );
         })}
       </div>
-      <input
-        type="text"
-        placeholder="댓글을 입력해주세요"
-        onChange={(e) => {
-          setContent(e.target.value);
-          if (prop.courseId !== undefined) setCourseId(parseInt(prop.courseId, 10));
-        }}
-        value={content}
-      />
-
-      <button type="button" onClick={post}>
-        등록
-      </button>
+      <div
+        className="postReview"
+        style={{ display: 'flex', gap: '10px', marginLeft: '20px', width: '68%' }}
+      >
+        <TextArea
+          placeholder="댓글을 입력해주세요"
+          autoSize
+          onChange={(e) => {
+            setContent(e.target.value);
+            if (prop.courseId !== undefined) setCourseId(parseInt(prop.courseId, 10));
+          }}
+          value={content}
+        />
+        <Button type="primary" onClick={post}>
+          등록
+        </Button>
+      </div>
     </div>
   );
 }

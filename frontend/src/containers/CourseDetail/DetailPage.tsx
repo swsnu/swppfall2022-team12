@@ -1,26 +1,43 @@
+import { Button, Divider, Select, Tag, List } from 'antd';
 import axios from 'axios';
 import React, { useEffect, useState, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Navigate, useLocation } from 'react-router';
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
-import { JsonObjectExpression } from 'typescript';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import KakaoMap from '../../components/Map/KakaoMap';
 import MuiRating from '../../components/MuiRate/MuiRating';
 import ReviewElement from '../../components/ReviewElement/ReviewElement';
 import ReviewPost from '../../components/ReviewPost/ReviewPost';
 import { MarkerProps, PositionProps } from '../CourseCreate/SearchCourse';
-/* eslint-disable */
-export default function CourseDetail() {
 
-  type reviewProps = {
-    id : number,
-    content : string,
-    likes : number,
-    author : string,
-    rate : number,
-    created_at : string
-  }
+const ReviewFilters = [
+  { value: '최신 순', label: '&filter=time_desc' },
+  { value: '오래된 순', label: '&filter=time_asc' },
+  { value: '평점 높은 순', label: '&filter=rate_desc' },
+  { value: '평점 낮은 순', label: '&filter=rate_desc' },
+  { value: '좋아요 순', label: '&filter=likes' },
+];
+const TagColor = [
+  'blue',
+  'magenta',
+  'red',
+  'lime',
+  'green',
+  'cyan',
+  'volcano',
+  'orange',
+  'gold',
+  'geekblue',
+  'purple',
+];
+export default function CourseDetail() {
+  type ReviewProps = {
+    id: number;
+    content: string;
+    likes: number;
+    author: string;
+    rate: number;
+    created_at: string;
+  };
   const navigate = useNavigate();
 
   const { id } = useParams(); // get the id of the course
@@ -40,9 +57,9 @@ export default function CourseDetail() {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const [e_time, setTime] = useState(50);
   const [tags, setTags] = useState([]);
-  const [author, setAuthor] = useState<string>("");
+  const [author, setAuthor] = useState<string>('');
   const [distance, setDistance] = useState<number>(0);
-  //const [fare, setFare] = useState<number>(0);
+  // const [fare, setFare] = useState<number>(0);
   // const [created_at, setCreateAt] = useState("");
   // const [link, setLink] = useState("");
   const [element, setElement] = useState({
@@ -54,8 +71,8 @@ export default function CourseDetail() {
     },
     idx: 0,
   });
-  const [reviewList, setReviewList] = useState<reviewProps[]>([]);
-  const [reviewState, setReviewState] = useState<string>("");
+  const [reviewList, setReviewList] = useState<ReviewProps[]>([]);
+  const [reviewState, setReviewState] = useState<string>('');
 
   useEffect(() => {
     axios.get(`/api/course/${id}/`).then((res) => {
@@ -70,19 +87,17 @@ export default function CourseDetail() {
       setRating(res.data.rate);
       setAuthor(res.data.author);
       setDistance(res.data.distance);
-      //setFare(res.data.fare);
-      console.log(res);
+      // setFare(res.data.fare);
     });
-
   }, [changeInside]);
 
-  useEffect( () =>{
+  useEffect(() => {
     axios.get(`/api/review/?course=${id}${reviewState}`).then((res) => {
       console.log(res);
       setReviewList(res.data);
       setRateNum(res.data.length);
     });
-  }, [reviewState, changeInside])
+  }, [reviewState, changeInside]);
 
   const mapBounds = useMemo(() => {
     const bounds = new kakao.maps.LatLngBounds();
@@ -98,9 +113,9 @@ export default function CourseDetail() {
   }, [markers]);
 
   const onPlay = () => {
-    console.log(reviewList);
-    axios.get(`/api/course/${id}/play/`
-    ).then((res)=>{console.log(res)});
+    axios.get(`/api/course/${id}/play/`).then((res) => {
+      console.log(res);
+    });
     const tempArray = ['nmap://navigation?'];
     const elementArray = [
       {
@@ -130,83 +145,136 @@ export default function CourseDetail() {
 
     tempArray.push('&appname=com.example.myapp');
 
-    console.log(tempArray.toString().replace(/,/g, ''));
-
     window.location.href = tempArray.toString().replace(/,/g, '');
   };
+
+  const handleChange = (filter: string) => {
+    const state = ReviewFilters.find((item) => filter === item.value);
+    if (state) setReviewState(state.label);
+  };
+
+  console.log({ reviewState });
 
   return (
     <div style={{ display: 'flex' }}>
       <div
-      className="Container"
-      style={{
-        width: '700px',
-        zIndex: 1,
-        backgroundColor: 'white',
-        textAlign: 'center',
-        fontFamily: 'Arial',
-        display: "display-listitem"
-      }}
-    >
-      <div style={{  height: '50px' , width:"50px"}}/>
-        <h1>{title}</h1>
-        
-      {
-        author !== window.sessionStorage.getItem('username')?
-        <div/>:
-        <div>
-        <button onClick={() => {
-          navigate(`/course/edit-search/${id}/`)
+        className="buttons"
+        style={{
+          zIndex: 1,
+          position: 'fixed',
+          right: '10px',
+          margin: '10px',
         }}
-      >코스 변경하기
-      </button>
-        </div>
-        }
-        <h3>태그 : {tags.toString()} </h3>
-        <h5>코스 설명 : {description}</h5>
-        <h6>{u_counts} 명이 이 코스를 방문했어요!</h6>
-        <h6>
-          코스 평점 : {<MuiRating rate={rating}></MuiRating>} {rating} 점({rateNum}명이 평가했어요)
-        </h6>
-        <h6>경로 길이 : {distance} km</h6>
-        <h6>예상 소요 시간 : {e_time} 분 </h6>
+      >
+        {author !== window.sessionStorage.getItem('username') && (
+          <Button
+            style={{
+              height: 50,
+              boxShadow:
+                'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
+            }}
+            size="large"
+            onClick={() => {
+              navigate(`/course/edit-search/${id}/`);
+            }}
+          >
+            <h4 style={{ margin: 0 }}>경로 수정</h4>
+          </Button>
+        )}
+      </div>
+      <div
+        className="Container"
+        style={{
+          position: 'fixed',
+          width: '600px',
+          height: '100vh',
+          zIndex: 1,
+          backgroundColor: 'white',
+          textAlign: 'center',
+          boxShadow:
+            'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
+        }}
+      >
+        <div style={{ margin: '30px 30px 0 30px' }}>
+          <div>
+            <h2 style={{ margin: '10px 0' }}>{title}</h2>
+          </div>
+          <div className="Tags" style={{ height: '30px' }}>
+            {tags.map((tag, idx) => (
+              <Tag color={TagColor[11 % idx]}>{tag}</Tag>
+            ))}
+          </div>
+          <h6 style={{ margin: '5px' }}>{u_counts} 명이 이 코스를 방문했어요!</h6>
+          <h6 style={{ margin: '0' }}>
+            <MuiRating rate={rating} /> {rating} 점({rateNum}명이 평가했어요)
+          </h6>
+          <div style={{ margin: '50px 20px', height: '5vh' }}>
+            <p>{description}</p>
+          </div>
 
-        <button onClick={onPlay}>네이버지도앱에 경로표시</button>
-        <h3>Reviews</h3>
-        <ReviewPost courseId={id} setChange={setChangeInside} />
-        <div>
-          <button onClick={()=>{setReviewState("&filter=time_desc")}}>최신순</button>
-          <button onClick={()=>{setReviewState("&filter=time_asc")}}>오래된순</button>
-          <button onClick={()=>{setReviewState("&filter=rate_desc")}}>평점높은순</button>
-          <button onClick={()=>{setReviewState("&filter=rate_asc")}}>평점낮은순</button>
-          <button onClick={()=>{setReviewState("&filter=likes")}}>좋아요 순</button>
+          <div className="site-card-wrapper">
+            <div
+              className="info"
+              style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}
+            >
+              <p>
+                <strong>예상 소요 시간</strong> : {`${e_time} 분`}
+              </p>
+              <p>
+                <strong>총 거리</strong> : {`${distance} km`}
+              </p>
+            </div>
           </div>
-        <div>
-          {reviewList.map((prop) => {
-            return (
-              <ReviewElement
-                key={prop.id}
-                id={prop.id}
-                content={prop.content}
-                likes={prop.likes}
-                author={prop.author}
-                rate={prop.rate}
-                created_at={prop.created_at}
-                change={changeInside}
-                setChange={setChangeInside}
-              />
-            );
-          })}
+          <Button type="primary" onClick={onPlay}>
+            네이버지도앱에 경로표시
+          </Button>
+          <Divider orientation="left" style={{ margin: 0 }}>
+            <h3>리뷰</h3>
+          </Divider>
+          <ReviewPost courseId={id} setChange={setChangeInside} />
+          <div style={{ display: 'flex', justifyContent: 'right', marginTop: '10px' }}>
+            <Select placeholder="필터 선택" onChange={handleChange} style={{ width: '120px' }}>
+              {ReviewFilters.map((item) => (
+                <Select.Option key={item.value} value={item.value}>
+                  {item.value}
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
+
+          <div
+            style={{
+              marginLeft: '20px',
+            }}
+          >
+            <List style={{ overflow: 'auto', height: '35vh' }}>
+              {reviewList.map((prop) => {
+                return (
+                  <ReviewElement
+                    key={prop.id}
+                    id={prop.id}
+                    content={prop.content}
+                    likes={prop.likes}
+                    author={prop.author}
+                    rate={prop.rate}
+                    created_at={prop.created_at}
+                    change={changeInside}
+                    setChange={setChangeInside}
+                  />
+                );
+              })}
+            </List>
           </div>
         </div>
-        <KakaoMap
-          setMap={setMap}
-          path={path}
-          previewMarkers={markers}
-          info={info}
-          setInfo={setInfo}
-          preview={true}
-        />
+      </div>
+      <KakaoMap
+        setMap={setMap}
+        path={path}
+        previewMarkers={markers}
+        info={info}
+        setInfo={setInfo}
+        preview
+      />
     </div>
   );
 }
