@@ -9322,6 +9322,13 @@ react-scripts@5.0.1:
   optionalDependencies:
     fsevents "^2.3.2"
 
+react-toasts@^3.0.6:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/react-toasts/-/react-toasts-3.0.6.tgz#e6865ba2a7dd544f09e00c68310ee779d30c7571"
+  integrity sha512-SgtyyytTG6wcjI4rgv4OZmHHLiETYfiHfyz1qLv8Cxu6h9I3p+asUgY3L5DSEorOBSS4Dtv87xwXhi0KsCgLvQ==
+  dependencies:
+    watchable-stores "^2.0.2"
+
 react-transition-group@^4.4.5:
   version "4.4.5"
   resolved "https://registry.npmjs.org/react-transition-group/-/react-transition-group-4.4.5.tgz"
@@ -10847,6 +10854,11 @@ walker@^1.0.7:
   integrity sha512-ts/8E8l5b7kY0vlWLewOkDXMmPdLcVV4GmOQLyxuSswIJsweeFZtAsMF7k1Nszz+TYBQrlYRmzOnr398y1JemQ==
   dependencies:
     makeerror "1.0.12"
+
+watchable-stores@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/watchable-stores/-/watchable-stores-2.0.2.tgz#38c03b73019e704d5f4741541b0dfbe9169c86bb"
+  integrity sha512-xKzypK+hG6gaZFcmiEvdazbD9Z8+hIlr+frC7Ne4N4LI0zvuPaT5uPrhn2RMxhiwaLVw70rctes+rPUTvwhPNg==
 
 watchpack@^2.4.0:
   version "2.4.0"
