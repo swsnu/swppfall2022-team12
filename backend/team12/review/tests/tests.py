@@ -304,6 +304,3 @@ class ReviewTestCase(TestCase):
             HTTP_AUTHORIZATION=self.user_token,
             content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-            
-    
