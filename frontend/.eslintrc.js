@@ -32,7 +32,6 @@ module.exports = {
         'no-multi-str': 'off',
         'no-new': 'off',
         'no-underscore-dangle': 'off',
-        'no-alert':'off',
         'no-return-assign': 'off',
         'no-restricted-syntax': 'off',
         'guard-for-in': 'off',

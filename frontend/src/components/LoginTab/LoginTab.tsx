@@ -2,6 +2,7 @@ import { Button, FormControl, InputLabel, OutlinedInput } from '@mui/material';
 import axios from 'axios';
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 
 import { TagType } from '../../store/slices/tag';
 
@@ -44,7 +45,7 @@ export default function LoginTab() {
         navigate('/main');
       })
       .catch((error) => {
-        alert(error.response.data.detail ?? '로그인에 실패했습니다.');
+        toast.error(error.response.data.detail ?? '로그인에 실패했습니다.');
       });
   };
 

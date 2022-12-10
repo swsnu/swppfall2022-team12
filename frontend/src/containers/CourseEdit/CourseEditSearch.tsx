@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { DropResult } from 'react-beautiful-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
+import { toast } from 'react-toastify';
 
 import KakaoMap from '../../components/Map/KakaoMap';
 import SearchBar from '../../components/SearchBar/SearchBar';
@@ -95,9 +96,9 @@ export default function CourseEditSearch() {
           // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
           map.setBounds(bounds);
         } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-          alert('검색 결과가 존재하지 않습니다.');
+          toast.warning('검색 결과가 존재하지 않습니다.');
         } else if (status === kakao.maps.services.Status.ERROR) {
-          alert('검색 결과 중 오류가 발생했습니다.');
+          toast.error('검색 결과 중 오류가 발생했습니다.');
         }
       });
     }
@@ -167,7 +168,7 @@ export default function CourseEditSearch() {
           item.position.lat === marker.position.lat && item.position.lng === marker.position.lng,
       )
     ) {
-      alert('이미 같은 장소가 선택되었습니다');
+      toast.warning('이미 같은 장소가 선택되었습니다');
     } else {
       setSelected([...selected, marker]);
       const added = searchMarkers.map((item) => {
@@ -231,14 +232,14 @@ export default function CourseEditSearch() {
 
   const storeCourse = () => {
     if (!preview && !okayToPost) {
-      alert('경로 미리보기를 눌러주세요!');
+      toast.info('경로 미리보기를 눌러주세요!');
       return;
     }
     if (selected.length) {
       setMarkerImage(selected);
       navigate(`/course/edit-post/${id}/`, { state: { selected, path, resultData } });
     } else {
-      alert('경로를 작성해주세요');
+      toast.warning('경로를 작성해주세요');
     }
   };
 
@@ -264,7 +265,7 @@ export default function CourseEditSearch() {
     if (!map) return;
     if (preview) {
       if (selected.length < 3) {
-        alert('장소를 적어도 3개 이상 선택해주세요');
+        toast.warning('장소를 적어도 3개 이상 선택해주세요');
         setPreview(false);
         return;
       }

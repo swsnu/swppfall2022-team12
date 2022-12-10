@@ -3,6 +3,7 @@ import axios from 'axios';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 
 import Logo from '../../img/Logo';
 import { AppDispatch } from '../../store';
@@ -32,7 +33,7 @@ export default function Header() {
           navigate('/main');
         })
         .catch((error) => {
-          alert(error.response.data.detail);
+          toast.error(error.response.data.detail);
           navigate('/main');
         });
     }

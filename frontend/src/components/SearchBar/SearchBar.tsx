@@ -3,6 +3,7 @@ import IconButton from '@mui/material/IconButton';
 import { Input, List, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
+import { toast } from 'react-toastify';
 
 import { MarkerProps } from '../../containers/CourseCreate/SearchCourse';
 
@@ -41,7 +42,7 @@ export default function SearchBar({
 
   const submitKeyword = () => {
     if (valueChecker()) {
-      alert('검색어를 입력해주세요.');
+      toast.info('검색어를 입력해주세요.');
     }
     searchPlaces(keyword);
   };

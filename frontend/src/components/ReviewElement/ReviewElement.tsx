@@ -6,6 +6,7 @@ import { List, Input, Button } from 'antd';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { FaStar } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 interface ReviewProp {
   id: number;
@@ -136,7 +137,7 @@ export default function ReviewElement(prop: ReviewProp) {
               style={{ color: 'red', padding: '5px' }}
               onClick={() => {
                 if (prop.author === window.sessionStorage.getItem('username')) {
-                  alert('자신이 작성한 댓글은 좋아할수 없습니다');
+                  toast.warning('자신이 작성한 댓글은 좋아할수 없습니다');
                 } else {
                   axios
                     .get(`/api/review/${prop.id}/like/`, {
@@ -162,7 +163,7 @@ export default function ReviewElement(prop: ReviewProp) {
                     setEdit(true);
                   } else {
                     // make Modal to notice user that he can't edit the comment
-                    alert('자신이 작성한 댓글만 수정 가능합니다');
+                    toast.warning('자신이 작성한 댓글만 수정 가능합니다');
                   }
                 }}
               >
@@ -182,7 +183,7 @@ export default function ReviewElement(prop: ReviewProp) {
                         prop.setChange(Math.random());
                       });
                   } else {
-                    alert('자신이 작성한 댓글만 삭제 가능합니다');
+                    toast.warning('자신이 작성한 댓글만 삭제 가능합니다');
                   }
                 }}
               >

@@ -4,6 +4,7 @@ import { Button, Input, Card, Col, Row, Select } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 
 import KakaoMap from '../../components/Map/KakaoMap';
 import { AppDispatch } from '../../store';
@@ -65,11 +66,11 @@ export default function PostCourse() {
 
   const handleSubmitCourse = async (e: React.MouseEvent<HTMLElement>) => {
     if (description.length < 10) {
-      alert('설명을 10자 이상 입력해주세요');
+      toast.warning('설명을 10자 이상 입력해주세요');
       return;
     }
     if (title.length === 0) {
-      alert('제목을 비우지 말아주세요');
+      toast.warning('제목을 비우지 말아주세요');
       return;
     }
     e.preventDefault();
@@ -93,7 +94,7 @@ export default function PostCourse() {
     if (result.type === `${postCourse.typePrefix}/fulfilled`) {
       navigate('/courses');
     } else {
-      alert('ERROR');
+      toast.error('코스 등록에 실패했습니다');
     }
   };
 

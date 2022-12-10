@@ -2,6 +2,7 @@ import { Button, FormControl, InputLabel, OutlinedInput } from '@mui/material';
 import axios from 'axios';
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 
 export interface SignUpResponseType {
   email: string;
@@ -60,7 +61,7 @@ export default function SignUpTab() {
         if (msg.email) alertMsg += `Email : ${msg.email}\n`;
         if (msg.username) alertMsg += `Username : ${msg.username}\n`;
         if (msg.password) alertMsg += `Password : ${msg.password}\n`;
-        alert(alertMsg);
+        toast.error(alertMsg);
       });
   };
 
