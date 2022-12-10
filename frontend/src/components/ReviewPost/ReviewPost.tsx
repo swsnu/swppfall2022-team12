@@ -57,7 +57,7 @@ export default function ReviewPost(prop: ReviewPostProp) {
       </div>
       <div
         className="postReview"
-        style={{ display: 'flex', gap: '10px', marginLeft: '20px', width: '68%' }}
+        style={{ display: 'flex', gap: '10px', marginLeft: '10px', width: '68%' }}
       >
         <TextArea
           placeholder="댓글을 입력해주세요"

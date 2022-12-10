@@ -172,6 +172,7 @@ export default function CourseDetail() {
           position: 'fixed',
           width: '600px',
           height: '100vh',
+          overflow: 'auto',
           zIndex: 1,
           backgroundColor: 'white',
           textAlign: 'center',
@@ -198,7 +199,7 @@ export default function CourseDetail() {
           <h6 style={{ margin: '0' }}>
             <MuiRating rate={rating} /> {rating} 점({rateNum}명이 평가했어요)
           </h6>
-          <div style={{ margin: '50px 20px', height: '5vh' }}>
+          <div style={{ margin: '30px 20px', height: '100%' }}>
             <p>{description}</p>
           </div>
 
@@ -237,7 +238,7 @@ export default function CourseDetail() {
           </div>
 
           <div>
-            <List style={{ overflow: 'auto', height: '35vh' }}>
+            <List style={{ height: '35vh' }}>
               {reviewList.map((prop) => {
                 return (
                   <ReviewElement
