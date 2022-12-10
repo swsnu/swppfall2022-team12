@@ -41,22 +41,20 @@ export default function ReviewElement(prop: ReviewProp) {
       </div>
       <div className="likes">
         {prop.likes} people liked this comment
-        <button
+        <button data-testid="like"
           onClick={() => {
             if (sessionStorage.getItem('username') === null) {
               alert('로그인하셔야 댓글을 좋아할 수 잇습니다!');
               return;
-            }
-            if (prop.author === window.sessionStorage.getItem('username')) {
+            }else if (prop.author === window.sessionStorage.getItem('username')) {
               alert('자신이 작성한 댓글은 좋아할수 없습니다')
+              return;
             }else{
               axios.get(`/api/review/${prop.id}/like/`);
               prop.setChange(Math.random());
             }
           }}
-        >
-          like
-        </button>
+        >like</button>
       </div>
       
       <div>{editting ? <div>
@@ -75,7 +73,7 @@ export default function ReviewElement(prop: ReviewProp) {
         })}
       </div>editting area:
         <input data-testid="editting" type={"text"} onChange={(e)=>setNewText(e.target.value)} value={newtext}></input>
-        <button  onClick={()=>{
+        <button data-testid="confirm" onClick={()=>{
           console.log(newtext)
           axios.put('/api/review/'+prop.id+"/", {
             content:newtext,
@@ -83,41 +81,31 @@ export default function ReviewElement(prop: ReviewProp) {
           }, {
             headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
           }).then((res) => {
-            /* eslint no-restricted-globals: ["off"] */
             setEditting(false);
             prop.setChange(Math.random());
-            // test needed for reloading***
           });
         }}>confirm</button>
       </div> : <div />}</div>
       {
-      prop.author != window.sessionStorage.getItem('username')?
+      prop.author !== window.sessionStorage.getItem('username')?
           <div></div>:
           <div>
-          <button
+          <button data-testid="edit"
         onClick={() => {
-          if (prop.author === window.sessionStorage.getItem('username')) {
             setEditting(true);
-          } else {
-            // make Modal to notice user that he can't edit the comment
-            alert('자신이 작성한 댓글만 수정 가능합니다')
-          }
-        }}
+
+        }} 
       >
         edit
       </button>
-      <button
+      <button data-testid="delete"
         onClick={() => {
-          if(prop.author === window.sessionStorage.getItem('username')){
             axios.delete(`/api/review/${prop.id}/`, {
               headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
             }).then((res) => {
               /* eslint no-restricted-globals: ["off"] */
               prop.setChange(Math.random());
             });
-          }else{
-            alert('자신이 작성한 댓글만 삭제 가능합니다')
-          }
         }}
       >
         delete

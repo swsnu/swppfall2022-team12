@@ -1,3 +1,5 @@
+/* global kakao */
+
 import axios from 'axios';
 import React, { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -58,7 +60,8 @@ export default function CourseDetail() {
   const [reviewState, setReviewState] = useState<string>("");
 
   useEffect(() => {
-    axios.get(`/api/course/${id}/`).then((res) => {
+    axios.get("/api/course/"+id+"/")
+    .then((res) => {
       setTitle(res.data.title);
       setDescription(res.data.description);
       setTime(res.data.e_time);

@@ -6,10 +6,22 @@ import { MemoryRouter, Route, Routes, Navigate } from 'react-router';
 
 import CourseDetail from './DetailPage';
 
+function renderWithRouterMatch(ui: JSX.Element, { path = '/', route = '/' } = {}) {
+  return {
+    ...render(
+      <MemoryRouter initialEntries={[route]}>
+        <Routes>
+          <Route path={path} element={ui} />
+        </Routes>
+      </MemoryRouter>,
+    ),
+  };
+}
+
 describe('<CourseDetail /', () => {
   const d = {
     data: {
-      id: 117,
+      id: 12,
       author: 'test',
       rate: 5,
       markers: [
@@ -58,17 +70,18 @@ describe('<CourseDetail /', () => {
       description: 'test description for mid presentation',
       created_at: '2022-11-17T10:38:24.424411Z',
       u_counts: 0,
-      e_time: '03:30',
+      e_time: 330,
       distance: 2,
       tags: ['a', 'b'],
     },
   };
   it('should render CourseDetail without error', () => {
-    jest.spyOn(axios, 'get').mockImplementation(() => {
-      return Promise.resolve(d);
-    });
+    jest.spyOn(axios, 'get').mockReturnValue(Promise.resolve(d));
 
-    render(<CourseDetail />);
+    renderWithRouterMatch(<CourseDetail />, {
+      path: '/course/:id/',
+      route: '/course/12/',
+    });
     // screen.getByText("dummy");
     // expect(screen.getAllByText("드라이브").length).toEqual(2);
   });

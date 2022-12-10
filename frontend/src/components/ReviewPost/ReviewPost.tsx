@@ -28,21 +28,20 @@ export default function ReviewPost(prop: ReviewPostProp) {
       rate,
       content,
     };
+    prop.setChange(Math.random());
+    setContent('');
+    setRate(5);
+    setClicked([false, false, false, false, false]);
     axios
       .post('/api/review/', data, {
         headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
       })
       .then((res) => {
-        if (res.status === 403) {
-          alert('자신이 작성한 코스에 리뷰를 남길 수 없습니다!');
-          return;
-        }
+        // if (res.status === 403) {
+        //   alert('자신이 작성한 코스에 리뷰를 남길 수 없습니다!');
+        //   return;
+        // }
         /* eslint no-restricted-globals: ["off"] */
-        prop.setChange(Math.random());
-        setContent('');
-        setRate(5);
-        setClicked([false, false, false, false, false]);
-        // test needed for reloading***
       });
   };
 
@@ -72,10 +71,9 @@ export default function ReviewPost(prop: ReviewPostProp) {
         value={content}
       />
 
-      <button type="button" onClick={post}>
+      <button data-testid="post" type="button" onClick={post}>
         등록
       </button>
     </div>
   );
 }
-
