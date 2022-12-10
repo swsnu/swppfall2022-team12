@@ -1,4 +1,4 @@
-import { Button, FormControl, InputLabel, OutlinedInput } from '@mui/material';
+import { Button, FormControl, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
 import axios from 'axios';
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router';
@@ -24,11 +24,15 @@ export default function SignUpTab() {
   const emailInputRef = useRef<HTMLInputElement>(null);
   const pwInputRef1 = useRef<HTMLInputElement>(null);
   const pwInputRef2 = useRef<HTMLInputElement>(null);
+  const ageInputRef = useRef<HTMLInputElement>(null);
+  const genderInputRef = useRef<HTMLInputElement>(null);
 
   const [usernameInput, setUsernameInput] = useState<string>('');
   const [emailInput, setEmailInput] = useState<string>('');
   const [passwordInput, setPasswordInput] = useState<string>('');
   const [checkPwInput, setCheckPwInput] = useState<string>('');
+  const [ageInput, setAgeInput] = useState<string>('10');
+  const [genderInput, setGenderInput] = useState<string>('male');
 
   const onClickSignUpButton = async () => {
     if (usernameInput === '' && nameInputRef.current != null) {
@@ -48,7 +52,13 @@ export default function SignUpTab() {
       return;
     }
 
-    const req = { username: usernameInput, email: emailInput, password: passwordInput };
+    const req = {
+      username: usernameInput,
+      email: emailInput,
+      password: passwordInput,
+      ages: parseInt(ageInput, 10),
+      gender: genderInput,
+    };
     await axios
       .post<SignUpResponseType>('/user/signup/', req)
       .then((response) => {
@@ -131,6 +141,38 @@ export default function SignUpTab() {
             onChange={(e) => setCheckPwInput(e.target.value)}
             inputRef={pwInputRef2}
           />
+        </FormControl>
+        <FormControl sx={{ minWidth: 150 }} size="small">
+          <InputLabel id="age-input-label">Age</InputLabel>
+          <Select
+            data-testid="age-input-testId"
+            labelId="age-input-label"
+            id="age-input-select"
+            label="Age"
+            defaultValue={ageInput}
+            onChange={(e) => setAgeInput(e.target.value)}
+          >
+            <MenuItem value={10}>10s</MenuItem>
+            <MenuItem value={20}>20s</MenuItem>
+            <MenuItem value={30}>30s</MenuItem>
+            <MenuItem value={40}>40s</MenuItem>
+            <MenuItem value={50}>50s</MenuItem>
+            <MenuItem value={60}>60s</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl sx={{ minWidth: 150 }} size="small">
+          <InputLabel id="gender-input-label">Gender</InputLabel>
+          <Select
+            data-testid="gender-input-testId"
+            labelId="gender-input-label"
+            id="gender-input-select"
+            label="Gender"
+            defaultValue={genderInput}
+            onChange={(e) => setGenderInput(e.target.value)}
+          >
+            <MenuItem value="male">남자</MenuItem>
+            <MenuItem value="female">여자</MenuItem>
+          </Select>
         </FormControl>
       </div>
       <Button onClick={onClickSignUpButton}>회원가입</Button>

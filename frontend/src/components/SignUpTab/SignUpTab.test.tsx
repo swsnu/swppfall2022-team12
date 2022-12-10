@@ -41,6 +41,8 @@ describe('<SignUpTab />', () => {
     screen.getByLabelText('Password');
     screen.getByLabelText('Check Password');
     screen.getByText('회원가입');
+    screen.getByText('10s');
+    screen.getByText('남자');
   });
 
   it('should handle empty or wrong input when Sign up button is clicked', async () => {
@@ -70,6 +72,21 @@ describe('<SignUpTab />', () => {
     fireEvent.click(signUpButton);
     expect(pwInput2).toHaveFocus();
   });
+
+  it("should handle age and gender input", () => {
+    render(<SignUpTab />);
+    const ageInput = screen.getByTestId('age-input-testId');
+    const genderInput = screen.getByTestId('gender-input-testId');
+
+    userEvent.click(getByRole(ageInput, 'button'));
+    fireEvent.click(screen.getByText('60s'));
+    expect(screen.getAllByText('60s'));
+
+    
+    userEvent.click(getByRole(genderInput, 'button'));
+    fireEvent.click(screen.getByText('여자'));
+    expect(screen.getAllByText('여자'));
+  })
 
   it("should handle signup without error with valid inputs", async () => {
     axios.post = jest.fn().mockResolvedValue({
