@@ -136,8 +136,15 @@ export default function ReviewElement(prop: ReviewProp) {
                 if (prop.author === window.sessionStorage.getItem('username')) {
                   alert('자신이 작성한 댓글은 좋아할수 없습니다');
                 } else {
-                  axios.get(`/api/review/${prop.id}/like/`);
-                  prop.setChange(Math.random());
+                  axios
+                    .get(`/api/review/${prop.id}/like/`, {
+                      headers: {
+                        Authorization: `Bearer ${window.sessionStorage.getItem('access')}`,
+                      },
+                    })
+                    .then(() => {
+                      prop.setChange(Math.random());
+                    });
                 }
               }}
             >
@@ -169,8 +176,7 @@ export default function ReviewElement(prop: ReviewProp) {
                           Authorization: `Bearer ${window.sessionStorage.getItem('access')}`,
                         },
                       })
-                      .then((res) => {
-                        /* eslint no-restricted-globals: ["off"] */
+                      .then(() => {
                         prop.setChange(Math.random());
                       });
                   } else {
