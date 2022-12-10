@@ -50,7 +50,7 @@ export default function ReviewPost(prop: ReviewPostProp) {
               onClick={() => {
                 setRate(idx + 1);
               }}
-              color={rate >= idx + 1 ? '#d57358' : 'lightgray'}
+              color={rate >= idx + 1 ? '#FFC000' : 'lightgray'}
             />
           );
         })}

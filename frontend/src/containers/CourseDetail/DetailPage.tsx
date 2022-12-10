@@ -199,7 +199,7 @@ export default function CourseDetail() {
           </div>
           <div className="Tags" style={{ height: '30px' }}>
             {tags.map((tag, idx) => (
-              <Tag color={TagColor[idx]}>{tag}</Tag>
+              <Tag color={TagColor[11 % idx]}>{tag}</Tag>
             ))}
           </div>
           <h6 style={{ margin: '5px' }}>{u_counts} 명이 이 코스를 방문했어요!</h6>
@@ -231,11 +231,7 @@ export default function CourseDetail() {
           </Divider>
           <ReviewPost courseId={id} setChange={setChangeInside} />
           <div style={{ display: 'flex', justifyContent: 'right', marginTop: '10px' }}>
-            <Select
-              placeholder="태그를 선택해주세요"
-              onChange={handleChange}
-              style={{ width: '150px' }}
-            >
+            <Select placeholder="필터 선택" onChange={handleChange} style={{ width: '120px' }}>
               {ReviewFilters.map((item) => (
                 <Select.Option key={item.value} value={item.value}>
                   {item.value}
