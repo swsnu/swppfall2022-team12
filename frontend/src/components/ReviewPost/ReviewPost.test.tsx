@@ -1,7 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
 
-import { renderWithProviders } from '../../test-utils/mocks';
 import ReviewPost from './ReviewPost';
 
 describe('<ReviewPost />', () => {
@@ -20,7 +18,6 @@ describe('<ReviewPost />', () => {
     const postButton = screen.getByText('post');
     fireEvent.change(commentInput, { target: { value: 'TEST' } });
     fireEvent.click(postButton!);
-    // expect(window.location.reload).toHaveBeenCalled();
   });
   it('should not post when comment content is empty', () => {
     render(<ReviewPost courseId="3" setChange={jest.fn()} />);

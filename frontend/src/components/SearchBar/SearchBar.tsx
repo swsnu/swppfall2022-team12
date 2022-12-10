@@ -3,6 +3,7 @@ import IconButton from '@mui/material/IconButton';
 import { Input, List, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
+import { toast } from 'react-toastify';
 
 import { MarkerProps } from '../../containers/CourseCreate/SearchCourse';
 
@@ -41,7 +42,7 @@ export default function SearchBar({
 
   const submitKeyword = () => {
     if (valueChecker()) {
-      alert('검색어를 입력해주세요.');
+      toast.info('검색어를 입력해주세요.');
     }
     searchPlaces(keyword);
   };
@@ -62,11 +63,6 @@ export default function SearchBar({
 
     // styles we need to apply on draggables
     ...draggableStyle,
-  });
-
-  const getListStyle = (isDraggingOver: boolean) => ({
-    // background: isDraggingOver ? 'lightblue' : 'white',
-    padding: grid,
   });
 
   return (
@@ -103,13 +99,13 @@ export default function SearchBar({
         {/* Selected Location List */}
         <DragDropContext onDragEnd={handleDrag}>
           <Droppable droppableId="selected">
-            {(provided, snapshot) => (
+            {(provided) => (
               <div ref={homeRef}>
                 <ul
                   className="selected"
                   {...provided.droppableProps}
                   ref={provided.innerRef}
-                  style={getListStyle(snapshot.isDraggingOver)}
+                  style={{ padding: 0, listStyle: 'none' }}
                 >
                   {selected.map((marker, index) => (
                     <Draggable
@@ -125,7 +121,13 @@ export default function SearchBar({
                           {...item.draggableProps}
                           style={getItemStyle(snapshots.isDragging, item.draggableProps.style)}
                         >
-                          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                          <div
+                            style={{ display: 'flex', justifyContent: 'space-between' }}
+                            onMouseOver={() => setInfo(marker)}
+                            onFocus={() => undefined}
+                            onMouseOut={() => setInfo(null)}
+                            onBlur={() => undefined}
+                          >
                             <Text
                               style={{
                                 display: 'inherit',

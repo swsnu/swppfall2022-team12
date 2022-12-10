@@ -1,25 +1,6 @@
-import { getByRole, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { Provider } from 'react-redux';
+import { fireEvent, render, screen } from '@testing-library/react';
 
-import { getMockStore } from '../../test-utils/mocks';
 import SignUpTab from './SignUpTab';
-
-const initialState = {
-  course: {
-    courses: [],
-    selectedCourse: null,
-    tMapData: null,
-    tMapFeatures: [],
-  },
-  user: {
-    users: [],
-    loggedInUser: null,
-    selectedUser: null,
-  },
-};
-
-// const mockStore = getMockStore({ ...initialState });
 
 const mockNavigate = jest.fn();
 jest.mock('react-router', () => ({

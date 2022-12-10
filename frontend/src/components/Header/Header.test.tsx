@@ -14,7 +14,6 @@ jest.mock('react-router', () => ({
 }));
 
 describe('<Header />', () => {
-  beforeAll(() => (console.error = jest.fn()));
   beforeEach(() => {
     jest.clearAllMocks();
   });

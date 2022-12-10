@@ -1,6 +1,5 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import axios from 'axios';
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
 
 import { renderWithProviders } from '../../test-utils/mocks';
 import ReviewElement from './ReviewElement';

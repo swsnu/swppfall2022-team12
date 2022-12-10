@@ -1,4 +1,4 @@
-import { Button, Card, CardContent, Typography, CardActionArea } from '@mui/material';
+import { Button, Card, CardContent, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -64,11 +64,11 @@ function MainPage() {
               {courseState.recommendedCourses.map((set) => {
                 const tagContent = set.tag;
                 const coursesData = set.courses;
-                if (coursesData.length === 0) return;
+                if (coursesData.length === 0) return <div style={{ height: '100%' }} />;
                 return (
                   <div
                     style={{
-                      height: '450px',
+                      height: '350px',
                       width: '90%',
                       display: 'flex',
                       flexDirection: 'column',
@@ -127,7 +127,9 @@ function MainPage() {
           </div>
         </>
       ) : (
-        <div>맞춤형 코스 추천을 보고 싶다면 로그인하세요!</div>
+        <div>
+          <h3>맞춤형 코스 추천을 보고 싶다면 로그인하세요!</h3>
+        </div>
       )}
     </div>
   );

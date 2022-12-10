@@ -6,6 +6,7 @@ import { List, Input, Button } from 'antd';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { FaStar } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 interface ReviewProp {
   id: number;
@@ -18,7 +19,7 @@ interface ReviewProp {
   setChange: (change: number) => void;
 }
 
-const formatDate = (time: string) => {
+export const formatDate = (time: string) => {
   const newDate = new Date(time);
   const year = newDate.getFullYear();
   const month = newDate.getMonth();
@@ -40,7 +41,7 @@ export default function ReviewElement(prop: ReviewProp) {
   const ARRAY = [1, 1, 1, 1, 1];
   const [edit, setEdit] = useState<boolean>(false);
   const [newText, setNewText] = useState<string>('');
-  const [clicked, setClicked] = useState([false, false, false, false, false]);
+  const [clicked] = useState([false, false, false, false, false]);
   const [newRate, setNewRate] = useState<number>(5);
 
   useEffect(() => {
@@ -94,7 +95,7 @@ export default function ReviewElement(prop: ReviewProp) {
                     },
                   },
                 )
-                .then((res) => {
+                .then(() => {
                   /* eslint no-restricted-globals: ["off"] */
                   setEdit(false);
                   prop.setChange(Math.random());
@@ -115,17 +116,19 @@ export default function ReviewElement(prop: ReviewProp) {
             width: '100%',
           }}
         >
-          <div>
+          <div className="stars">
             {ARRAY.map((elem, idx) => (
               <FaStar size="18" color={prop.rate >= idx + 1 ? '#FFC000' : 'lightgray'} />
             ))}
           </div>
-          <div style={{ display: 'flex', gap: '5px' }}>
-            <div className="content">{prop.content}</div>
-            <div className="author" style={{ color: 'rgb(0, 116, 204)' }}>
-              - {prop.author}
+          <div style={{ display: 'flex', gap: '5px', marginLeft: '10px' }}>
+            <div className="content" style={{ overflowWrap: 'break-word', display: 'inline' }}>
+              {prop.content}
             </div>
-            <div className="created_at" style={{ color: 'hsl(210, 8%, 55%)' }}>
+            <div className="author" style={{ color: '#0074CC' }}>
+              {prop.author}
+            </div>
+            <div className="created_at" style={{ color: '#838C95' }}>
               {formatDate(prop.created_at)}
             </div>
           </div>
@@ -134,10 +137,17 @@ export default function ReviewElement(prop: ReviewProp) {
               style={{ color: 'red', padding: '5px' }}
               onClick={() => {
                 if (prop.author === window.sessionStorage.getItem('username')) {
-                  alert('자신이 작성한 댓글은 좋아할수 없습니다');
+                  toast.warning('자신이 작성한 댓글은 좋아할수 없습니다');
                 } else {
-                  axios.get(`/api/review/${prop.id}/like/`);
-                  prop.setChange(Math.random());
+                  axios
+                    .get(`/api/review/${prop.id}/like/`, {
+                      headers: {
+                        Authorization: `Bearer ${window.sessionStorage.getItem('access')}`,
+                      },
+                    })
+                    .then(() => {
+                      prop.setChange(Math.random());
+                    });
                 }
               }}
             >
@@ -153,7 +163,7 @@ export default function ReviewElement(prop: ReviewProp) {
                     setEdit(true);
                   } else {
                     // make Modal to notice user that he can't edit the comment
-                    alert('자신이 작성한 댓글만 수정 가능합니다');
+                    toast.warning('자신이 작성한 댓글만 수정 가능합니다');
                   }
                 }}
               >
@@ -169,12 +179,11 @@ export default function ReviewElement(prop: ReviewProp) {
                           Authorization: `Bearer ${window.sessionStorage.getItem('access')}`,
                         },
                       })
-                      .then((res) => {
-                        /* eslint no-restricted-globals: ["off"] */
+                      .then(() => {
                         prop.setChange(Math.random());
                       });
                   } else {
-                    alert('자신이 작성한 댓글만 삭제 가능합니다');
+                    toast.warning('자신이 작성한 댓글만 삭제 가능합니다');
                   }
                 }}
               >

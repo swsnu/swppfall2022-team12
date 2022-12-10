@@ -1,8 +1,5 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import ReactDOM from 'react-dom/client';
-import { MapMarker } from 'react-kakao-maps-sdk';
+import { render } from '@testing-library/react';
 
-import { MarkerProps } from '../../containers/CourseCreate/SearchCourse';
 import KakaoMap from './KakaoMap';
 
 describe('<KakaoMap />', () => {
@@ -33,7 +30,7 @@ describe('<KakaoMap />', () => {
     ];
     const setInfo = jest.fn();
 
-    const { container } = render(
+    render(
       <KakaoMap
         setMap={jest.fn()}
         searchMarkers={[]}

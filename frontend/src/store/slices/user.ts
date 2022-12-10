@@ -1,6 +1,4 @@
-import { createAsyncThunk, createSlice, isRejected, PayloadAction } from '@reduxjs/toolkit';
-import userEvent from '@testing-library/user-event';
-import axios, { AxiosRequestHeaders } from 'axios';
+import { createSlice } from '@reduxjs/toolkit';
 
 import { RootState } from '../index';
 
@@ -33,10 +31,9 @@ export const userSlice = createSlice({
   name: 'user',
   initialState: initialUserState,
   reducers: {},
-  extraReducers: (builder) => {},
+  extraReducers: () => {},
 });
 
-export const userActions = userSlice.actions;
 export const selectUser = (state: RootState) => state.user;
 
 export default userSlice.reducer;

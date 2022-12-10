@@ -1,15 +1,17 @@
 /* global kakao */
-
+import { Button, Card, Col, Row, Select, Input } from 'antd';
 import axios from 'axios';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router';
+import { toast } from 'react-toastify';
 
 import KakaoMap from '../../components/Map/KakaoMap';
 import { AppDispatch } from '../../store';
-import { postCourse } from '../../store/slices/course';
-import { TagType, selectTag, fetchTags } from '../../store/slices/tag';
+import { selectTag, fetchTags } from '../../store/slices/tag';
 import { MarkerProps, PositionProps } from './CourseEditSearch';
+
+const { TextArea } = Input;
 
 export default function PostCourse() {
   const { id } = useParams();
@@ -71,23 +73,21 @@ export default function PostCourse() {
 
   const handleSubmitCourse = async (e: React.MouseEvent<HTMLElement>) => {
     if (description.length < 10) {
-      alert('설명을 10자 이상 입력해주세요');
+      toast.warning('설명을 10자 이상 입력해주세요');
       return;
     }
     if (title.length === 0) {
-      alert('제목을 비우지 말아주세요');
+      toast.warning('제목을 비우지 말아주세요');
       return;
     }
     e.preventDefault();
     setTagsToSubmit(
       selectedTags.map((st) => {
         return tags.tags.find((t) => {
-          if (t.content === st) return true;
-          return false;
+          return t.content === st;
         })?.id!;
       }),
     );
-    console.log(tagsToSubmit);
     const data = {
       title,
       description,
@@ -99,17 +99,27 @@ export default function PostCourse() {
       tags: tagsToSubmit,
     };
     try {
-      axios.put(`/api/course/${id}/`, data, {
+      await axios.put(`/api/course/${id}/`, data, {
         headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
       });
       navigate(`/courses/`);
     } catch (error) {
-      alert('ERROR');
+      toast.error('코스 등록에 실패했습니다');
     }
     // const result = await dispatch(postCourse(data));
     // if (result.type === `${postCourse.typePrefix}/fulfilled`) {
     //   navigate('/courses');
     // }
+  };
+
+  const handleChange = (tag: string) => {
+    setSelectedTags([...selectedTags, tag]);
+    setTagsToSubmit([
+      ...tagsToSubmit,
+      tags.tags.find((t) => {
+        return t.content === tag;
+      })?.id!,
+    ]);
   };
 
   return (
@@ -123,9 +133,17 @@ export default function PostCourse() {
           margin: '10px',
         }}
       >
-        <button style={{ backgroundColor: 'white' }} onClick={handleSubmitCourse}>
-          <h3>경로 완성</h3>
-        </button>
+        <Button
+          style={{
+            height: 50,
+            boxShadow:
+              'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
+          }}
+          size="large"
+          onClick={handleSubmitCourse}
+        >
+          <h4 style={{ margin: 0 }}>경로 완성</h4>
+        </Button>
       </div>
       <div
         className="Container"
@@ -136,90 +154,82 @@ export default function PostCourse() {
           backgroundColor: 'white',
         }}
       >
-        <label>
-          Title
-          <input
-            style={{ marginRight: '30px' }}
-            type="text"
-            value={title}
-            onChange={(e) => {
-              setTitle(e.target.value);
-            }}
-          />
-        </label>
-        <label>
-          Description
-          <input
-            style={{ marginRight: '30px' }}
-            type="text"
-            value={description}
-            onChange={(e) => {
-              setDescription(e.target.value);
-            }}
-          />
-        </label>
-        <div>
-          tags
-          <select
-            onChange={(e) => {
-              setSelectedTags([...selectedTags, e.target.value]);
-              setTagsToSubmit(
-                [...selectedTags, e.target.value].map((st) => {
-                  return tags.tags.find((t) => {
-                    if (t.content === st) return true;
-                    return false;
-                  })?.id!;
-                }),
-              );
-              console.log(tagsToSubmit);
-            }}
-          >
-            {tags.tags.map((t) => {
-              return (
-                <option key={t.id} value={t.content}>
-                  {t.content}
-                </option>
-              );
-            })}
-          </select>
-          <div>
-            {selectedTags.map((s) => {
-              return (
-                <div>
-                  {s}
-                  <button
-                    onClick={() => {
-                      setSelectedTags(
-                        selectedTags.filter((tagNotMatched) => {
-                          if (s !== tagNotMatched) return true;
-                          return false;
-                        }),
-                      );
-                      setTagsToSubmit(
-                        [
-                          ...selectedTags.filter((tagNotMatched) => {
-                            if (s !== tagNotMatched) return true;
-                            return false;
-                          }),
-                        ].map((st) => {
-                          return tags.tags.find((t) => {
-                            if (t.content === st) return true;
-                            return false;
-                          })?.id!;
-                        }),
-                      );
-                    }}
-                  >
-                    X
-                  </button>
-                </div>
-              );
-            })}
+        <div style={{ margin: '30px 30px 0 30px' }}>
+          <div style={{ marginBottom: '50px' }}>
+            <h3 style={{ textAlign: 'left' }}>제목</h3>
+            <TextArea
+              style={{ marginRight: '30px' }}
+              placeholder="제목을 작성해주세요"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              autoSize
+            />
+          </div>
+          <div style={{ marginBottom: ' 50px' }}>
+            <h3 style={{ textAlign: 'left' }}>내용</h3>
+            <TextArea
+              style={{ marginRight: '30px' }}
+              placeholder="글을 작성해주세요"
+              value={description}
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+              rows={4}
+            />
+          </div>
+          <div className="Tags" style={{ height: '100px' }}>
+            태그
+            <Select
+              mode="tags"
+              placeholder="태그를 선택해주세요"
+              onChange={handleChange}
+              style={{ width: '100%' }}
+            >
+              {tags.tags.map((item) => (
+                <Select.Option key={item.id} value={item.content}>
+                  {item.content}
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
+          <div className="site-card-wrapper">
+            <Row gutter={15}>
+              <Col>
+                <Card
+                  title="총 요금"
+                  size="small"
+                  headStyle={{ backgroundColor: '#a0d911' }}
+                  style={{ width: '200px' }}
+                >
+                  {fare} 원
+                </Card>
+              </Col>
+              <Col>
+                <Card
+                  title="예상 소요 시간"
+                  size="small"
+                  headStyle={{ backgroundColor: '#91caff' }}
+                  style={{ width: '200px' }}
+                >
+                  {expectedTime >= 60
+                    ? `${(expectedTime / 60).toFixed(0)}시간 ${expectedTime % 60}`
+                    : expectedTime}
+                  분
+                </Card>
+              </Col>
+              <Col>
+                <Card
+                  title="총 거리"
+                  size="small"
+                  headStyle={{ backgroundColor: '#ff85c0' }}
+                  style={{ width: '200px' }}
+                >
+                  {distance} km
+                </Card>
+              </Col>
+            </Row>
           </div>
         </div>
-        <label style={{ marginRight: '30px' }}>total fare : {`${fare} 원`}</label>
-        <label style={{ marginRight: '30px' }}>expected time : {`${expectedTime} 분`}</label>
-        <label>total distance : {`${distance} km`}</label>
       </div>
       <div style={{ height: '30px' }} />
       <KakaoMap
