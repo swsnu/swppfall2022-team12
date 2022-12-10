@@ -1,4 +1,4 @@
-import { Button, Card, CardContent, Typography } from '@mui/material';
+import { Button, Card, CardContent, Typography, CardActionArea } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -55,7 +55,7 @@ function MainPage() {
         <>
           <TagSelectPopup toOpen={toOpenPopup} openHandler={setToOpenPopup} />
           <div>
-            <p>{window.sessionStorage.getItem('username')}님을 위한 맞춤 코스</p>
+            <h2>{window.sessionStorage.getItem('username')}님을 위한 맞춤 코스</h2>
             <div>
               {tagIds.length === 0 && <span>아직 선택한 태그가 없어요. 태그를 골라주세요!</span>}
               <Button onClick={() => setToOpenPopup(true)}>태그 선택</Button>
@@ -68,35 +68,53 @@ function MainPage() {
                 return (
                   <div
                     style={{
-                      height: '350px',
+                      height: '450px',
                       width: '90%',
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'flex-start',
+                      margin: '10px',
                     }}
                   >
                     <h3>{tagContent} 코스 추천</h3>
-                    <div style={{ display: 'flex', flexDirection: 'row', overflowX: 'auto' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        overflowX: 'auto',
+                        height: '300px',
+                      }}
+                    >
                       {coursesData.map((course) => {
                         return (
                           <div
                             style={{
-                              height: '200px',
+                              height: '220px',
                               width: '275px',
-                              marginRight: '10px',
+                              marginRight: '20px',
                             }}
                             key={`recommended-course-${course.id}`}
                           >
-                            <Card sx={{ minHeight: '100%', minWidth: '100%' }}>
-                              <CardContent>
+                            <Card
+                              variant="outlined"
+                              sx={{
+                                minHeight: '100%',
+                                minWidth: '100%',
+                                ':hover': {
+                                  boxShadow: '0 0 11px rgba(33,33,33,.2)',
+                                },
+                              }}
+                            >
+                              <CardContent style={{ height: '140px' }}>
                                 <Typography variant="subtitle1">{course.title}</Typography>
-                                <Typography variant="body1">{course.u_counts}번 이용됨</Typography>
+                                <Typography mt={2} mb={2} variant="body1">
+                                  {course.u_counts}번 이용됨
+                                </Typography>
                                 <MuiRating rate={course.rate} />
-                                <div> </div>
-                                <Button onClick={() => onClickCourseDetail(course.id)}>
-                                  코스 보기
-                                </Button>
                               </CardContent>
+                              <Button onClick={() => onClickCourseDetail(course.id)}>
+                                코스 보기
+                              </Button>
                             </Card>
                           </div>
                         );

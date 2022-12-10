@@ -39,8 +39,6 @@ export default function Header() {
   };
 
   const onClickCategory = async (category: string) => {
-    // const prior = localStorage.getItem('CATEGORY_KEY');
-    // if (prior !== category)
     localStorage.setItem('CATEGORY_KEY', category);
     localStorage.removeItem('SEARCH_KEY');
     localStorage.removeItem('FILTER');
@@ -68,9 +66,6 @@ export default function Header() {
         <div role="button" tabIndex={0} onClick={onClickLogo}>
           <Logo />
         </div>
-        {/* <button onClick={() => onClickCategory('bike')}>바이크</button>
-        <button onClick={() => onClickCategory('cycle')}>자전거</button>
-        <button onClick={() => onClickCategory('run')}>런닝</button> */}
         {isLogin() ? (
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <div>{window.sessionStorage.getItem('username')}님, 환영합니다!</div>
