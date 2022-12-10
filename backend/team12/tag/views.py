@@ -1,9 +1,11 @@
-from tag.models import Tag
-from tag.utils import create_tags
 from django.db import transaction
+
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
+
+from tag.models import Tag
+from tag.utils import create_tags
 
 class TagViewSet(viewsets.GenericViewSet):
     """

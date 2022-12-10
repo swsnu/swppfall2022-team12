@@ -203,6 +203,11 @@ class ReviewTestCase(TestCase):
             content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+        response = self.client.get(
+            f'/api/review/{target.id}/like/', 
+            content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
     def test_list_review(self):
         """
         List review test case.
