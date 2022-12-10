@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import KakaoMap from '../../components/Map/KakaoMap';
 import MuiRating from '../../components/MuiRate/MuiRating';
-import ReviewElement from '../../components/ReviewElement/ReviewElement';
+import ReviewElement, { formatDate } from '../../components/ReviewElement/ReviewElement';
 import ReviewPost from '../../components/ReviewPost/ReviewPost';
 import { MarkerProps, PositionProps } from '../CourseCreate/SearchCourse';
 
@@ -29,15 +29,17 @@ export const TagColor = [
   'geekblue',
   'purple',
 ];
+
+type ReviewProps = {
+  id: number;
+  content: string;
+  likes: number;
+  author: string;
+  rate: number;
+  created_at: string;
+};
+
 export default function CourseDetail() {
-  type ReviewProps = {
-    id: number;
-    content: string;
-    likes: number;
-    author: string;
-    rate: number;
-    created_at: string;
-  };
   const navigate = useNavigate();
 
   const { id } = useParams(); // get the id of the course
@@ -48,13 +50,14 @@ export default function CourseDetail() {
   const [title, setTitle] = useState('dummy title');
   const [rating, setRating] = useState(4.7);
   const [rateNum, setRateNum] = useState(19);
+  const [createdAt, setCreatedAt] = useState('');
   const [description, setDescription] = useState('dummy description');
   const [points, setPoints] = useState([]);
   const [changeInside, setChangeInside] = useState<number>(0);
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  const [u_counts, setCounts] = useState(45);
+  const [usageCounts, setUsageCounts] = useState(45);
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  const [e_time, setTime] = useState(50);
+  const [expectedTime, setExpectedTime] = useState(50);
   const [tags, setTags] = useState([]);
   const [author, setAuthor] = useState<string>('');
   const [distance, setDistance] = useState<number>(0);
@@ -65,8 +68,8 @@ export default function CourseDetail() {
     axios.get(`/api/course/${id}/`).then((res) => {
       setTitle(res.data.title);
       setDescription(res.data.description);
-      setTime(res.data.e_time);
-      setCounts(res.data.u_counts);
+      setExpectedTime(res.data.e_time);
+      setUsageCounts(res.data.u_counts);
       setPoints(res.data.markers);
       setMarkers(res.data.markers);
       setPath(res.data.path);
@@ -74,6 +77,7 @@ export default function CourseDetail() {
       setRating(res.data.rate);
       setAuthor(res.data.author);
       setDistance(res.data.distance);
+      setCreatedAt(res.data.created_at);
       // setFare(res.data.fare);
     });
   }, [changeInside]);
@@ -148,7 +152,7 @@ export default function CourseDetail() {
           margin: '10px',
         }}
       >
-        {author !== window.sessionStorage.getItem('username') && (
+        {author === window.sessionStorage.getItem('username') && (
           <Button
             style={{
               height: 50,
@@ -179,14 +183,20 @@ export default function CourseDetail() {
       >
         <div style={{ margin: '30px 30px 0 30px' }}>
           <div>
-            <h2 style={{ margin: '10px 0' }}>{title}</h2>
+            <h2 style={{ margin: '5px 0' }}>{title}</h2>
+            <span style={{ color: '#0074CC' }}>{author}</span>
+            <span style={{ color: '#838C95' }}> {formatDate(createdAt).slice(0, 10)}</span>
           </div>
-          <div className="Tags" style={{ height: '30px' }}>
-            {tags.map((tag, idx) => (
-              <Tag color={TagColor[TagColor.length % idx]}>{tag}</Tag>
-            ))}
-          </div>
-          <h6 style={{ margin: '5px' }}>{u_counts} 명이 이 코스를 방문했어요!</h6>
+          {tags.length > 0 ? (
+            <div className="Tags" style={{ height: '30px' }}>
+              {tags.map((tag, idx) => (
+                <Tag color={TagColor[TagColor.length % idx]}>{tag}</Tag>
+              ))}
+            </div>
+          ) : (
+            <p />
+          )}
+          <h6 style={{ margin: '5px' }}>{usageCounts} 명이 이 코스를 방문했어요!</h6>
           <h6 style={{ margin: '0' }}>
             <MuiRating rate={rating} /> {rating} 점({rateNum}명이 평가했어요)
           </h6>
@@ -201,7 +211,10 @@ export default function CourseDetail() {
             >
               <p>
                 <strong>예상 소요 시간</strong> :{' '}
-                {e_time >= 60 ? `${(e_time / 60).toFixed(0)}시간 ${e_time % 60}` : e_time}분
+                {expectedTime >= 60
+                  ? `${(expectedTime / 60).toFixed(0)}시간 ${expectedTime % 60}`
+                  : expectedTime}
+                분
               </p>
               <p>
                 <strong>총 거리</strong> : {distance} km

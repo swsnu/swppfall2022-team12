@@ -105,7 +105,7 @@ export default function SearchBar({
                   className="selected"
                   {...provided.droppableProps}
                   ref={provided.innerRef}
-                  style={{ padding: `${grid}`, listStyle: 'none' }}
+                  style={{ padding: 0, listStyle: 'none' }}
                 >
                   {selected.map((marker, index) => (
                     <Draggable

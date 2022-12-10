@@ -231,7 +231,7 @@ export default function SearchCourse() {
 
   const storeCourse = () => {
     if (!okayToPost) {
-      toast.info('경로 미리보기를 눌러주세요!');
+      toast.warning('경로 미리보기를 눌러주세요!');
       return;
     }
     if (selected.length) {
@@ -243,7 +243,6 @@ export default function SearchCourse() {
   };
 
   useEffect(() => {
-    // setLoading(false);
     if (!map) return;
     if (preview) {
       if (selected.length < 3) {
@@ -291,7 +290,7 @@ export default function SearchCourse() {
               setOkayToPost(true);
             }}
           >
-            <h4 style={{ margin: 0 }}>경로 만들기</h4>
+            <h4 style={{ margin: 0 }}>경로 수정</h4>
           </Button>
         ) : (
           <Button
