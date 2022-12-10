@@ -16,6 +16,10 @@ export default function ReviewPost(prop: ReviewPostProp) {
   const [courseId, setCourseId] = useState<number>(1);
 
   const post = () => {
+    if (sessionStorage.getItem('username') === null) {
+      alert('로그인하셔야 댓글이 작성됩니다!');
+      return;
+    }
     if (content.length === 0) {
       return false;
     }
@@ -29,6 +33,10 @@ export default function ReviewPost(prop: ReviewPostProp) {
         headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
       })
       .then((res) => {
+        if (res.status === 403) {
+          alert('자신이 작성한 코스에 리뷰를 남길 수 없습니다!');
+          return;
+        }
         /* eslint no-restricted-globals: ["off"] */
         prop.setChange(Math.random());
         setContent('');
@@ -70,3 +78,4 @@ export default function ReviewPost(prop: ReviewPostProp) {
     </div>
   );
 }
+

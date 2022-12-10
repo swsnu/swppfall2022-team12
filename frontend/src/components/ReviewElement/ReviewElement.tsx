@@ -43,6 +43,10 @@ export default function ReviewElement(prop: ReviewProp) {
         {prop.likes} people liked this comment
         <button
           onClick={() => {
+            if (sessionStorage.getItem('username') === null) {
+              alert('로그인하셔야 댓글을 좋아할 수 잇습니다!');
+              return;
+            }
             if (prop.author === window.sessionStorage.getItem('username')) {
               alert('자신이 작성한 댓글은 좋아할수 없습니다')
             }else{
@@ -125,4 +129,5 @@ export default function ReviewElement(prop: ReviewProp) {
     </div>
   );
 }
+
 
