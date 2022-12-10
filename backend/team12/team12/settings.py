@@ -108,18 +108,18 @@ SIMPLE_JWT = {
 
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    },
     # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'team12',
-    #     'USER': 'team12',
-    #     'PASSWORD': 'team12',
-    #     'HOST': 'swpp-team12.cq3boo3w9eua.ap-northeast-2.rds.amazonaws.com',
-    #     'PORT': '3306',
-    # }
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # },
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'team12',
+        'USER': 'team12',
+        'PASSWORD': 'team12',
+        'HOST': 'swpp-team12.cq3boo3w9eua.ap-northeast-2.rds.amazonaws.com',
+        'PORT': '3306',
+    }
 }
 
 
