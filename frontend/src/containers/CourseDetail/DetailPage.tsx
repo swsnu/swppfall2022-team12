@@ -153,8 +153,6 @@ export default function CourseDetail() {
     if (state) setReviewState(state.label);
   };
 
-  console.log({ reviewState });
-
   return (
     <div style={{ display: 'flex' }}>
       <div
