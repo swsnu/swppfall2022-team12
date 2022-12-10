@@ -176,7 +176,7 @@ export default function PostCourse() {
                   headStyle={{ backgroundColor: '#a0d911' }}
                   style={{ width: '200px' }}
                 >
-                  {`${fare} 원`}
+                  {fare} 원
                 </Card>
               </Col>
               <Col>
@@ -186,7 +186,10 @@ export default function PostCourse() {
                   headStyle={{ backgroundColor: '#91caff' }}
                   style={{ width: '200px' }}
                 >
-                  {`${expectedTime} 분`}
+                  {expectedTime >= 60
+                    ? `${(expectedTime / 60).toFixed(0)}시간 ${expectedTime % 60}`
+                    : expectedTime}
+                  분
                 </Card>
               </Col>
               <Col>
@@ -196,7 +199,7 @@ export default function PostCourse() {
                   headStyle={{ backgroundColor: '#ff85c0' }}
                   style={{ width: '200px' }}
                 >
-                  {`${distance} km`}
+                  {distance} km
                 </Card>
               </Col>
             </Row>

@@ -60,7 +60,7 @@ export default function Header() {
   };
 
   return (
-    <div className="header" style={{ width: '90%' }}>
+    <div className="header" style={{ width: '90%', marginBottom: '30px' }}>
       <div style={{ height: '30px' }} />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div role="button" tabIndex={0} onClick={onClickLogo}>
@@ -76,10 +76,14 @@ export default function Header() {
         )}
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-around', alignContent: 'center' }}>
-        <Button variant="outlined" onClick={() => onClickCategory('drive')}>
+        <Button
+          variant="outlined"
+          style={{ borderWidth: '2px' }}
+          onClick={() => onClickCategory('drive')}
+        >
           드라이브 전체보기
         </Button>
-        <Button variant="outlined" onClick={onClickCreateCourse}>
+        <Button variant="outlined" style={{ borderWidth: '2px' }} onClick={onClickCreateCourse}>
           나만의 코스 만들기
         </Button>
       </div>

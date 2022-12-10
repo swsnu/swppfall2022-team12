@@ -16,7 +16,7 @@ const ReviewFilters = [
   { value: '평점 낮은 순', label: '&filter=rate_desc' },
   { value: '좋아요 순', label: '&filter=likes' },
 ];
-const TagColor = [
+export const TagColor = [
   'blue',
   'magenta',
   'red',
@@ -183,7 +183,7 @@ export default function CourseDetail() {
           </div>
           <div className="Tags" style={{ height: '30px' }}>
             {tags.map((tag, idx) => (
-              <Tag color={TagColor[11 % idx]}>{tag}</Tag>
+              <Tag color={TagColor[TagColor.length % idx]}>{tag}</Tag>
             ))}
           </div>
           <h6 style={{ margin: '5px' }}>{u_counts} 명이 이 코스를 방문했어요!</h6>
@@ -200,10 +200,11 @@ export default function CourseDetail() {
               style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}
             >
               <p>
-                <strong>예상 소요 시간</strong> : {`${e_time} 분`}
+                <strong>예상 소요 시간</strong> :{' '}
+                {e_time >= 60 ? `${(e_time / 60).toFixed(0)}시간 ${e_time % 60}` : e_time}분
               </p>
               <p>
-                <strong>총 거리</strong> : {`${distance} km`}
+                <strong>총 거리</strong> : {distance} km
               </p>
             </div>
           </div>
@@ -224,11 +225,7 @@ export default function CourseDetail() {
             </Select>
           </div>
 
-          <div
-            style={{
-              marginLeft: '20px',
-            }}
-          >
+          <div>
             <List style={{ overflow: 'auto', height: '35vh' }}>
               {reviewList.map((prop) => {
                 return (

@@ -7,11 +7,14 @@ describe('<CourseListElement />', () => {
     render(
       <CourseListElement
         id={99}
+        author="TEST_AUTHOR"
         title="CLE_TEST_TITLE"
         description="CLE_TEST_DESCRIPTION"
         rate={3}
+        createdAt="2022"
         usageCounts={50}
         expectedTime={100}
+        distance={300}
         showDetail={() => null}
       />,
     );

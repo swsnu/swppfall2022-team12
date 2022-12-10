@@ -18,7 +18,7 @@ interface ReviewProp {
   setChange: (change: number) => void;
 }
 
-const formatDate = (time: string) => {
+export const formatDate = (time: string) => {
   const newDate = new Date(time);
   const year = newDate.getFullYear();
   const month = newDate.getMonth();
@@ -115,17 +115,19 @@ export default function ReviewElement(prop: ReviewProp) {
             width: '100%',
           }}
         >
-          <div>
+          <div className="stars">
             {ARRAY.map((elem, idx) => (
               <FaStar size="18" color={prop.rate >= idx + 1 ? '#FFC000' : 'lightgray'} />
             ))}
           </div>
-          <div style={{ display: 'flex', gap: '5px' }}>
-            <div className="content">{prop.content}</div>
-            <div className="author" style={{ color: 'rgb(0, 116, 204)' }}>
-              - {prop.author}
+          <div style={{ display: 'flex', gap: '5px', marginLeft: '10px' }}>
+            <div className="content" style={{ overflowWrap: 'break-word', display: 'inline' }}>
+              {prop.content}
             </div>
-            <div className="created_at" style={{ color: 'hsl(210, 8%, 55%)' }}>
+            <div className="author" style={{ color: '#0074CC' }}>
+              {prop.author}
+            </div>
+            <div className="created_at" style={{ color: '#838C95' }}>
               {formatDate(prop.created_at)}
             </div>
           </div>
