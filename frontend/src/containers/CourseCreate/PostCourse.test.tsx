@@ -1,14 +1,11 @@
-/* global kakao */
-
-import { fireEvent, getByText, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import axios from 'axios';
 import { Provider } from 'react-redux';
-import { useLocation } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 
-import course, { CourseState } from '../../store/slices/course';
-import tagReducer, { TagState } from '../../store/slices/tag';
-import userReducer, { UserState } from '../../store/slices/user';
+import { CourseState } from '../../store/slices/course';
+import { TagState } from '../../store/slices/tag';
+import { UserState } from '../../store/slices/user';
 import { getMockStore } from '../../test-utils/mocks';
 import PostCourse from './PostCourse';
 import { MarkerProps, PositionProps } from './SearchCourse';

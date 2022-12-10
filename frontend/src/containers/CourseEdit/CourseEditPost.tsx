@@ -7,8 +7,7 @@ import { useLocation, useNavigate, useParams } from 'react-router';
 
 import KakaoMap from '../../components/Map/KakaoMap';
 import { AppDispatch } from '../../store';
-import { postCourse } from '../../store/slices/course';
-import { TagType, selectTag, fetchTags } from '../../store/slices/tag';
+import { selectTag, fetchTags } from '../../store/slices/tag';
 import { MarkerProps, PositionProps } from './CourseEditSearch';
 
 export default function PostCourse() {
@@ -82,12 +81,10 @@ export default function PostCourse() {
     setTagsToSubmit(
       selectedTags.map((st) => {
         return tags.tags.find((t) => {
-          if (t.content === st) return true;
-          return false;
+          return t.content === st;
         })?.id!;
       }),
     );
-    console.log(tagsToSubmit);
     const data = {
       title,
       description,
@@ -99,7 +96,7 @@ export default function PostCourse() {
       tags: tagsToSubmit,
     };
     try {
-      axios.put(`/api/course/${id}/`, data, {
+      await axios.put(`/api/course/${id}/`, data, {
         headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
       });
       navigate(`/courses/`);
@@ -166,12 +163,10 @@ export default function PostCourse() {
               setTagsToSubmit(
                 [...selectedTags, e.target.value].map((st) => {
                   return tags.tags.find((t) => {
-                    if (t.content === st) return true;
-                    return false;
+                    return t.content === st;
                   })?.id!;
                 }),
               );
-              console.log(tagsToSubmit);
             }}
           >
             {tags.tags.map((t) => {
@@ -191,20 +186,17 @@ export default function PostCourse() {
                     onClick={() => {
                       setSelectedTags(
                         selectedTags.filter((tagNotMatched) => {
-                          if (s !== tagNotMatched) return true;
-                          return false;
+                          return s !== tagNotMatched;
                         }),
                       );
                       setTagsToSubmit(
                         [
                           ...selectedTags.filter((tagNotMatched) => {
-                            if (s !== tagNotMatched) return true;
-                            return false;
+                            return s !== tagNotMatched;
                           }),
                         ].map((st) => {
                           return tags.tags.find((t) => {
-                            if (t.content === st) return true;
-                            return false;
+                            return t.content === st;
                           })?.id!;
                         }),
                       );

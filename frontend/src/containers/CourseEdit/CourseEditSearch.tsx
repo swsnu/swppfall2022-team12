@@ -61,7 +61,7 @@ export default function CourseEditSearch() {
   const [preview, setPreview] = useState<boolean>(false);
   const [resultData, setResultData] = useState<DataProps | null>(null);
   const [resultFeatures, setResultFeatures] = useState<FeatureProps[]>([]);
-  const [okayToPost, setOkayToPost] = useState<boolean>(false);
+  const [okayToPost] = useState<boolean>(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const courseState = useSelector(selectCourse);

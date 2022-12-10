@@ -3,9 +3,6 @@ import axios from 'axios';
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router';
 
-import { TagType } from '../../store/slices/tag';
-import { selectUser, UserType } from '../../store/slices/user';
-
 export interface SignUpResponseType {
   email: string;
   username: string;
@@ -16,9 +13,7 @@ export interface SignUpResponseType {
 }
 
 export default function SignUpTab() {
-  // const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  // const userState = useSelector(selectUser);
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);

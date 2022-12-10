@@ -64,11 +64,6 @@ export default function SearchBar({
     ...draggableStyle,
   });
 
-  const getListStyle = (isDraggingOver: boolean) => ({
-    // background: isDraggingOver ? 'lightblue' : 'white',
-    padding: grid,
-  });
-
   return (
     <div
       className="SearchBar"
@@ -103,13 +98,13 @@ export default function SearchBar({
         {/* Selected Location List */}
         <DragDropContext onDragEnd={handleDrag}>
           <Droppable droppableId="selected">
-            {(provided, snapshot) => (
+            {(provided) => (
               <div ref={homeRef}>
                 <ul
                   className="selected"
                   {...provided.droppableProps}
                   ref={provided.innerRef}
-                  style={getListStyle(snapshot.isDraggingOver)}
+                  style={{ padding: `${grid}` }}
                 >
                   {selected.map((marker, index) => (
                     <Draggable
@@ -125,7 +120,13 @@ export default function SearchBar({
                           {...item.draggableProps}
                           style={getItemStyle(snapshots.isDragging, item.draggableProps.style)}
                         >
-                          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                          <div
+                            style={{ display: 'flex', justifyContent: 'space-between' }}
+                            onMouseOver={() => setInfo(marker)}
+                            onFocus={() => undefined}
+                            onMouseOut={() => setInfo(null)}
+                            onBlur={() => undefined}
+                          >
                             <Text
                               style={{
                                 display: 'inherit',

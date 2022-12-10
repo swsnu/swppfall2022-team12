@@ -1,8 +1,5 @@
-import { Button } from '@mui/material';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import axios from 'axios';
-import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes, Navigate } from 'react-router';
 
 import CourseDetail from './DetailPage';
 
@@ -69,8 +66,6 @@ describe('<CourseDetail /', () => {
     });
 
     render(<CourseDetail />);
-    // screen.getByText("dummy");
-    // expect(screen.getAllByText("드라이브").length).toEqual(2);
   });
 
   it('should handle click Play button', () => {
@@ -81,6 +76,5 @@ describe('<CourseDetail /', () => {
     render(<CourseDetail />);
     const button = screen.getByText('네이버지도앱에 경로표시');
     fireEvent.click(button!);
-    // expect(button).toBeCalled();
   });
 });

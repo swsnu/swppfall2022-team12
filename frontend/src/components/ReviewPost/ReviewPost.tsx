@@ -29,7 +29,7 @@ export default function ReviewPost(prop: ReviewPostProp) {
       .post('/api/review/', data, {
         headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
       })
-      .then((res) => {
+      .then(() => {
         /* eslint no-restricted-globals: ["off"] */
         prop.setChange(Math.random());
         setContent('');

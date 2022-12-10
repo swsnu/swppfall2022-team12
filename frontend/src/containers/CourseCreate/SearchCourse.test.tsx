@@ -1,6 +1,4 @@
-/* global kakao */
-
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -110,7 +108,5 @@ describe('<SearchCourse />', () => {
         </Provider>
       </BrowserRouter>,
     );
-    const keywordInput = screen.getByPlaceholderText('검색어를 입력해주세요');
-    const submitButton = screen.getByText('검색');
   });
 });

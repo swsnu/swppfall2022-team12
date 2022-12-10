@@ -1,9 +1,6 @@
-import { getByRole, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import axios from 'axios';
-import { Provider } from 'react-redux';
 
-import { getMockStore } from '../../test-utils/mocks';
 import LoginTab from './LoginTab';
 
 const mockResponse = {
@@ -15,8 +12,6 @@ const mockResponse = {
   },
   tags: [],
 };
-
-// const mockStore = getMockStore({ ...initialState });
 
 const mockNavigate = jest.fn();
 jest.mock('react-router', () => ({

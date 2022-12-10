@@ -50,7 +50,6 @@ export default function CourseDetail() {
   const [rateNum, setRateNum] = useState(19);
   const [description, setDescription] = useState('dummy description');
   const [points, setPoints] = useState([]);
-  const [destination, setDestination] = useState('dummy destination');
   const [changeInside, setChangeInside] = useState<number>(0);
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const [u_counts, setCounts] = useState(45);
@@ -59,18 +58,6 @@ export default function CourseDetail() {
   const [tags, setTags] = useState([]);
   const [author, setAuthor] = useState<string>('');
   const [distance, setDistance] = useState<number>(0);
-  // const [fare, setFare] = useState<number>(0);
-  // const [created_at, setCreateAt] = useState("");
-  // const [link, setLink] = useState("");
-  const [element, setElement] = useState({
-    content: '[0] 출발지',
-    image: 'http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png',
-    position: {
-      lat: '37.40268656668587',
-      lng: '127.10325874620656',
-    },
-    idx: 0,
-  });
   const [reviewList, setReviewList] = useState<ReviewProps[]>([]);
   const [reviewState, setReviewState] = useState<string>('');
 
@@ -93,7 +80,6 @@ export default function CourseDetail() {
 
   useEffect(() => {
     axios.get(`/api/review/?course=${id}${reviewState}`).then((res) => {
-      console.log(res);
       setReviewList(res.data);
       setRateNum(res.data.length);
     });
@@ -113,9 +99,7 @@ export default function CourseDetail() {
   }, [markers]);
 
   const onPlay = () => {
-    axios.get(`/api/course/${id}/play/`).then((res) => {
-      console.log(res);
-    });
+    axios.get(`/api/course/${id}/play/`).then(() => {});
     const tempArray = ['nmap://navigation?'];
     const elementArray = [
       {

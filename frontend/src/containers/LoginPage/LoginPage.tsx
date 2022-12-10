@@ -1,6 +1,5 @@
 import { Button } from '@mui/material';
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import React, { useState } from 'react';
 
 import LoginTab from '../../components/LoginTab/LoginTab';
 import SignUpTab from '../../components/SignUpTab/SignUpTab';

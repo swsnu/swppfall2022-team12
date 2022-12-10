@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
 import './App.css';
@@ -13,26 +13,15 @@ import CourseList from './containers/CourseList/CourseList';
 import Login from './containers/LoginPage/LoginPage';
 import MainPage from './containers/MainPage/MainPage';
 import { AppDispatch } from './store';
-import { TagType, selectTag, fetchTags } from './store/slices/tag';
-import { UserType, selectUser } from './store/slices/user';
+import { fetchTags } from './store/slices/tag';
 import isLogin from './utils/isLogin';
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
-  const userState = useSelector(selectUser);
-  // Pick<UserType, 'email' | 'username' | 'tags'>
-  // const [loggedInUser, setLoggedInUser] = useState<string | null>(
-  //   null,
-  // );
 
   useEffect(() => {
     dispatch(fetchTags());
   }, []);
-
-  // useEffect(() => {
-  //   setLoggedInUser(window.sessionStorage.getItem('access'));
-  //   console.log(loggedInUser);
-  // }, [window.sessionStorage.getItem('access')]);
 
   return (
     <div className="App">

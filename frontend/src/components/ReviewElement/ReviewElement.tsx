@@ -40,7 +40,7 @@ export default function ReviewElement(prop: ReviewProp) {
   const ARRAY = [1, 1, 1, 1, 1];
   const [edit, setEdit] = useState<boolean>(false);
   const [newText, setNewText] = useState<string>('');
-  const [clicked, setClicked] = useState([false, false, false, false, false]);
+  const [clicked] = useState([false, false, false, false, false]);
   const [newRate, setNewRate] = useState<number>(5);
 
   useEffect(() => {
@@ -94,7 +94,7 @@ export default function ReviewElement(prop: ReviewProp) {
                     },
                   },
                 )
-                .then((res) => {
+                .then(() => {
                   /* eslint no-restricted-globals: ["off"] */
                   setEdit(false);
                   prop.setChange(Math.random());

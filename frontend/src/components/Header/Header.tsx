@@ -27,7 +27,7 @@ export default function Header() {
         .get('/api/user/logout/', {
           headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
         })
-        .then((response) => {
+        .then(() => {
           window.sessionStorage.clear();
           navigate('/main');
         })

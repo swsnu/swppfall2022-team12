@@ -4,7 +4,6 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router';
 
 import { TagType } from '../../store/slices/tag';
-import { UserType, selectUser } from '../../store/slices/user';
 
 export interface LoginResponseType {
   email: string;
@@ -17,8 +16,6 @@ export interface LoginResponseType {
 }
 export default function LoginTab() {
   const navigate = useNavigate();
-  // const dispatch = useDispatch<AppDispatch>();
-  // const userState = useSelector(selectUser);
 
   const emailInputRef = useRef<HTMLInputElement>(null);
   const pwInputRef = useRef<HTMLInputElement>(null);
@@ -47,8 +44,6 @@ export default function LoginTab() {
         navigate('/main');
       })
       .catch((error) => {
-        // if (error.response.data.detail)
-        console.log(error);
         alert(error.response.data.detail ?? '로그인에 실패했습니다.');
       });
   };

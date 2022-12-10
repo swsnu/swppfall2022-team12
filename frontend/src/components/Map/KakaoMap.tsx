@@ -1,6 +1,6 @@
 /* global kakao */
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
 import { Map, MapMarker, Polyline } from 'react-kakao-maps-sdk';
 
 import { PositionProps, MarkerProps } from '../../containers/CourseCreate/SearchCourse';
@@ -27,8 +27,6 @@ function KakaoMap({
   addLocation,
   preview,
 }: MapProps) {
-  const [selectedMarker, setSelectedMarker] = useState<number>();
-
   return (
     <div>
       {preview ? (
@@ -55,7 +53,7 @@ function KakaoMap({
             strokeOpacity={1} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
             strokeStyle="solid" // 선의 스타일입니다
           />
-          {previewMarkers?.map((marker, idx) => (
+          {previewMarkers?.map((marker) => (
             <div>
               <MapMarker
                 key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
@@ -92,15 +90,9 @@ function KakaoMap({
           level={3}
           onCreate={setMap}
         >
-          {searchMarkers?.map((marker, index) =>
+          {searchMarkers?.map((marker) =>
             marker.selected ? (
-              <EventMarker
-                marker={marker}
-                index={index}
-                onClick={() => setSelectedMarker(index)}
-                isClicked={selectedMarker === index}
-                info={info}
-              />
+              <EventMarker marker={marker} info={info} setInfo={setInfo} />
             ) : (
               <MapMarker
                 key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
