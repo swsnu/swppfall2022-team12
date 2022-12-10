@@ -64,11 +64,11 @@ function MainPage() {
               {courseState.recommendedCourses.map((set) => {
                 const tagContent = set.tag;
                 const coursesData = set.courses;
-                if (coursesData.length === 0) return;
+                if (coursesData.length === 0) return <div style={{ height: '100%' }} />;
                 return (
                   <div
                     style={{
-                      height: '450px',
+                      height: '350px',
                       width: '90%',
                       display: 'flex',
                       flexDirection: 'column',

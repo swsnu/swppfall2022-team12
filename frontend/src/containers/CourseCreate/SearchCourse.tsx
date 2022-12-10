@@ -242,6 +242,7 @@ export default function SearchCourse() {
   };
 
   useEffect(() => {
+    // setLoading(false);
     if (!map) return;
     if (preview) {
       if (selected.length < 3) {
