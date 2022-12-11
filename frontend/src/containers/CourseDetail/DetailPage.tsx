@@ -182,12 +182,12 @@ export default function CourseDetail() {
       >
         <div style={{ margin: '30px 30px 0 30px' }}>
           <div>
-            <h2 style={{ margin: '5px 0' }}>{title}</h2>
+            <h2 style={{ margin: '10px 0' }}>{title}</h2>
             <span style={{ color: '#0074CC' }}>{author}</span>
             <span style={{ color: '#838C95' }}> {formatDate(createdAt).slice(0, 10)}</span>
           </div>
           {tags.length > 0 ? (
-            <div className="Tags" style={{ height: '30px' }}>
+            <div className="Tags" style={{ margin: '10px 10px' }}>
               {tags.map((tag, idx) => (
                 <Tag color={TagColor[TagColor.length % idx]}>{tag}</Tag>
               ))}
@@ -196,8 +196,13 @@ export default function CourseDetail() {
             <p />
           )}
           <h6 style={{ margin: '5px' }}>{usageCounts} 명이 이 코스를 방문했어요!</h6>
-          <h6 style={{ margin: '0' }}>
-            <MuiRating rate={rating} /> {rating} 점({rateNum}명이 평가했어요)
+          <h6
+            style={{ margin: '0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            <MuiRating rate={rating} />{' '}
+            <span style={{ marginLeft: '5px' }}>
+              {rating} 점({rateNum}명이 평가했어요)
+            </span>
           </h6>
           <div style={{ margin: '30px 20px', height: '100%' }}>
             <p>{description}</p>
