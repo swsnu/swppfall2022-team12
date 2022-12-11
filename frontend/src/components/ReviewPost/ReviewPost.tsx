@@ -45,6 +45,7 @@ export default function ReviewPost(prop: ReviewPostProp) {
         {clicked.map((currBoolean, idx) => {
           return (
             <FaStar
+              key={`${currBoolean}-${Math.random()}`}
               data-testid="star"
               size="30"
               onClick={() => {

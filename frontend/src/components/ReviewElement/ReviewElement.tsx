@@ -118,7 +118,11 @@ export default function ReviewElement(prop: ReviewProp) {
         >
           <div className="stars">
             {ARRAY.map((elem, idx) => (
-              <FaStar size="18" color={prop.rate >= idx + 1 ? '#FFC000' : 'lightgray'} />
+              <FaStar
+                key={elem + Math.random()}
+                size="18"
+                color={prop.rate >= idx + 1 ? '#FFC000' : 'lightgray'}
+              />
             ))}
           </div>
           <div style={{ display: 'flex', gap: '5px', marginLeft: '10px' }}>

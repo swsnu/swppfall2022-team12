@@ -25,11 +25,10 @@ export default function PostCourse() {
   const [markers, setMarkers] = useState<MarkerProps[]>([]);
   const [path, setPath] = useState<PositionProps[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [tagsToSubmit, setTagsToSubmit] = useState<number[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const tags = useSelector(selectTag);
+  const tagList = useSelector(selectTag);
 
   const { state } = useLocation();
 
@@ -71,6 +70,15 @@ export default function PostCourse() {
     if (markers) map?.setBounds(mapBounds, 200, 0, 50, 500);
   }, [markers]);
 
+  const handleChange = (tags: string[]) => {
+    setSelectedTags(tags);
+  };
+
+  const handleClose = (tag: string) => {
+    const removed = selectedTags.filter((item) => item !== tag);
+    setSelectedTags(removed);
+  };
+
   const handleSubmitCourse = async (e: React.MouseEvent<HTMLElement>) => {
     if (title.length === 0 || title.length > 100) {
       toast.warning('제목을 100 이하로 작성해주세요');
@@ -80,13 +88,7 @@ export default function PostCourse() {
       return;
     }
     e.preventDefault();
-    setTagsToSubmit(
-      selectedTags.map((st) => {
-        return tags.tags.find((t) => {
-          return t.content === st;
-        })?.id!;
-      }),
-    );
+    const finalTags = selectedTags.map((tag) => tagList.tags.find((t) => t.content === tag)?.id!);
     const data = {
       title,
       description,
@@ -95,7 +97,7 @@ export default function PostCourse() {
       distance,
       path,
       markers,
-      tags: tagsToSubmit,
+      tags: finalTags,
     };
     try {
       await axios.put(`/api/course/${id}/`, data, {
@@ -109,16 +111,6 @@ export default function PostCourse() {
     // if (result.type === `${postCourse.typePrefix}/fulfilled`) {
     //   navigate('/courses');
     // }
-  };
-
-  const handleChange = (tag: string) => {
-    setSelectedTags([...selectedTags, tag]);
-    setTagsToSubmit([
-      ...tagsToSubmit,
-      tags.tags.find((t) => {
-        return t.content === tag;
-      })?.id!,
-    ]);
   };
 
   return (
@@ -184,8 +176,8 @@ export default function PostCourse() {
               onChange={handleChange}
               style={{ width: '100%' }}
             >
-              {tags.tags.map((item) => (
-                <Select.Option key={item.id} value={item.content}>
+              {tagList.tags.map((item) => (
+                <Select.Option key={item.id} value={item.content} onClose={handleClose}>
                   {item.content}
                 </Select.Option>
               ))}

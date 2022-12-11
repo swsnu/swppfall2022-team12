@@ -1,4 +1,5 @@
 import { Button, Card, CardContent, Typography } from '@mui/material';
+import { Badge } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -68,28 +69,24 @@ function MainPage() {
                 return (
                   <div
                     style={{
-                      height: '350px',
                       width: '90%',
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'flex-start',
-                      margin: '10px',
+                      margin: '20px',
                     }}
                   >
                     <h3>{tagContent} 코스 추천</h3>
                     <div
                       style={{
                         display: 'flex',
-                        flexDirection: 'row',
                         overflowX: 'auto',
-                        height: '300px',
                       }}
                     >
                       {coursesData.map((course) => {
                         return (
                           <div
                             style={{
-                              height: '220px',
                               width: '275px',
                               marginRight: '20px',
                             }}
@@ -98,21 +95,41 @@ function MainPage() {
                             <Card
                               variant="outlined"
                               sx={{
-                                minHeight: '100%',
                                 minWidth: '100%',
+                                borderRadius: '8px',
                                 ':hover': {
                                   boxShadow: '0 0 11px rgba(33,33,33,.2)',
                                 },
                               }}
                             >
-                              <CardContent style={{ height: '140px' }}>
+                              <CardContent
+                                style={{
+                                  height: '130px',
+                                  flexDirection: 'column',
+                                  justifyContent: 'space-between',
+                                }}
+                              >
                                 <Typography variant="subtitle1">{course.title}</Typography>
-                                <Typography mt={2} mb={2} variant="body1">
-                                  {course.u_counts}번 이용됨
+                                <Typography
+                                  mt={2}
+                                  mb={2}
+                                  variant="body1"
+                                  style={{ display: 'flex', justifyContent: 'center', gap: '5px' }}
+                                >
+                                  이용 횟수{' '}
+                                  <Badge
+                                    className="site-badge-count-109"
+                                    count={course.u_counts}
+                                    showZero
+                                    style={{ backgroundColor: '#52C41A' }}
+                                  />
                                 </Typography>
                                 <MuiRating rate={course.rate} />
                               </CardContent>
-                              <Button onClick={() => onClickCourseDetail(course.id)}>
+                              <Button
+                                style={{ marginBottom: '10px' }}
+                                onClick={() => onClickCourseDetail(course.id)}
+                              >
                                 코스 보기
                               </Button>
                             </Card>
