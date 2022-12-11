@@ -211,7 +211,7 @@ export default function CourseDetail() {
           <div className="site-card-wrapper">
             <div
               className="info"
-              style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}
+              style={{ display: 'flex', gap: '20px', justifyContent: 'center' }}
             >
               <p>
                 <strong>예상 소요 시간</strong> :{' '}
