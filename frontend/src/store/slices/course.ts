@@ -125,6 +125,16 @@ export const postCourse = createAsyncThunk(
   },
 );
 
+export const deleteCourse = createAsyncThunk(
+  'course/deleteCourse',
+  async (id: CourseType['id']) => {
+    await axios.delete<CourseType>(`/api/course/${id}/`, {
+      headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+    });
+    return id;
+  },
+);
+
 export const fetchPathFromTMap = createAsyncThunk(
   'course/fetchCoursePath',
   async (markers: MarkerProps[]) => {
@@ -204,6 +214,10 @@ export const courseSlice = createSlice({
     builder.addCase(postCourse.fulfilled, (state, action) => {
       state.courses.push(action.payload);
       state.selectedCourse = action.payload;
+    });
+    builder.addCase(deleteCourse.fulfilled, (state, action) => {
+      const deleted = state.courses.filter((course) => course.id !== action.payload);
+      state.courses = deleted;
     });
     builder.addCase(fetchPathFromTMap.fulfilled, (state, action) => {
       state.tMapCourse.tMapData = action.payload.properties;

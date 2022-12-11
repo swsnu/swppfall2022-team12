@@ -1,12 +1,19 @@
-import { Button, Divider, Select, Tag, List } from 'antd';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { Button, Divider, Select, Tag, List, Modal } from 'antd';
 import axios from 'axios';
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import KakaoMap from '../../components/Map/KakaoMap';
 import MuiRating from '../../components/MuiRate/MuiRating';
 import ReviewElement, { formatDate } from '../../components/ReviewElement/ReviewElement';
 import ReviewPost from '../../components/ReviewPost/ReviewPost';
+import { AppDispatch } from '../../store';
+import { deleteCourse } from '../../store/slices/course';
 import { MarkerProps, PositionProps } from '../CourseCreate/SearchCourse';
 
 const ReviewFilters = [
@@ -40,9 +47,7 @@ type ReviewProps = {
 };
 
 export default function CourseDetail() {
-  const navigate = useNavigate();
-
-  const { id } = useParams(); // get the id of the course
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [info, setInfo] = useState<MarkerProps | null>(null);
   const [markers, setMarkers] = useState<MarkerProps[]>([]);
   const [path, setPath] = useState<PositionProps[]>([]);
@@ -61,6 +66,11 @@ export default function CourseDetail() {
   const [distance, setDistance] = useState<number>(0);
   const [reviewList, setReviewList] = useState<ReviewProps[]>([]);
   const [reviewState, setReviewState] = useState<string>('');
+
+  const { id } = useParams(); // get the id of the course
+
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get(`/api/course/${id}/`).then((res) => {
@@ -139,20 +149,51 @@ export default function CourseDetail() {
     if (state) setReviewState(state.label);
   };
 
+  const handleDelete = async () => {
+    if (id) {
+      const result = await dispatch(deleteCourse(Number(id)));
+      if (result.type === `${deleteCourse.typePrefix}/fulfilled`) {
+        navigate('/courses');
+      } else {
+        toast.error('코스 삭제에 실패했습니다');
+      }
+    }
+  };
+
+  const ModalTitle = useCallback(
+    () => (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <ErrorOutlineIcon sx={{ color: '#e64a4a' }} fontSize="large" />
+        코스를 삭제하시겠습니까?
+      </div>
+    ),
+    [],
+  );
+
   return (
     <div style={{ display: 'flex' }}>
-      <div
-        className="buttons"
-        style={{
-          zIndex: 1,
-          position: 'fixed',
-          right: '10px',
-          margin: '10px',
-        }}
-      >
-        {author === window.sessionStorage.getItem('username') && (
+      <Modal
+        title={<ModalTitle />}
+        open={isModalOpen}
+        cancelText="닫기"
+        onCancel={() => setIsModalOpen(false)}
+        okText="삭제"
+        okButtonProps={{ danger: true }}
+        onOk={handleDelete}
+      />
+      {author === window.sessionStorage.getItem('username') && (
+        <div
+          className="buttons"
+          style={{
+            zIndex: 1,
+            position: 'fixed',
+            right: '10px',
+            margin: '10px',
+          }}
+        >
           <Button
             style={{
+              marginRight: 15,
               height: 50,
               boxShadow:
                 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
@@ -162,10 +203,30 @@ export default function CourseDetail() {
               navigate(`/course/edit-search/${id}/`);
             }}
           >
-            <h4 style={{ margin: 0 }}>경로 수정</h4>
+            <h4 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '5px' }}>
+              수정
+              <EditIcon fontSize="small" />
+            </h4>
           </Button>
-        )}
-      </div>
+          <Button
+            danger
+            style={{
+              height: 50,
+              boxShadow:
+                'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
+            }}
+            size="large"
+            onClick={() => {
+              setIsModalOpen(true);
+            }}
+          >
+            <h4 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '5px' }}>
+              삭제
+              <DeleteIcon fontSize="small" />
+            </h4>
+          </Button>
+        </div>
+      )}
       <div
         className="Container"
         style={{
