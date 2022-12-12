@@ -26,13 +26,12 @@ const style = {
 };
 
 export default function TagSelectPopup(prop: TagPopupProp) {
-  const dispatch = useDispatch<AppDispatch>();
+  // const dispatch = useDispatch<AppDispatch>();
   const tagState = useSelector(selectTag);
 
   const existing = JSON.parse(window.sessionStorage.getItem('tags') ?? '[]');
 
   const [selectedTags, setSelectedTags] = useState<TagType['id'][]>(existing);
-  // const [open, setOpen] = useState<boolean>(prop.toOpen);
   const { toOpen, openHandler } = prop;
 
   const onCloseModal = () => {
@@ -85,7 +84,6 @@ export default function TagSelectPopup(prop: TagPopupProp) {
                 return isSelected ? (
                   <Chip
                     label={tag.content}
-                    onClick={() => onClickTag(tag.id)}
                     onDelete={() => onDeleteTag(tag.id)}
                     variant="outlined"
                   />
