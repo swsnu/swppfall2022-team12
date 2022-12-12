@@ -17,7 +17,6 @@ export interface CourseType {
   category: string | null;
   created_at: string;
   rate: number;
-  // f_count: number;
   u_counts: number;
   e_time: number;
   distance: number;
