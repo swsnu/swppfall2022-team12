@@ -21,14 +21,15 @@ import random
 from datetime import datetime, timedelta
 from collections import Counter
 
+
 class UserViewSet(viewsets.GenericViewSet):
-    
+
     queryset = User.objects.all()
     permission_classes = []
     serializer_class = UserLoginSerializer
-    
+
     @csrf_exempt
-    @action(methods=['POST'], detail=False)
+    @action(methods=["POST"], detail=False)
     @transaction.atomic
     def signup(self, request):
         serializer = UserCreateSerializer(data=request.data)
@@ -36,42 +37,43 @@ class UserViewSet(viewsets.GenericViewSet):
         user = serializer.save()
         login(request, user)
         return Response(self.get_serializer(user).data, status=status.HTTP_201_CREATED)
-    
+
     @transaction.atomic
-    @action(methods=['PUT'], detail=False)
+    @action(methods=["PUT"], detail=False)
     def tags(self, request, pk=None):
-        tags_ = request.data.get('tags', [])
+        tags_ = request.data.get("tags", [])
         tags = list(Tag.objects.filter(id__in=tags_))
         request.user.tags.set(tags)
-        return Response(self.get_serializer(request.user).data, status=status.HTTP_200_OK)
-    
+        return Response(
+            self.get_serializer(request.user).data, status=status.HTTP_200_OK
+        )
+
     @csrf_exempt
-    @action(methods=['PUT'], detail=False)
+    @action(methods=["PUT"], detail=False)
     @transaction.atomic
     def login(self, request):
         data = request.data
         user = authenticate(
-			request, 
-			email=data.get('email', ""), 
-			password=data.get('password', ""))
+            request, email=data.get("email", ""), password=data.get("password", "")
+        )
         if user is not None:
-          login(request, user)
-          return Response(self.get_serializer(user).data, status=status.HTTP_200_OK)
+            login(request, user)
+            return Response(self.get_serializer(user).data, status=status.HTTP_200_OK)
         else:
-          raise AuthentificationFailed()
-    
+            raise AuthentificationFailed()
+
     @csrf_exempt
-    @action(methods=['GET'], detail=False)
+    @action(methods=["GET"], detail=False)
     def logout(self, request):
         if request.user.is_authenticated:
             logout(request)
             response = Response(status=status.HTTP_204_NO_CONTENT)
-            response.delete_cookie('refreshtoken')
+            response.delete_cookie("refreshtoken")
             return response
         else:
             raise AnonymousError
-        
-    @action(methods=['GET'], detail=False)
+
+    @action(methods=["GET"], detail=False)
     def recommend(self, request):
         category = request.query_params.get("category", DRIVE)
         user = request.user
@@ -82,32 +84,39 @@ class UserViewSet(viewsets.GenericViewSet):
         if user.is_anonymous or len(tags) == 0:
             tags = list(Tag.objects.all())
             random.shuffle(tags)
-            tags = tags[:3]            
-        
+            tags = tags[:3]
+
         for tag in tags:
             response.append(
                 {
                     "tag": tag.content,
-                    "courses": CourseListSerializer(tag.courses.filter(category=category).all(), many=True).data
+                    "courses": CourseListSerializer(
+                        tag.courses.filter(category=category).all(), many=True
+                    ).data,
                 }
             )
         if user.is_authenticated:
             now = datetime.now()
             before = (now - timedelta(hours=2)).hour
             after = (now + timedelta(hours=2)).hour
-            recommends = Counter(list(History.objects.filter(
-                    hours__lte=after, 
-                    hours__gte=before, 
-                    user__ages=user.ages, 
-                    user__gender=user.gender)\
-                        .values_list('course', flat=True)))\
-                        .most_common()
+            recommends = Counter(
+                list(
+                    History.objects.filter(
+                        hours__lte=after,
+                        hours__gte=before,
+                        user__ages=user.ages,
+                        user__gender=user.gender,
+                    ).values_list("course", flat=True)
+                )
+            ).most_common()
 
             response.append(
                 {
                     "tag": "recommend",
-                    "courses": CourseListSerializer(list(map(lambda x: Course.objects.get(id=x[0]), recommends)), many=True).data
+                    "courses": CourseListSerializer(
+                        list(map(lambda x: Course.objects.get(id=x[0]), recommends)),
+                        many=True,
+                    ).data,
                 }
             )
         return Response(response, status=status.HTTP_200_OK)
-

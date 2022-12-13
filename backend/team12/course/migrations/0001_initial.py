@@ -10,38 +10,70 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('tag', '__first__'),
+        ("tag", "__first__"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Course',
+            name="Course",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('category', models.CharField(choices=[('drive', 'drive'), ('bike', 'bike'), ('walk', 'walk')], default='drive', max_length=10)),
-                ('title', models.CharField(blank=True, max_length=100)),
-                ('description', models.CharField(blank=True, max_length=1000)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('u_counts', models.PositiveIntegerField(default=0)),
-                ('e_time', models.PositiveIntegerField(default=0)),
-                ('distance', models.PositiveIntegerField(default=0)),
-                ('rate', models.PositiveSmallIntegerField(default=0)),
-                ('author', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-                ('tag', models.ManyToManyField(to='tag.tag')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "category",
+                    models.CharField(
+                        choices=[
+                            ("drive", "drive"),
+                            ("bike", "bike"),
+                            ("walk", "walk"),
+                        ],
+                        default="drive",
+                        max_length=10,
+                    ),
+                ),
+                ("title", models.CharField(blank=True, max_length=100)),
+                ("description", models.CharField(blank=True, max_length=1000)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("u_counts", models.PositiveIntegerField(default=0)),
+                ("e_time", models.PositiveIntegerField(default=0)),
+                ("distance", models.PositiveIntegerField(default=0)),
+                ("rate", models.PositiveSmallIntegerField(default=0)),
+                (
+                    "author",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                ("tag", models.ManyToManyField(to="tag.tag")),
             ],
         ),
         migrations.CreateModel(
-            name='Point',
+            name="Point",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('category', models.CharField(choices=[('path', 'path'), ('marker', 'marker')], default='marker', max_length=10)),
-                ('name', models.CharField(blank=True, max_length=50)),
-                ('image', models.CharField(blank=True, max_length=100)),
-                ('longitude', models.FloatField(blank=True, max_length=30)),
-                ('latitude', models.CharField(blank=True, max_length=30)),
-                ('idx', models.SmallIntegerField()),
-                ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='points', to='course.course')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "category",
+                    models.CharField(
+                        choices=[("path", "path"), ("marker", "marker")],
+                        default="marker",
+                        max_length=10,
+                    ),
+                ),
+                ("name", models.CharField(blank=True, max_length=50)),
+                ("image", models.CharField(blank=True, max_length=100)),
+                ("longitude", models.FloatField(blank=True, max_length=30)),
+                ("latitude", models.CharField(blank=True, max_length=30)),
+                ("idx", models.SmallIntegerField()),
+                (
+                    "course",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="points",
+                        to="course.course",
+                    ),
+                ),
             ],
         ),
     ]

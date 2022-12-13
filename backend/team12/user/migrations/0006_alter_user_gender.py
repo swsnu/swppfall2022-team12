@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user', '0005_user_birth_user_gender'),
+        ("user", "0005_user_birth_user_gender"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='user',
-            name='gender',
-            field=models.CharField(blank=True, choices=[('male', 'M'), ('female', 'F')], max_length=10),
+            model_name="user",
+            name="gender",
+            field=models.CharField(
+                blank=True, choices=[("male", "M"), ("female", "F")], max_length=10
+            ),
         ),
     ]
