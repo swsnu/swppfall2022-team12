@@ -27,12 +27,12 @@ export default function Header() {
       .get('/user/logout/', {
         headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
       })
-      .then((response) => {
+      .then(() => {
         window.sessionStorage.clear();
         navigate('/main');
       })
       .catch((error) => {
-        alert(error.response.data.detail);
+        toast.error(error.response.data.detail);
         navigate('/main');
       });
   };

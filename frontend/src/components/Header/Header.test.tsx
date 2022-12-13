@@ -5,14 +5,6 @@ import { renderWithProviders } from '../../test-utils/mocks';
 import Header from './Header';
 
 const mockNavigate = jest.fn();
-// jest.mock('react-router', () => ({
-//   ...jest.requireActual('react-router'),
-//   Navigate: (props: any) => {
-//     mockNavigate(props.to);
-//     return null;
-//   },
-//   useNavigate: () => mockNavigate,
-// }));
 jest.mock('react-router', () => ({
   ...jest.requireActual('react-router'),
   useNavigate: () => mockNavigate,

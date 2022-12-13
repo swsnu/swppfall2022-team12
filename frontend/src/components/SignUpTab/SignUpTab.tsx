@@ -20,8 +20,6 @@ export default function SignUpTab() {
   const emailInputRef = useRef<HTMLInputElement>(null);
   const pwInputRef1 = useRef<HTMLInputElement>(null);
   const pwInputRef2 = useRef<HTMLInputElement>(null);
-  const ageInputRef = useRef<HTMLInputElement>(null);
-  const genderInputRef = useRef<HTMLInputElement>(null);
 
   const [usernameInput, setUsernameInput] = useState<string>('');
   const [emailInput, setEmailInput] = useState<string>('');
