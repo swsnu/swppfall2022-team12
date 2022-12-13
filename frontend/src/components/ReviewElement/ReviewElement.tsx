@@ -2,7 +2,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { IconButton } from '@mui/material';
-import { List, Input, Button } from 'antd';
+import { List, Input, Button, Col, Row } from 'antd';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { FaStar } from 'react-icons/fa';
@@ -50,7 +50,7 @@ export default function ReviewElement(prop: ReviewProp) {
   }, [edit]);
 
   return (
-    <List.Item>
+    <List.Item style={{ padding: '20px 0' }}>
       {edit ? (
         <div
           style={{
@@ -108,15 +108,8 @@ export default function ReviewElement(prop: ReviewProp) {
           <Button onClick={() => setEdit(false)}>취소</Button>
         </div>
       ) : (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            width: '100%',
-          }}
-        >
-          <div className="stars">
+        <Row style={{ display: 'flex', alignItems: 'center' }}>
+          <Col className="stars" flex={2}>
             {ARRAY.map((elem, idx) => (
               <FaStar
                 key={elem + Math.random()}
@@ -124,19 +117,29 @@ export default function ReviewElement(prop: ReviewProp) {
                 color={prop.rate >= idx + 1 ? '#FFC000' : 'lightgray'}
               />
             ))}
-          </div>
-          <div style={{ display: 'flex', gap: '5px', marginLeft: '10px' }}>
-            <div className="content" style={{ overflowWrap: 'break-word', display: 'inline' }}>
-              {prop.content}
-            </div>
+          </Col>
+          <Col
+            style={{
+              gap: '5px',
+              marginLeft: '10px',
+              marginRight: '10px',
+              overflowWrap: 'break-word',
+              display: 'inline',
+              width: '250px',
+            }}
+          >
+            {prop.content}
+          </Col>
+          <Col style={{ width: '60px', marginRight: '20px' }}>
             <div className="author" style={{ color: '#0074CC' }}>
-              {prop.author}
+              {prop.author}{' '}
             </div>
             <div className="created_at" style={{ color: '#838C95' }}>
               {formatDate(prop.created_at)}
             </div>
-          </div>
-          <div className="likes" style={{ display: 'flex', alignItems: 'center' }}>
+          </Col>
+
+          <Col className="likes" style={{ display: 'flex', alignItems: 'center' }} flex={2}>
             <IconButton
               style={{ color: 'red', padding: '5px' }}
               onClick={() => {
@@ -158,9 +161,9 @@ export default function ReviewElement(prop: ReviewProp) {
               <FavoriteIcon fontSize="small" />
             </IconButton>
             <p style={{ fontSize: '16px', margin: 0 }}>{prop.likes}</p>
-          </div>
+          </Col>
           {prop.author === window.sessionStorage.getItem('username') ? (
-            <div>
+            <Col flex={2}>
               <IconButton
                 onClick={() => {
                   if (prop.author === window.sessionStorage.getItem('username')) {
@@ -193,11 +196,11 @@ export default function ReviewElement(prop: ReviewProp) {
               >
                 <DeleteIcon fontSize="small" />
               </IconButton>
-            </div>
+            </Col>
           ) : (
             <div />
           )}
-        </div>
+        </Row>
       )}
     </List.Item>
   );
