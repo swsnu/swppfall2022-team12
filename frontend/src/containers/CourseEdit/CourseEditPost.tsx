@@ -48,14 +48,6 @@ export default function PostCourse() {
     setDistance(Number((state.resultData.totalDistance / 1000).toFixed(1)));
     setFare(Number(state.resultData.totalFare));
     dispatch(fetchTags());
-    // axios
-    //   .get(`/api/course/${id}/`, {
-    //     headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
-    //   })
-    //   .then((res) => {
-    //     // tag fetch
-    //     setSelectedTags(res.data.tags);
-    //   });
   }, []);
 
   const mapBounds = useMemo(() => {

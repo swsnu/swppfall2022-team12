@@ -67,7 +67,7 @@ export default function TagSelectPopup(prop: TagPopupProp) {
             <Stack direction="row" spacing={1}>
               {tagState.tags.map((tag: TagType) => {
                 return selectedTags.includes(tag.id) ? (
-                  <Chip label={tag.content} color="primary" variant="outlined" />
+                  <Chip key={tag.id} label={tag.content} color="primary" variant="outlined" />
                 ) : null;
               })}
             </Stack>
@@ -79,13 +79,19 @@ export default function TagSelectPopup(prop: TagPopupProp) {
                 const isSelected = selectedTags.includes(tag.id);
                 return isSelected ? (
                   <Chip
+                    key={tag.id}
                     label={tag.content}
                     onClick={() => onClickTag(tag.id)}
                     onDelete={() => onDeleteTag(tag.id)}
                     variant="outlined"
                   />
                 ) : (
-                  <Chip label={tag.content} onClick={() => onClickTag(tag.id)} variant="outlined" />
+                  <Chip
+                    key={tag.id}
+                    label={tag.content}
+                    onClick={() => onClickTag(tag.id)}
+                    variant="outlined"
+                  />
                 );
               })}
             </Stack>
