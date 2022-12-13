@@ -1,6 +1,5 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import axios from 'axios';
-import { toast } from 'react-toastify';
 
 import { renderWithProviders } from '../../test-utils/mocks';
 import Header from './Header';
@@ -46,7 +45,6 @@ describe('<Header />', () => {
   });
 
   it("should handle onClickLogout when logged in", async () => {
-    // axios.get = jest.fn().mockResolvedValue({status : 204});
     jest.spyOn(axios, 'get').mockImplementation(() => {
       return Promise.resolve({ status: 204 });
     })
@@ -65,7 +63,6 @@ describe('<Header />', () => {
     jest.spyOn(axios, 'get').mockImplementation(() => {
       return Promise.reject({response: { data: { detail: "error-test" } } });
     });
-    // jest.spyOn(toast, 'error').mockImplementation(() => {});
     window.sessionStorage.setItem('access', 'test-jwt');
     
     renderWithProviders(<Header />);

@@ -2,7 +2,6 @@ import { getByRole, fireEvent, render, screen, waitFor } from '@testing-library/
 import userEvent from '@testing-library/user-event';
 import axios from 'axios';
 import React from 'react';
-import { Provider } from 'react-redux';
 
 import SignUpTab from './SignUpTab';
 
@@ -165,7 +164,7 @@ describe('<SignUpTab />', () => {
     axios.post = jest.fn().mockRejectedValue({
       response: {
         data: {
-          password: 'password-test-error-message',
+          password: 'password-test-error-message', //sensitive
         },
       },
     });

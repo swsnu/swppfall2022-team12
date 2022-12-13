@@ -90,7 +90,7 @@ export default function LoginTab() {
           />
         </FormControl>
       </div>
-      <Button size="medium" onClick={onClickLogin}>
+      <Button size="medium" onClick={() => onClickLogin()}>
         로그인
       </Button>
     </div>

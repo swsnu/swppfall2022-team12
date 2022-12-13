@@ -1,8 +1,6 @@
-import { accordionSummaryClasses } from '@mui/material';
 import { AnyAction, configureStore, EnhancedStore } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { ThunkMiddleware } from 'redux-thunk';
-import { getMockStore } from '../../test-utils/mocks';
 import reducer, { fetchTags, TagState, TagType } from './tag';
 
 describe('tag reducer', () => {

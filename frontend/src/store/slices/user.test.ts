@@ -1,7 +1,5 @@
-import { accordionSummaryClasses } from '@mui/material';
 import { AnyAction, configureStore, EnhancedStore } from '@reduxjs/toolkit';
 import { ThunkMiddleware } from 'redux-thunk';
-import { getMockStore } from '../../test-utils/mocks';
 import reducer, { UserState } from './user';
 
 describe("user reducer", () => {

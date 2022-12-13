@@ -85,7 +85,6 @@ jest.mock('react-router', () => ({
 
 describe('<MainPage />', () => {
   it('should render without errors before login', () => {
-    // window.sessionStorage.setItem('username', 'test-user');
     render(<Provider store={mockStore}><MainPage /></Provider>);
     screen.getByText('나만의 코스 만들기');
     screen.getByText('로 떠나기');
