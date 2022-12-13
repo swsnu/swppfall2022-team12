@@ -46,12 +46,11 @@ class ReviewTestCase(TestCase):
             5) ['course'] fields missing.
         """
         # 1) create success.
-        # TODO: user_token -> stranger_token
         before_rate = self.course.rate
         response = self.client.post(
             "/api/review/",
             data=self.post_data,
-            HTTP_AUTHORIZATION=self.user_token,
+            HTTP_AUTHORIZATION=self.stranger_token,
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -62,13 +61,13 @@ class ReviewTestCase(TestCase):
         self.course.refresh_from_db()
         self.assertNotEqual(before_rate, self.course.rate)
 
-        # # 2) author can't create review.
-        # response = self.client.post(
-        #     '/api/review/',
-        #     data=self.post_data,
-        #     HTTP_AUTHORIZATION = self.user_token,
-        #     content_type="application/json")
-        # self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        # 2) author can't create review.
+        response = self.client.post(
+            '/api/review/',
+            data=self.post_data,
+            HTTP_AUTHORIZATION = self.user_token,
+            content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         # 3) course not found.
         wrong_data = self.post_data.copy()
@@ -76,7 +75,7 @@ class ReviewTestCase(TestCase):
         response = self.client.post(
             "/api/review/",
             data=wrong_data,
-            HTTP_AUTHORIZATION=self.user_token,
+            HTTP_AUTHORIZATION=self.stranger_token,
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -87,7 +86,7 @@ class ReviewTestCase(TestCase):
         response = self.client.post(
             "/api/review/",
             data=wrong_data,
-            HTTP_AUTHORIZATION=self.user_token,
+            HTTP_AUTHORIZATION=self.stranger_token,
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -98,7 +97,7 @@ class ReviewTestCase(TestCase):
         response = self.client.post(
             "/api/review/",
             data={"rate": 5, "content": "test content"},
-            HTTP_AUTHORIZATION=self.user_token,
+            HTTP_AUTHORIZATION=self.stranger_token,
             content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
