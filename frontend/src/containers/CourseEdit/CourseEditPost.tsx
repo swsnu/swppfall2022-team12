@@ -40,6 +40,7 @@ export default function PostCourse() {
       .then((res) => {
         setTitle(res.data.title);
         setDescription(res.data.description);
+        setSelectedTags(res.data.tags);
       });
     setMarkers(state.selected);
     setPath(state.path);
@@ -47,14 +48,6 @@ export default function PostCourse() {
     setDistance(Number((state.resultData.totalDistance / 1000).toFixed(1)));
     setFare(Number(state.resultData.totalFare));
     dispatch(fetchTags());
-    axios
-      .get(`/api/course/${id}/`, {
-        headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
-      })
-      .then((res) => {
-        // tag fetch
-        setSelectedTags(res.data.tags);
-      });
   }, []);
 
   const mapBounds = useMemo(() => {
@@ -173,6 +166,7 @@ export default function PostCourse() {
             <Select
               mode="tags"
               placeholder="태그를 선택해주세요"
+              value={selectedTags}
               onChange={handleChange}
               style={{ width: '100%' }}
             >

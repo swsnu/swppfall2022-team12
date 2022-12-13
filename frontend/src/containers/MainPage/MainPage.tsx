@@ -65,9 +65,11 @@ function MainPage() {
               {courseState.recommendedCourses.map((set) => {
                 const tagContent = set.tag;
                 const coursesData = set.courses;
-                if (coursesData.length === 0) return <div style={{ height: '100%' }} />;
+                if (coursesData.length === 0)
+                  return <div key={set.tag} style={{ height: '100%' }} />;
                 return (
                   <div
+                    key={set.tag}
                     style={{
                       width: '90%',
                       display: 'flex',
@@ -86,11 +88,11 @@ function MainPage() {
                       {coursesData.map((course) => {
                         return (
                           <div
+                            key={`recommended-course-${course.id}`}
                             style={{
                               width: '275px',
                               marginRight: '20px',
                             }}
-                            key={`recommended-course-${course.id}`}
                           >
                             <Card
                               variant="outlined"
