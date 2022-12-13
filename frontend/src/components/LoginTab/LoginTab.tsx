@@ -4,7 +4,6 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 
-import Logo from '../../img/Logo';
 import { TagType } from '../../store/slices/tag';
 
 export interface LoginResponseType {
@@ -51,52 +50,49 @@ export default function LoginTab() {
   };
 
   return (
-    <>
-      <div role="button" tabIndex={0} onClick={() => navigate('/main')}>
-        <Logo />
-      </div>
+    <div
+      id="login-tab"
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap: '1em',
+      }}
+    >
       <div
-        id="login-tab"
+        className="login-input"
         style={{
           display: 'flex',
-          flexDirection: 'row',
+          flexDirection: 'column',
           justifyContent: 'center',
         }}
       >
-        <div
-          className="login-input"
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            marginLeft: '30px',
-          }}
-        >
-          <FormControl variant="outlined" margin="normal">
-            <InputLabel htmlFor="login-email-input">Email</InputLabel>
-            <OutlinedInput
-              id="login-email-input"
-              label="Email"
-              type="email"
-              value={emailInput}
-              onChange={(e) => setEmailInput(e.target.value)}
-              inputRef={emailInputRef}
-            />
-          </FormControl>
-          <FormControl variant="outlined">
-            <InputLabel htmlFor="login-pw-input">Password</InputLabel>
-            <OutlinedInput
-              id="login-pw-input"
-              label="Password"
-              type="password"
-              value={passwordInput}
-              onChange={(e) => setPasswordInput(e.target.value)}
-              inputRef={pwInputRef}
-            />
-          </FormControl>
-        </div>
-        <Button onClick={onClickLogin}>로그인</Button>
+        <FormControl variant="outlined" margin="normal">
+          <InputLabel htmlFor="login-email-input">Email</InputLabel>
+          <OutlinedInput
+            id="login-email-input"
+            label="Email"
+            type="email"
+            value={emailInput}
+            onChange={(e) => setEmailInput(e.target.value)}
+            inputRef={emailInputRef}
+          />
+        </FormControl>
+        <FormControl variant="outlined">
+          <InputLabel htmlFor="login-pw-input">Password</InputLabel>
+          <OutlinedInput
+            id="login-pw-input"
+            label="Password"
+            type="password"
+            value={passwordInput}
+            onChange={(e) => setPasswordInput(e.target.value)}
+            inputRef={pwInputRef}
+          />
+        </FormControl>
       </div>
-    </>
+      <Button size="medium" onClick={onClickLogin}>
+        로그인
+      </Button>
+    </div>
   );
 }

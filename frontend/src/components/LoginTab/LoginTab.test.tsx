@@ -35,14 +35,6 @@ describe('<LoginTab />', () => {
     screen.getByText('로그인');
   });
 
-  it('should handle logo', () => {
-    render(<LoginTab />);
-    
-    const logo = screen.getAllByRole('button')[0];
-    fireEvent.click(logo);
-    expect(mockNavigate).toBeCalledWith('/main');
-  });
-
   it('should handle empty input when Login button is clicked', async () => {
     render(<LoginTab />);
     const emailInput = screen.getByLabelText('Email');

@@ -81,6 +81,7 @@ export default function SignUpTab() {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
+        gap: '1em',
       }}
     >
       <div
@@ -89,7 +90,7 @@ export default function SignUpTab() {
           height: '300px',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
         }}
       >
         <FormControl variant="outlined" margin="normal">
@@ -136,7 +137,18 @@ export default function SignUpTab() {
             inputRef={pwInputRef2}
           />
         </FormControl>
-        <FormControl sx={{ minWidth: 150 }} size="small">
+      </div>
+      <div
+        className="signup-input"
+        style={{
+          height: '300px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          gap: '1em',
+        }}
+      >
+        <FormControl sx={{ minWidth: 150 }} size="small" margin="normal">
           <InputLabel id="age-input-label">Age</InputLabel>
           <Select
             data-testid="age-input-testId"
