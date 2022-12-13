@@ -32,8 +32,8 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
             missing_fields.append("course")
         else:
             course = get_object_or_404(Course, id=self.context["course"])
-            # if course.author == self.context['author']:
-            #     raise NotOwner("Author can't create the review.")
+            if course.author == self.context['author']:
+                raise NotOwner("Author can't create the review.")
             data["course"] = course
         if not 0 < data["rate"] < 6:
             raise FieldError("rate must be between 1 and 5.")
