@@ -7,7 +7,9 @@ class IsOwnerOrCreateReadOnly(permissions.BasePermission):
     """
     message = 'Not allowed.'
     def has_permission(self, request, view):
-        return request.user and request.user.is_authenticated
+        if request.method == 'POST':
+            return request.user.is_authenticated
+        return True
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
             return True

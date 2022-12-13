@@ -1,12 +1,9 @@
 import { CloseRounded } from '@mui/icons-material';
 import { Button, Chip, Modal, Stack } from '@mui/material';
-import { styled } from '@mui/material/styles';
-// import { Dispatch } from '@reduxjs/toolkit';
 import axios from 'axios';
-import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, Dispatch, SetStateAction } from 'react';
+import { useSelector } from 'react-redux';
 
-import { AppDispatch } from '../../store';
 import { selectTag, TagType } from '../../store/slices/tag';
 
 interface TagPopupProp {
@@ -26,7 +23,6 @@ const style = {
 };
 
 export default function TagSelectPopup(prop: TagPopupProp) {
-  // const dispatch = useDispatch<AppDispatch>();
   const tagState = useSelector(selectTag);
 
   const existing = JSON.parse(window.sessionStorage.getItem('tags') ?? '[]');
@@ -49,11 +45,11 @@ export default function TagSelectPopup(prop: TagPopupProp) {
   const onComplete = async () => {
     await axios
       .put(
-        '/user/tags/',
+        '/api/user/tags/',
         { tags: selectedTags },
         { headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` } },
       )
-      .then((response) => {
+      .then(() => {
         window.sessionStorage.setItem('tags', JSON.stringify(selectedTags));
         openHandler(false);
       });
@@ -88,12 +84,18 @@ export default function TagSelectPopup(prop: TagPopupProp) {
                 const isSelected = selectedTags.includes(tag.id);
                 return isSelected ? (
                   <Chip
+                    key={tag.id}
                     label={tag.content}
                     onDelete={() => onDeleteTag(tag.id)}
                     variant="outlined"
                   />
                 ) : (
-                  <Chip label={tag.content} onClick={() => onClickTag(tag.id)} variant="outlined" />
+                  <Chip
+                    key={tag.id}
+                    label={tag.content}
+                    onClick={() => onClickTag(tag.id)}
+                    variant="outlined"
+                  />
                 );
               })}
             </Stack>

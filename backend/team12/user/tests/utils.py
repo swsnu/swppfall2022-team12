@@ -31,7 +31,7 @@ class UserFactory(DjangoModelFactory):
         shuffle(test_tags)
         user.tags.set(Tag.objects.filter(id__in=test_tags[:randint(1, 5)]))
         response = self.client.put(
-            '/user/login/', 
+            '/api/user/login/', 
             data={"email": user.email, "password": kwargs.get("password", "12345678")}, 
             content_type="application/json").json()
         return (user, f"Bearer {response['token']['access']}")

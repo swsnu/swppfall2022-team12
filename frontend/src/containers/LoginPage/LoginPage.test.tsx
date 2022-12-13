@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
 
-import { renderWithProviders } from '../../test-utils/mocks';
 import LoginPage from './LoginPage';
 
 const mockNavigate = jest.fn();

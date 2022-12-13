@@ -75,24 +75,15 @@ class UserViewSet(viewsets.GenericViewSet):
     def recommend(self, request):
         category = request.query_params.get("category", DRIVE)
         user = request.user
-        tags = list(user.tags.all())
         response = []
-        if len(tags) == 0:
+        if user.is_authenticated:
+            tags = list(user.tags.all())
+
+        if user.is_anonymous or len(tags) == 0:
             tags = list(Tag.objects.all())
             random.shuffle(tags)
-            tags = tags[:3]
+            tags = tags[:3]            
         
-        now = datetime.now()
-        before = (now - timedelta(hours=2)).hour
-        after = (now + timedelta(hours=2)).hour
-        recommends = Counter(list(History.objects.filter(
-                hours__lte=after, 
-                hours__gte=before, 
-                user__ages=user.ages, 
-                user__gender=user.gender)\
-                    .values_list('course', flat=True)))\
-                    .most_common()
-
         for tag in tags:
             response.append(
                 {
@@ -100,11 +91,23 @@ class UserViewSet(viewsets.GenericViewSet):
                     "courses": CourseListSerializer(tag.courses.filter(category=category).all(), many=True).data
                 }
             )
-        response.append(
-            {
-                "tag": "recommend",
-                "courses": CourseListSerializer(list(map(lambda x: Course.objects.get(id=x[0]), recommends)), many=True).data
-            }
-        )
+        if user.is_authenticated:
+            now = datetime.now()
+            before = (now - timedelta(hours=2)).hour
+            after = (now + timedelta(hours=2)).hour
+            recommends = Counter(list(History.objects.filter(
+                    hours__lte=after, 
+                    hours__gte=before, 
+                    user__ages=user.ages, 
+                    user__gender=user.gender)\
+                        .values_list('course', flat=True)))\
+                        .most_common()
+
+            response.append(
+                {
+                    "tag": "recommend",
+                    "courses": CourseListSerializer(list(map(lambda x: Course.objects.get(id=x[0]), recommends)), many=True).data
+                }
+            )
         return Response(response, status=status.HTTP_200_OK)
 

@@ -14,8 +14,6 @@ jest.mock('react-router', () => ({
 }));
 
 describe('<SearchBox />', () => {
-  beforeAll(() => (console.error = jest.fn()));
-
   it('should render without errors', () => {
     renderWithProviders(<SearchBox searchKey={null} />);
     screen.getByPlaceholderText('Search Courses');

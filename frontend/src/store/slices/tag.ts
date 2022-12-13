@@ -1,6 +1,5 @@
-import { createAsyncThunk, createSlice, isRejected, PayloadAction } from '@reduxjs/toolkit';
-import userEvent from '@testing-library/user-event';
-import axios, { AxiosRequestHeaders } from 'axios';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 import { RootState } from '../index';
 
@@ -20,7 +19,7 @@ const initialTagState: TagState = {
 };
 
 export const fetchTags = createAsyncThunk('tag/fetchTags', async () => {
-  const response = await axios.get<TagType[]>('/tag/');
+  const response = await axios.get<TagType[]>('/api/tag/');
   return response.data;
 });
 
@@ -35,7 +34,6 @@ export const tagSlice = createSlice({
   },
 });
 
-export const tagActions = tagSlice.actions;
 export const selectTag = (state: RootState) => state.tag;
 
 export default tagSlice.reducer;

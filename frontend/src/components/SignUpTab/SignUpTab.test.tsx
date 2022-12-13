@@ -4,24 +4,7 @@ import axios from 'axios';
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import { getMockStore } from '../../test-utils/mocks';
 import SignUpTab from './SignUpTab';
-
-const initialState = {
-  course: {
-    courses: [],
-    selectedCourse: null,
-    tMapData: null,
-    tMapFeatures: [],
-  },
-  user: {
-    users: [],
-    loggedInUser: null,
-    selectedUser: null,
-  },
-};
-
-// const mockStore = getMockStore({ ...initialState });
 
 const mockNavigate = jest.fn();
 jest.mock('react-router', () => ({
@@ -82,7 +65,7 @@ describe('<SignUpTab />', () => {
     fireEvent.click(screen.getByText('60s'));
     expect(screen.getAllByText('60s'));
 
-    
+
     userEvent.click(getByRole(genderInput, 'button'));
     fireEvent.click(screen.getByText('여자'));
     expect(screen.getAllByText('여자'));

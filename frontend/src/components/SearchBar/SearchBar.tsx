@@ -1,9 +1,14 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
-import React, { useState } from 'react';
+import { Input, List, Typography } from 'antd';
+import React, { useRef, useState } from 'react';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
+import { toast } from 'react-toastify';
 
 import { MarkerProps } from '../../containers/CourseCreate/SearchCourse';
+
+const { Search } = Input;
+const { Text } = Typography;
 
 type SearchProps = {
   markers: MarkerProps[];
@@ -27,6 +32,7 @@ export default function SearchBar({
   preview,
 }: SearchProps) {
   const [keyword, setKeyword] = useState('');
+  const homeRef = useRef<HTMLDivElement>(null);
 
   const valueChecker = () => {
     if (keyword === '') {
@@ -34,33 +40,29 @@ export default function SearchBar({
     }
   };
 
-  const submitKeyword = (e: React.MouseEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const submitKeyword = () => {
     if (valueChecker()) {
-      alert('검색어를 입력해주세요.');
+      toast.info('검색어를 입력해주세요.');
     }
     searchPlaces(keyword);
   };
 
-  const grid = 5;
+  const grid = 3;
 
   const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
     // some basic styles to make the items look a bit nicer
     userSelect: 'none',
     padding: grid * 2,
-    margin: `0 0 ${grid}px 0`,
+    margin: `0 10px ${grid}px 10px`,
     listStyle: 'none',
 
     // change background colour if dragging
-    background: isDragging ? 'lightgreen' : 'lightgray',
+    background: isDragging ? '#c0d7fa' : 'white',
+    border: '2px solid #E5EBF2',
+    borderRadius: '10px 10px 10px 10px',
 
     // styles we need to apply on draggables
     ...draggableStyle,
-  });
-
-  const getListStyle = (isDraggingOver: boolean) => ({
-    background: isDraggingOver ? 'lightblue' : 'white',
-    padding: grid,
   });
 
   return (
@@ -68,101 +70,114 @@ export default function SearchBar({
       className="SearchBar"
       style={{
         width: '390px',
+        height: '100vh',
         zIndex: 1,
         backgroundColor: 'white',
+        boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
       }}
     >
-      <h1>Search!</h1>
+      <h2>장소 찾아보기</h2>
       {/* Keyword Input */}
-      <form onSubmit={submitKeyword}>
-        <input
+      <div>
+        <Search
+          size="large"
           placeholder="검색어를 입력해주세요"
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
+          onSearch={submitKeyword}
+          style={{ width: 300 }}
         />
-        <button>검색</button>
-      </form>
+      </div>
 
-      {/* Selected Location List */}
-      <DragDropContext onDragEnd={handleDrag}>
-        <Droppable droppableId="selected">
-          {(provided, snapshot) => (
-            <ul
-              className="selected"
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              style={getListStyle(snapshot.isDraggingOver)}
-            >
-              {selected.map((marker, index) => (
-                <Draggable
-                  key={`${marker.content}`}
-                  draggableId={marker.content}
-                  index={index}
-                  isDragDisabled={preview}
+      <div
+        style={{
+          position: 'relative',
+          height: '85vh',
+          overflow: 'auto',
+        }}
+      >
+        {/* Selected Location List */}
+        <DragDropContext onDragEnd={handleDrag}>
+          <Droppable droppableId="selected">
+            {(provided) => (
+              <div ref={homeRef}>
+                <ul
+                  className="selected"
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                  style={{ padding: 0, listStyle: 'none' }}
                 >
-                  {(item, snapshots) => (
-                    <li
-                      ref={item.innerRef}
-                      {...item.dragHandleProps}
-                      {...item.draggableProps}
-                      style={getItemStyle(snapshots.isDragging, item.draggableProps.style)}
+                  {selected.map((marker, index) => (
+                    <Draggable
+                      key={`${marker.content}`}
+                      draggableId={marker.content}
+                      index={index}
+                      isDragDisabled={preview}
                     >
-                      {marker.content}{' '}
-                      <IconButton
-                        aria-label="delete"
-                        disabled={preview}
-                        onClick={() => removeLocation(marker)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </li>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </ul>
-          )}
-        </Droppable>
-      </DragDropContext>
+                      {(item, snapshots) => (
+                        <li
+                          ref={item.innerRef}
+                          {...item.dragHandleProps}
+                          {...item.draggableProps}
+                          style={getItemStyle(snapshots.isDragging, item.draggableProps.style)}
+                        >
+                          <div
+                            style={{ display: 'flex', justifyContent: 'space-between' }}
+                            onMouseOver={() => setInfo(marker)}
+                            onFocus={() => undefined}
+                            onMouseOut={() => setInfo(null)}
+                            onBlur={() => undefined}
+                          >
+                            <Text
+                              style={{
+                                display: 'inherit',
+                                alignItems: 'center',
+                                paddingLeft: '10px',
+                                fontSize: 15,
+                              }}
+                            >
+                              {marker.content}
+                            </Text>
+                            <IconButton
+                              aria-label="delete"
+                              disabled={preview}
+                              onClick={() => removeLocation(marker)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </div>
+                        </li>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </ul>
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
 
-      {/* Search Result List */}
-      <div className="rst_wrap">
-        <div
-          className="rst mCustomScrollbar"
-          style={{ position: 'relative', overflow: 'auto', height: '100vh' }}
-        >
-          <h2>Route</h2>
-          <div className="title">
-            <strong>Search</strong> Results
+        {/* Search Result List */}
+        <div className="rst_wrap">
+          <div className="rst mCustomScrollbar">
+            <h3>검색 결과</h3>
+            <List
+              itemLayout="horizontal"
+              dataSource={markers}
+              renderItem={(item) => (
+                <List.Item
+                  onMouseEnter={() => setInfo(item)}
+                  onMouseLeave={() => setInfo(null)}
+                  onClick={() => {
+                    addLocation(item);
+                    homeRef.current?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
+                  {item.content}
+                </List.Item>
+              )}
+            />
           </div>
-          <ul
-            id="searchResult"
-            style={{
-              listStyle: 'none',
-              margin: 0,
-              padding: 0,
-              height: '110vh',
-            }}
-          >
-            {markers.map((marker) => (
-              <button
-                key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
-                id={marker.content}
-                style={{
-                  border: 0,
-                  padding: '20px 10px 8px',
-                  outline: '1px solid blue',
-                  backgroundColor: 'white',
-                  width: '100%',
-                }}
-                onMouseEnter={() => setInfo(marker)}
-                onMouseLeave={() => setInfo(null)}
-                onClick={() => addLocation(marker)}
-              >
-                {marker.content}
-              </button>
-            ))}
-          </ul>
         </div>
       </div>
     </div>

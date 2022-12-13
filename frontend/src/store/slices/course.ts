@@ -17,7 +17,6 @@ export interface CourseType {
   category: string | null;
   created_at: string;
   rate: number;
-  // f_count: number;
   u_counts: number;
   e_time: number;
   distance: number;
@@ -88,7 +87,9 @@ const initialCourseState: CourseState = {
 export const fetchCourses = createAsyncThunk(
   'course/fetchCourses',
   async (props: FetchCoursesParams) => {
-    const response = await axios.get<CourseType[]>('/course/', { params: props });
+    const response = await axios.get<CourseType[]>('/api/course/', {
+      params: props,
+    });
     return response.data;
   },
 );
@@ -96,8 +97,7 @@ export const fetchCourses = createAsyncThunk(
 export const fetchRecommendedCourse = createAsyncThunk(
   'course/fetchRecommendedCourse',
   async () => {
-    const response = await axios.get<TaggedCourse[]>('/user/recommend/', {
-      headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+    const response = await axios.get<TaggedCourse[]>('/api/user/recommend/', {
       params: { category: 'drive' },
     });
     return response.data;
@@ -105,7 +105,7 @@ export const fetchRecommendedCourse = createAsyncThunk(
 );
 
 export const fetchCourse = createAsyncThunk('course/fetchCourse', async (id: CourseType['id']) => {
-  const response = await axios.get<CourseType>(`/course/${id}/`);
+  const response = await axios.get<CourseType>(`/api/course/${id}/`);
   return response.data ?? null;
 });
 
@@ -117,10 +117,20 @@ export const postCourse = createAsyncThunk(
       'title' | 'description' | 'category' | 'e_time' | 'distance' | 'path' | 'markers' | 'tags'
     >,
   ) => {
-    const response = await axios.post<CourseType>(`/course/`, course, {
+    const response = await axios.post<CourseType>(`/api/course/`, course, {
       headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
     });
     return response.data;
+  },
+);
+
+export const deleteCourse = createAsyncThunk(
+  'course/deleteCourse',
+  async (id: CourseType['id']) => {
+    await axios.delete<CourseType>(`/api/course/${id}/`, {
+      headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+    });
+    return id;
   },
 );
 
@@ -203,6 +213,10 @@ export const courseSlice = createSlice({
     builder.addCase(postCourse.fulfilled, (state, action) => {
       state.courses.push(action.payload);
       state.selectedCourse = action.payload;
+    });
+    builder.addCase(deleteCourse.fulfilled, (state, action) => {
+      const deleted = state.courses.filter((course) => course.id !== action.payload);
+      state.courses = deleted;
     });
     builder.addCase(fetchPathFromTMap.fulfilled, (state, action) => {
       state.tMapCourse.tMapData = action.payload.properties;

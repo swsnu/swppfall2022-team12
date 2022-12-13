@@ -13,7 +13,7 @@ from review.serializers import ReviewSerializer, ReviewCreateSerializer
 from course.models import *
 from course.utils import reflect_rate
 
-from team12.exceptions import FieldError, NotAllowed
+from team12.exceptions import FieldError, NotOwner, AnonymousError
 from team12.permissions import IsOwnerOrCreateReadOnly
 
 class ReviewViewSet(
@@ -39,7 +39,7 @@ class ReviewViewSet(
         data = request.data
         context = {
             'course': data.get('course'),
-            'author': User.objects.get(id=1)
+            'author': request.user
         }
         serializer = self.get_serializer(data=request.data, context=context)
         serializer.is_valid(raise_exception=True)
@@ -102,9 +102,11 @@ class ReviewViewSet(
     def like(self, request, pk=None):
         """Like Reviews"""
         review = self.get_object()
+        if request.user.is_anonymous:
+            raise AnonymousError()
         user = request.user
         if review.author == user:
-            raise NotAllowed("Author can't like the review.")
+            raise NotOwner("Author can't like the review.")
         
         if user.like_reviews.filter(review=review).exists():
             user.like_reviews.get(review=review).delete()

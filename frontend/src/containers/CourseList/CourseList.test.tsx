@@ -15,7 +15,6 @@ jest.mock(
           <div>
             <p>{props.id}</p>
             <button onClick={props.showDetail}>{props.title}</button>
-            {/* <MuiRating rate={props.grade}/> */}
             <span>{props.rate}</span>
           </div>
           <span> played {props.usageCounts} times</span>
@@ -83,7 +82,6 @@ jest.mock('react-router', () => ({
 }));
 
 describe('<CourseList />', () => {
-  beforeAll(() => (console.error = jest.fn()));
   beforeEach(() => {
     jest.clearAllMocks();
   });

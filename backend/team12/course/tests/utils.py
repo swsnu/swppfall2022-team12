@@ -60,7 +60,8 @@ class CourseFactory(DjangoModelFactory):
                     )
                 )
         Point.objects.bulk_create(points)
-
+        for course in courses:
+            make_history(kwargs['author'], course)
         return courses
     
 def make_history(user: User, course: Course, hours: int = datetime.now().hour):

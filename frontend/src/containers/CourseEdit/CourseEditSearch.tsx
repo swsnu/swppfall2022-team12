@@ -1,10 +1,11 @@
 /* global kakao */
-
+import { Button } from 'antd';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { DropResult } from 'react-beautiful-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
+import { toast } from 'react-toastify';
 
 import KakaoMap from '../../components/Map/KakaoMap';
 import SearchBar from '../../components/SearchBar/SearchBar';
@@ -61,7 +62,7 @@ export default function CourseEditSearch() {
   const [preview, setPreview] = useState<boolean>(false);
   const [resultData, setResultData] = useState<DataProps | null>(null);
   const [resultFeatures, setResultFeatures] = useState<FeatureProps[]>([]);
-  const [okayToPost, setOkayToPost] = useState<boolean>(false);
+  const [okayToPost] = useState<boolean>(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const courseState = useSelector(selectCourse);
@@ -95,9 +96,9 @@ export default function CourseEditSearch() {
           // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
           map.setBounds(bounds);
         } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-          alert('검색 결과가 존재하지 않습니다.');
+          toast.warning('검색 결과가 존재하지 않습니다.');
         } else if (status === kakao.maps.services.Status.ERROR) {
-          alert('검색 결과 중 오류가 발생했습니다.');
+          toast.error('검색 결과 중 오류가 발생했습니다.');
         }
       });
     }
@@ -167,7 +168,7 @@ export default function CourseEditSearch() {
           item.position.lat === marker.position.lat && item.position.lng === marker.position.lng,
       )
     ) {
-      alert('이미 같은 장소가 선택되었습니다');
+      toast.warning('이미 같은 장소가 선택되었습니다');
     } else {
       setSelected([...selected, marker]);
       const added = searchMarkers.map((item) => {
@@ -231,36 +232,40 @@ export default function CourseEditSearch() {
 
   const storeCourse = () => {
     if (!preview && !okayToPost) {
-      alert('경로 미리보기를 눌러주세요!');
+      toast.info('경로 미리보기를 눌러주세요!');
       return;
     }
     if (selected.length) {
       setMarkerImage(selected);
       navigate(`/course/edit-post/${id}/`, { state: { selected, path, resultData } });
     } else {
-      alert('경로를 작성해주세요');
+      toast.warning('경로를 작성해주세요');
     }
   };
 
   useEffect(() => {
-    axios.get(`/course/${id}/`).then((res) => {
-      setPreviewMarkers(res.data.markers);
-      setSelected(res.data.markers);
-      setPath(res.data.path);
-      setPreview(true);
-      setResultData({
-        totalDistance: res.data.distance,
-        totalTime: res.data.e_time,
-        totalFare: '0',
+    axios
+      .get(`/api/course/${id}/`, {
+        headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+      })
+      .then((res) => {
+        setPreviewMarkers(res.data.markers);
+        setSelected(res.data.markers);
+        setPath(res.data.path);
+        setPreview(true);
+        setResultData({
+          totalDistance: res.data.distance,
+          totalTime: res.data.e_time,
+          totalFare: '0',
+        });
       });
-    });
   }, []);
 
   useEffect(() => {
     if (!map) return;
     if (preview) {
       if (selected.length < 3) {
-        alert('장소를 적어도 3개 이상 선택해주세요');
+        toast.warning('장소를 적어도 3개 이상 선택해주세요');
         setPreview(false);
         return;
       }
@@ -291,23 +296,43 @@ export default function CourseEditSearch() {
         }}
       >
         {preview ? (
-          <button
-            style={{ backgroundColor: 'white', marginRight: '10px' }}
+          <Button
+            style={{
+              marginRight: 15,
+              height: 50,
+              boxShadow:
+                'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
+            }}
+            size="large"
             onClick={() => setPreview(false)}
           >
-            <h3>경로 만들기</h3>
-          </button>
+            <h4 style={{ margin: 0 }}>경로 수정</h4>
+          </Button>
         ) : (
-          <button
-            style={{ backgroundColor: 'white', marginRight: '10px' }}
+          <Button
+            style={{
+              marginRight: 15,
+              height: 50,
+              boxShadow:
+                'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
+            }}
+            size="large"
             onClick={() => setPreview(true)}
           >
-            <h3>경로 미리보기</h3>
-          </button>
+            <h4 style={{ margin: 0 }}>경로 미리보기</h4>
+          </Button>
         )}
-        <button style={{ backgroundColor: 'white' }} onClick={storeCourse}>
-          <h3>경로 완성</h3>
-        </button>
+        <Button
+          style={{
+            height: 50,
+            boxShadow:
+              'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px',
+          }}
+          size="large"
+          onClick={storeCourse}
+        >
+          <h4 style={{ margin: 0 }}>경로 완성</h4>
+        </Button>
       </div>
       <div className="Container" style={{ display: 'flex', position: 'fixed' }}>
         <SearchBar

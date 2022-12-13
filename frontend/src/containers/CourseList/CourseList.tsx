@@ -42,14 +42,6 @@ export default function CourseList() {
     init();
   }, []);
 
-  const korCategory = (ctgry: string) => {
-    if (ctgry === 'drive') return '드라이브';
-    if (ctgry === 'bike') return '바이크 라이드';
-    if (ctgry === 'cycle') return '자전거 라이드';
-    if (ctgry === 'run') return '런닝/산책';
-    return 'Invalid';
-  };
-
   const clickTitle = async (id: CourseElemType['id']) => {
     await dispatch(fetchCourse(id));
     navigate(`/course/${id}`);
@@ -64,27 +56,41 @@ export default function CourseList() {
         alignItems: 'center',
       }}
     >
-      <h2>Courses List</h2>
       <Header />
-      <h3>{korCategory(localStorage.getItem('CATEGORY_KEY') ?? 'drive')}</h3>
+
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <SearchBox searchKey={localStorage.getItem('SEARCH_KEY')} />
+      </div>
+
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          width: '60vw',
+          marginTop: '20px',
+        }}
+      >
+        <h3>드라이브 코스 목록</h3>
         <ListFilter />
       </div>
       <div className="course-list">
         {courseState.courses.map((course) => {
           // eslint-disable-next-line
-          const { id, title, description, rate, u_counts, e_time } = course;
+          const { id, author, title, description, created_at, rate, u_counts, e_time, distance } = course;
 
           return (
             <CourseListElement
               key={`course${id}`}
               id={id}
+              author={author}
               title={title}
               description={description}
+              createdAt={created_at}
               rate={rate}
               usageCounts={u_counts}
               expectedTime={e_time}
+              distance={distance}
               showDetail={() => clickTitle(id)}
             />
           );

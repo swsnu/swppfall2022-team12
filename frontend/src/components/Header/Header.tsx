@@ -3,6 +3,7 @@ import axios from 'axios';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 
 import Logo from '../../img/Logo';
 import { AppDispatch } from '../../store';
@@ -37,8 +38,6 @@ export default function Header() {
   };
 
   const onClickCategory = async (category: string) => {
-    // const prior = localStorage.getItem('CATEGORY_KEY');
-    // if (prior !== category)
     localStorage.setItem('CATEGORY_KEY', category);
     localStorage.removeItem('SEARCH_KEY');
     localStorage.removeItem('FILTER');
@@ -60,15 +59,12 @@ export default function Header() {
   };
 
   return (
-    <div className="header" style={{ width: '90%' }}>
+    <div className="header" style={{ width: '90%', marginBottom: '30px' }}>
       <div style={{ height: '30px' }} />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div role="button" tabIndex={0} onClick={onClickLogo}>
           <Logo />
         </div>
-        {/* <button onClick={() => onClickCategory('bike')}>바이크</button>
-        <button onClick={() => onClickCategory('cycle')}>자전거</button>
-        <button onClick={() => onClickCategory('run')}>런닝</button> */}
         {isLogin() ? (
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <div>{window.sessionStorage.getItem('username')}님, 환영합니다!</div>
@@ -79,10 +75,14 @@ export default function Header() {
         )}
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-around', alignContent: 'center' }}>
-        <Button variant="outlined" onClick={() => onClickCategory('drive')}>
+        <Button
+          variant="outlined"
+          style={{ borderWidth: '2px' }}
+          onClick={() => onClickCategory('drive')}
+        >
           드라이브 전체보기
         </Button>
-        <Button variant="outlined" onClick={onClickCreateCourse}>
+        <Button variant="outlined" style={{ borderWidth: '2px' }} onClick={onClickCreateCourse}>
           나만의 코스 만들기
         </Button>
       </div>

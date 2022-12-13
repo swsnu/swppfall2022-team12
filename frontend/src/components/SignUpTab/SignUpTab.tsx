@@ -2,9 +2,7 @@ import { Button, FormControl, InputLabel, MenuItem, OutlinedInput, Select } from
 import axios from 'axios';
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router';
-
-import { TagType } from '../../store/slices/tag';
-import { selectUser, UserType } from '../../store/slices/user';
+import { toast } from 'react-toastify';
 
 export interface SignUpResponseType {
   email: string;
@@ -16,9 +14,7 @@ export interface SignUpResponseType {
 }
 
 export default function SignUpTab() {
-  // const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  // const userState = useSelector(selectUser);
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
@@ -60,7 +56,7 @@ export default function SignUpTab() {
       gender: genderInput,
     };
     await axios
-      .post<SignUpResponseType>('/user/signup/', req)
+      .post<SignUpResponseType>('/api/user/signup/', req)
       .then((response) => {
         window.sessionStorage.setItem('username', response.data.username);
         window.sessionStorage.setItem('access', response.data.token.access);
@@ -75,7 +71,7 @@ export default function SignUpTab() {
         if (msg.email) alertMsg += `Email : ${msg.email}\n`;
         if (msg.username) alertMsg += `Username : ${msg.username}\n`;
         if (msg.password) alertMsg += `Password : ${msg.password}\n`;
-        alert(alertMsg);
+        toast.error(alertMsg);
       });
   };
 

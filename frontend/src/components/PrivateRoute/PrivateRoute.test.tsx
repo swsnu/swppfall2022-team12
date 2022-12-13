@@ -4,27 +4,8 @@ import { Route, Routes } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 import LoginPage from '../../containers/LoginPage/LoginPage';
 
-// import isLogin from '../../utils/isLogin';
 import PrivateRoute from './PrivateRoute';
 
-// jest.mock(
-//   '../../components/CourseListElement/CourseListElement',
-//   () =>
-//     function (props: CourseProps) {
-//       return (
-//         <div data-testid="spyCourseElement">
-//           <div>
-//             <p>{props.id}</p>
-//             <button onClick={props.showDetail}>{props.title}</button>
-//             {/* <MuiRating rate={props.grade}/> */}
-//             <span>{props.grade}</span>
-//           </div>
-//           <span> played {props.usageCounts} times</span>
-//           <span> expected time: {props.expectedTime}</span>
-//         </div>
-//       );
-//     },
-// );
 const mockNavigate = jest.fn();
 jest.mock('react-router', () => ({
   ...jest.requireActual('react-router'),
