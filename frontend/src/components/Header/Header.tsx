@@ -24,7 +24,7 @@ export default function Header() {
 
   const onClickLogout = async () => {
     await axios
-      .get('/user/logout/', {
+      .get('/api/user/logout/', {
         headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
       })
       .then(() => {
