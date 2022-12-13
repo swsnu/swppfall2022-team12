@@ -67,7 +67,7 @@ class ReviewTestCase(TestCase):
             data=self.post_data,
             HTTP_AUTHORIZATION = self.user_token,
             content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         # 3) course not found.
         wrong_data = self.post_data.copy()
