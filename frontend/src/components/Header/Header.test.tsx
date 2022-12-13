@@ -1,5 +1,6 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 import { renderWithProviders } from '../../test-utils/mocks';
 import Header from './Header';
@@ -64,7 +65,7 @@ describe('<Header />', () => {
     jest.spyOn(axios, 'get').mockImplementation(() => {
       return Promise.reject({response: { data: { detail: "error-test" } } });
     });
-    jest.spyOn(window, 'alert').mockImplementation(() => {});
+    // jest.spyOn(toast, 'error').mockImplementation(() => {});
     window.sessionStorage.setItem('access', 'test-jwt');
     
     renderWithProviders(<Header />);
@@ -72,23 +73,8 @@ describe('<Header />', () => {
     const logoutButton = screen.getByText('로그아웃');
     fireEvent.click(logoutButton);
     await waitFor(() => expect(axios.get).toHaveBeenCalled());
-    await waitFor(() => expect(window.alert).toBeCalledWith('error-test'));
+    await waitFor(() => expect(screen.findByText('error-test')));
   });
-
-  // it("should handle onClickLogout with empty 400 response", async () => {
-  //   jest.spyOn(axios, 'get').mockImplementation(() => {
-  //     return Promise.reject({response: { data: {} } });
-  //   });
-  //   jest.spyOn(window, 'alert').mockImplementation(() => {});
-  //   window.sessionStorage.setItem('access', 'test-jwt');
-    
-  //   renderWithProviders(<Header />);
-
-  //   const logoutButton = screen.getByText('로그아웃');
-  //   fireEvent.click(logoutButton);
-  //   await waitFor(() => expect(axios.get).toHaveBeenCalled());
-  //   await waitFor(() => expect(window.alert).toBeCalledWith(''));
-  // })
 
   it("should handle onClickCategory when button is clicked", async () => {
     renderWithProviders(<Header />);

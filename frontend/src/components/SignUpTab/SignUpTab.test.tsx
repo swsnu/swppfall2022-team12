@@ -111,7 +111,6 @@ describe('<SignUpTab />', () => {
         },
       },
     });
-    jest.spyOn(window, 'alert').mockImplementation(() => {});
 
     render(<SignUpTab />);
     const nameInput = screen.getByLabelText('Username');
@@ -127,9 +126,9 @@ describe('<SignUpTab />', () => {
     fireEvent.click(signUpButton);
 
     await waitFor(() => {
-      expect(window.alert).toBeCalledWith(
+      expect(screen.findByText(
         'Email : email-test-error-message\n'
-      );
+      ));
     });
   });
 
@@ -141,7 +140,6 @@ describe('<SignUpTab />', () => {
         },
       },
     });
-    jest.spyOn(window, 'alert').mockImplementation(() => {});
 
     render(<SignUpTab />);
     const nameInput = screen.getByLabelText('Username');
@@ -157,9 +155,9 @@ describe('<SignUpTab />', () => {
     fireEvent.click(signUpButton);
 
     await waitFor(() => {
-      expect(window.alert).toBeCalledWith(
+      expect(screen.findByText(
         'Username : username-test-error-message\n'
-      );
+      ));
     });
   });
 
@@ -171,7 +169,6 @@ describe('<SignUpTab />', () => {
         },
       },
     });
-    jest.spyOn(window, 'alert').mockImplementation(() => {});
 
     render(<SignUpTab />);
     const nameInput = screen.getByLabelText('Username');
@@ -187,9 +184,9 @@ describe('<SignUpTab />', () => {
     fireEvent.click(signUpButton);
 
     await waitFor(() => {
-      expect(window.alert).toBeCalledWith(
+      expect(screen.findByText(
         'Password : password-test-error-message\n'
-      );
+      ));
     });
   });
 });

@@ -74,6 +74,7 @@ describe('course reducer', () => {
   it('should handle initial state', () => {
     expect(reducer(undefined, { type: 'unknown ' })).toEqual({
       courses: [],
+      recommendedCourses: [],
       selectedCourse: null,
       tMapCourse: { tMapData: null, tMapFeatures: [] },
     });

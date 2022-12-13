@@ -35,6 +35,14 @@ describe('<LoginTab />', () => {
     screen.getByText('로그인');
   });
 
+  it('should handle logo', () => {
+    render(<LoginTab />);
+    
+    const logo = screen.getAllByRole('button')[0];
+    fireEvent.click(logo);
+    expect(mockNavigate).toBeCalledWith('/main');
+  });
+
   it('should handle empty input when Login button is clicked', async () => {
     render(<LoginTab />);
     const emailInput = screen.getByLabelText('Email');
@@ -74,7 +82,6 @@ describe('<LoginTab />', () => {
 
   it('should handle login with 400 response', async () => {
     axios.put = jest.fn().mockRejectedValue({ response : { status: 400, data: { detail: 'test-error' } } });
-    jest.spyOn(window, 'alert').mockImplementation(() => {});
 
     render(<LoginTab />);
     const emailInput = screen.getByLabelText('Email');
@@ -85,12 +92,11 @@ describe('<LoginTab />', () => {
     fireEvent.change(pwInput, { target: { value: 'pw-test' } });
     fireEvent.click(loginButton);
 
-    await waitFor(() => expect(window.alert).toBeCalledWith('test-error'));
+    await waitFor(() => expect(screen.findByText('test-error')));
   });
 
   it("should handle login with empty 400 response", async () => {
     axios.put = jest.fn().mockRejectedValue({ response : { status: 400, data: {} } });
-    jest.spyOn(window, 'alert').mockImplementation(() => {});
 
     render(<LoginTab />);
     const emailInput = screen.getByLabelText('Email');
@@ -101,6 +107,6 @@ describe('<LoginTab />', () => {
     fireEvent.change(pwInput, { target: { value: 'pw-test' } });
     fireEvent.click(loginButton);
 
-    await waitFor(() => expect(window.alert).toBeCalledWith('로그인에 실패했습니다.'));
+    await waitFor(() => expect(screen.findByText('로그인에 실패했습니다.')));
   });
 });
