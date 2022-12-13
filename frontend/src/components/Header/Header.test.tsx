@@ -61,6 +61,7 @@ describe('<Header />', () => {
 
   it('should handle onClickLogout with 400 response', async () => {
     jest.spyOn(axios, 'get').mockImplementation(() => {
+      // eslint-disable-next-line prefer-promise-reject-errors
       return Promise.reject({ response: { data: { detail: 'error-test' } } });
     });
     window.sessionStorage.setItem('access', 'test-jwt');
