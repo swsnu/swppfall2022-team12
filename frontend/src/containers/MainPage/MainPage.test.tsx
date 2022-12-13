@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { CourseState } from '../../store/slices/course';
 
+import { CourseState } from '../../store/slices/course';
 import { getMockStore, renderWithProviders } from '../../test-utils/mocks';
 import MainPage from './MainPage';
 
@@ -85,18 +85,26 @@ jest.mock('react-router', () => ({
 
 describe('<MainPage />', () => {
   it('should render without errors before login', () => {
-    render(<Provider store={mockStore}><MainPage /></Provider>);
+    render(
+      <Provider store={mockStore}>
+        <MainPage />
+      </Provider>,
+    );
     screen.getByText('나만의 코스 만들기');
     screen.getByText('로 떠나기');
     screen.getByText('맞춤형 코스 추천을 보고 싶다면 로그인하세요!');
   });
 
-  it("should render without errors after login", () => {
+  it('should render without errors after login', () => {
     window.sessionStorage.setItem('access', 'test-access-jwt');
     window.sessionStorage.setItem('username', 'test-user');
-    render(<Provider store={mockStore}><MainPage /></Provider>);
+    render(
+      <Provider store={mockStore}>
+        <MainPage />
+      </Provider>,
+    );
     screen.getByText('test-user님을 위한 맞춤 코스');
-  })
+  });
 
   it('should navigate to posting page when clicked create-new-course button', () => {
     window.sessionStorage.setItem('access', 'test-access-jwt');
@@ -108,7 +116,7 @@ describe('<MainPage />', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/course-create/search');
   });
 
-  it("should open TagSelectPopup with tag select button", () => {
+  it('should open TagSelectPopup with tag select button', () => {
     window.sessionStorage.setItem('access', 'test-access-jwt');
     window.sessionStorage.setItem('username', 'test-user');
     renderWithProviders(<MainPage />);
@@ -117,10 +125,14 @@ describe('<MainPage />', () => {
     screen.getByText('나의 태그');
   });
 
-  it("should handle onClickCourseDetail", () => {
+  it('should handle onClickCourseDetail', () => {
     window.sessionStorage.setItem('access', 'test-access-jwt');
     window.sessionStorage.setItem('username', 'test-user');
-    render(<Provider store={mockStore}><MainPage /></Provider>);
+    render(
+      <Provider store={mockStore}>
+        <MainPage />
+      </Provider>,
+    );
 
     fireEvent.click(screen.getByText('코스 보기'));
     expect(mockNavigate).toBeCalledWith('/course/1');

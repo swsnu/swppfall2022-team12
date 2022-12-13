@@ -2,8 +2,8 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { Route, Routes } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
-import LoginPage from '../../containers/LoginPage/LoginPage';
 
+import LoginPage from '../../containers/LoginPage/LoginPage';
 import PrivateRoute from './PrivateRoute';
 
 const mockNavigate = jest.fn();
@@ -18,7 +18,7 @@ describe('<PrivateRoute />', () => {
   });
 
   it('should render component when logged in', () => {
-    window.sessionStorage.setItem('access', 'test-jwt')
+    window.sessionStorage.setItem('access', 'test-jwt');
 
     render(
       <BrowserRouter>
@@ -33,7 +33,7 @@ describe('<PrivateRoute />', () => {
 
   it('should navigate to /login when logged out', () => {
     window.sessionStorage.clear();
-    
+
     render(
       <BrowserRouter>
         <Routes>
