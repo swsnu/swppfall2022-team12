@@ -6,14 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('tag', '0001_initial'),
-        ('user', '0003_alter_user_email'),
+        ("tag", "0001_initial"),
+        ("user", "0003_alter_user_email"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='user',
-            name='tags',
-            field=models.ManyToManyField(related_name='users', to='tag.tag'),
+            model_name="user",
+            name="tags",
+            field=models.ManyToManyField(related_name="users", to="tag.tag"),
         ),
     ]

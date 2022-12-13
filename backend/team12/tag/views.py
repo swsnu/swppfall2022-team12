@@ -7,10 +7,12 @@ from rest_framework.decorators import action
 from tag.models import Tag
 from tag.utils import create_tags
 
+
 class TagViewSet(viewsets.GenericViewSet):
     """
     Generic ViewSet of Tag Object.
     """
+
     queryset = Tag.objects.all()
     permission_classes = []
 
@@ -22,9 +24,7 @@ class TagViewSet(viewsets.GenericViewSet):
         contents = request.data.get("contents")
         if contents:
             for content in contents:
-                _, created = Tag.objects.get_or_create(
-                    content=content
-                )
+                _, created = Tag.objects.get_or_create(content=content)
                 if created:
                     tags_created.append(content)
         new_tags = " | ".join(tags_created)
@@ -34,10 +34,10 @@ class TagViewSet(viewsets.GenericViewSet):
     def list(self, request):
         """List Tags"""
         return Response(Tag.objects.all().values(), status=status.HTTP_200_OK)
-    
+
     # PUT /tag/remove/
     @transaction.atomic
-    @action(methods=['PUT'], detail=False)
+    @action(methods=["PUT"], detail=False)
     def remove(self, request):
         """Remove Tags"""
         contents = request.data.get("contents")
@@ -50,6 +50,5 @@ class TagViewSet(viewsets.GenericViewSet):
                     tag.delete()
                 except Tag.DoesNotExist:
                     pass
-        resp = ' | '.join(removed_tags)
+        resp = " | ".join(removed_tags)
         return Response(f"{resp} removed.", status=status.HTTP_200_OK)
-    

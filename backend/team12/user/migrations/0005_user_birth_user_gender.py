@@ -6,18 +6,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user', '0004_alter_user_tags'),
+        ("user", "0004_alter_user_tags"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='birth',
+            model_name="user",
+            name="birth",
             field=models.DateField(null=True),
         ),
         migrations.AddField(
-            model_name='user',
-            name='gender',
-            field=models.CharField(blank=True, choices=[('M', 'male'), ('F', 'female')], max_length=10),
+            model_name="user",
+            name="gender",
+            field=models.CharField(
+                blank=True, choices=[("M", "male"), ("F", "female")], max_length=10
+            ),
         ),
     ]

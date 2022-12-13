@@ -6,14 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('tag', '0001_initial'),
-        ('course', '0005_remove_course_tag_course_tags'),
+        ("tag", "0001_initial"),
+        ("course", "0005_remove_course_tag_course_tags"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='course',
-            name='tags',
-            field=models.ManyToManyField(related_name='courses', to='tag.tag'),
+            model_name="course",
+            name="tags",
+            field=models.ManyToManyField(related_name="courses", to="tag.tag"),
         ),
     ]
