@@ -11,5 +11,5 @@ test('renders App without errors', () => {
       <App />
     </Provider>,
   );
-  screen.getByText('Main Page');
+  screen.getByText('드라이브 전체보기');
 });

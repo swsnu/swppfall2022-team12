@@ -23,8 +23,9 @@ describe('<CourseListElement />', () => {
     const titleButton = screen.getByText('CLE_TEST_TITLE');
     expect(titleButton).toBeInTheDocument();
     screen.getByText('3');
-    screen.getByText('played 50 times');
-    screen.getByText('expected time: 100');
+    screen.getByText('이용 횟수');
+    screen.getByText('50');
+    screen.getByText('예상 소요 시간: 100분');
     screen.getByText('CLE_TEST_DESCRIPTION');
   });
 });
