@@ -33,7 +33,6 @@ describe('<PrivateRoute />', () => {
 
   it('should navigate to /login when logged out', () => {
     window.sessionStorage.clear();
-
     render(
       <BrowserRouter>
         <Routes>

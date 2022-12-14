@@ -292,7 +292,7 @@ export default function CourseDetail() {
           <Divider orientation="left" style={{ margin: 0 }}>
             <h3>리뷰</h3>
           </Divider>
-          <ReviewPost courseId={id} setChange={setChangeInside} />
+          <ReviewPost courseId={id} courseAuthor={author} setChange={setChangeInside} />
           <div style={{ display: 'flex', justifyContent: 'right', marginTop: '10px' }}>
             <Select placeholder="필터 선택" onChange={handleChange} style={{ width: '120px' }}>
               {ReviewFilters.map((item) => (
