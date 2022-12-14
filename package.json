@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "react-beautiful-dnd-test-utils": "^4.1.1"
+  }
+}
