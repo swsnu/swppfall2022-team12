@@ -19,7 +19,7 @@ export default function ReviewPost(prop: ReviewPostProp) {
 
   const post = () => {
     if(prop.courseAuthor === sessionStorage.getItem("username")){
-      alert("자신이 작성한 코스에 리뷰를 남길 수 없습니다.");
+      toast.error("자신이 작성한 코스에 리뷰를 남길 수 없습니다.");
       return;
     }
     if (content.length === 0) {
