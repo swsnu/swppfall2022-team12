@@ -55,9 +55,7 @@ class CourseViewSet(
         data["author"] = user_id
         serializer = self.get_serializer(data=data, context=context)
         serializer.is_valid(raise_exception=True)
-        print("done.")
         course = serializer.save()
-        print(course)
         return Response(CourseDetailSerializer(course).data, status=status.HTTP_200_OK)
 
     # DELETE /course/:courseId
