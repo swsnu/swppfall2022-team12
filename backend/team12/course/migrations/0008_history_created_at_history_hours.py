@@ -7,19 +7,21 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('course', '0007_alter_course_rate'),
+        ("course", "0007_alter_course_rate"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='history',
-            name='created_at',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
+            model_name="history",
+            name="created_at",
+            field=models.DateTimeField(
+                auto_now_add=True, default=django.utils.timezone.now
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='history',
-            name='hours',
+            model_name="history",
+            name="hours",
             field=models.SmallIntegerField(default=18),
         ),
     ]

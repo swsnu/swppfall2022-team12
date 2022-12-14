@@ -43,7 +43,7 @@ describe('<ListFilter />', () => {
     screen.getByDisplayValue('-');
   });
 
-  it("should handle default value", () => {
+  it('should handle default value', () => {
     window.localStorage.setItem('FILTER', 'use');
     render(
       <Provider store={mockStore}>
@@ -51,7 +51,7 @@ describe('<ListFilter />', () => {
       </Provider>,
     );
     screen.getByDisplayValue('use');
-  })
+  });
 
   it('should handle onChange withour errors', async () => {
     window.localStorage.clear();

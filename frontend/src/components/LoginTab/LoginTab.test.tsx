@@ -72,7 +72,9 @@ describe('<LoginTab />', () => {
   });
 
   it('should handle login with 400 response', async () => {
-    axios.put = jest.fn().mockRejectedValue({ response : { status: 400, data: { detail: 'test-error' } } });
+    axios.put = jest
+      .fn()
+      .mockRejectedValue({ response: { status: 400, data: { detail: 'test-error' } } });
 
     render(<LoginTab />);
     const emailInput = screen.getByLabelText('Email');
@@ -86,8 +88,8 @@ describe('<LoginTab />', () => {
     await waitFor(() => expect(screen.findByText('test-error')));
   });
 
-  it("should handle login with empty 400 response", async () => {
-    axios.put = jest.fn().mockRejectedValue({ response : { status: 400, data: {} } });
+  it('should handle login with empty 400 response', async () => {
+    axios.put = jest.fn().mockRejectedValue({ response: { status: 400, data: {} } });
 
     render(<LoginTab />);
     const emailInput = screen.getByLabelText('Email');

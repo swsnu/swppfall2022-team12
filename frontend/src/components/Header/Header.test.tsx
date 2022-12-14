@@ -21,14 +21,14 @@ describe('<Header />', () => {
     renderWithProviders(<Header />);
     const driveButton = screen.getByText('드라이브 전체보기');
     const loginButton = screen.getByText('로그인');
-    const createCourseButton = screen.getByText('나만의 코스 만들기')
+    const createCourseButton = screen.getByText('나만의 코스 만들기');
 
     expect(driveButton).toBeInTheDocument();
     expect(loginButton).toBeInTheDocument();
     expect(createCourseButton).toBeInTheDocument();
   });
 
-  it("should handle onClickLogo when logo is clicked", () => {
+  it('should handle onClickLogo when logo is clicked', () => {
     renderWithProviders(<Header />);
 
     const logo = screen.getAllByRole('button')[0];
@@ -36,35 +36,36 @@ describe('<Header />', () => {
     expect(mockNavigate).toBeCalledWith('/main');
   });
 
-  it("should handle onClickLogin when logged out", () => {
+  it('should handle onClickLogin when logged out', () => {
     renderWithProviders(<Header />);
-    
+
     const loginButton = screen.getByText('로그인');
     fireEvent.click(loginButton);
     expect(mockNavigate).toBeCalledWith('/login');
   });
 
-  it("should handle onClickLogout when logged in", async () => {
+  it('should handle onClickLogout when logged in', async () => {
     jest.spyOn(axios, 'get').mockImplementation(() => {
       return Promise.resolve({ status: 204 });
-    })
+    });
     window.sessionStorage.setItem('access', 'test-jwt');
-    
+
     renderWithProviders(<Header />);
 
     const logoutButton = screen.getByText('로그아웃');
     fireEvent.click(logoutButton);
     await waitFor(() => expect(axios.get).toHaveBeenCalled());
     await waitFor(() => expect(window.sessionStorage.getItem('access')).toEqual(null));
-    await waitFor(() => expect(mockNavigate).toBeCalledWith('/main'))
+    await waitFor(() => expect(mockNavigate).toBeCalledWith('/main'));
   });
 
-  it("should handle onClickLogout with 400 response", async () => {
+  it('should handle onClickLogout with 400 response', async () => {
     jest.spyOn(axios, 'get').mockImplementation(() => {
-      return Promise.reject({response: { data: { detail: "error-test" } } });
+      // eslint-disable-next-line prefer-promise-reject-errors
+      return Promise.reject({ response: { data: { detail: 'error-test' } } });
     });
     window.sessionStorage.setItem('access', 'test-jwt');
-    
+
     renderWithProviders(<Header />);
 
     const logoutButton = screen.getByText('로그아웃');
@@ -85,7 +86,7 @@ describe('<Header />', () => {
     await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/courses'));
   });
 
-  it("should handle onClickCreateCourse", () => {
+  it('should handle onClickCreateCourse', () => {
     renderWithProviders(<Header />);
 
     const createCourseButton = screen.getByText('나만의 코스 만들기');

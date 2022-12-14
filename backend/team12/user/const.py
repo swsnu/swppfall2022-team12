@@ -1,4 +1,1 @@
-GENDER = (
-    ('male', 'M'),
-    ('female', 'F')
-)
+GENDER = (("male", "M"), ("female", "F"))

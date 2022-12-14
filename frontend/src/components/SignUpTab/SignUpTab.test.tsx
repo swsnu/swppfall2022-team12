@@ -55,7 +55,7 @@ describe('<SignUpTab />', () => {
     expect(pwInput2).toHaveFocus();
   });
 
-  it("should handle age and gender input", () => {
+  it('should handle age and gender input', () => {
     render(<SignUpTab />);
     const ageInput = screen.getByTestId('age-input-testId');
     const genderInput = screen.getByTestId('gender-input-testId');
@@ -64,13 +64,12 @@ describe('<SignUpTab />', () => {
     fireEvent.click(screen.getByText('60s'));
     expect(screen.getAllByText('60s'));
 
-
     userEvent.click(getByRole(genderInput, 'button'));
     fireEvent.click(screen.getByText('여자'));
     expect(screen.getAllByText('여자'));
-  })
+  });
 
-  it("should handle signup without error with valid inputs", async () => {
+  it('should handle signup without error with valid inputs', async () => {
     axios.post = jest.fn().mockResolvedValue({
       data: {
         email: 'email-test',
@@ -97,12 +96,14 @@ describe('<SignUpTab />', () => {
 
     await waitFor(() => expect(window.sessionStorage.getItem('username')).toEqual('username-test'));
     await waitFor(() => expect(window.sessionStorage.getItem('access')).toEqual('jwt-access-test'));
-    await waitFor(() => expect(window.sessionStorage.getItem('refresh')).toEqual('jwt-refresh-test'));
+    await waitFor(() =>
+      expect(window.sessionStorage.getItem('refresh')).toEqual('jwt-refresh-test'),
+    );
     await waitFor(() => expect(window.sessionStorage.getItem('tags')).toEqual('[]'));
     await waitFor(() => expect(mockNavigate).toBeCalledWith('/main'));
   });
 
-  it("should handle email error response of signup", async () => {
+  it('should handle email error response of signup', async () => {
     axios.post = jest.fn().mockRejectedValue({
       response: {
         data: {
@@ -125,13 +126,11 @@ describe('<SignUpTab />', () => {
     fireEvent.click(signUpButton);
 
     await waitFor(() => {
-      expect(screen.findByText(
-        'Email : email-test-error-message\n'
-      ));
+      expect(screen.findByText('Email : email-test-error-message\n'));
     });
   });
 
-  it("should handle username error response of signup", async () => {
+  it('should handle username error response of signup', async () => {
     axios.post = jest.fn().mockRejectedValue({
       response: {
         data: {
@@ -154,17 +153,15 @@ describe('<SignUpTab />', () => {
     fireEvent.click(signUpButton);
 
     await waitFor(() => {
-      expect(screen.findByText(
-        'Username : username-test-error-message\n'
-      ));
+      expect(screen.findByText('Username : username-test-error-message\n'));
     });
   });
 
-  it("should handle password error response of signup", async () => {
+  it('should handle password error response of signup', async () => {
     axios.post = jest.fn().mockRejectedValue({
       response: {
         data: {
-          password: 'password-test-error-message', //sensitive
+          password: 'password-test-error-message', // sensitive
         },
       },
     });
@@ -183,9 +180,7 @@ describe('<SignUpTab />', () => {
     fireEvent.click(signUpButton);
 
     await waitFor(() => {
-      expect(screen.findByText(
-        'Password : password-test-error-message\n'
-      ));
+      expect(screen.findByText('Password : password-test-error-message\n'));
     });
   });
 });
