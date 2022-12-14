@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import axios from 'axios';
 import { Provider } from 'react-redux';
+
 import { TagState } from '../../store/slices/tag';
 import { getMockStore } from '../../test-utils/mocks';
 import TagSelectPopup from './TagSelectPopup';

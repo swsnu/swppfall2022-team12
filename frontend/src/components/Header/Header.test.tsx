@@ -74,7 +74,7 @@ describe('<Header />', () => {
     await waitFor(() => expect(screen.findByText('error-test')));
   });
 
-  it("should handle onClickCategory when button is clicked", async () => {
+  it('should handle onClickCategory when button is clicked', async () => {
     renderWithProviders(<Header />);
     localStorage.clear();
 

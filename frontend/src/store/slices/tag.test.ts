@@ -1,6 +1,7 @@
 import { AnyAction, configureStore, EnhancedStore } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { ThunkMiddleware } from 'redux-thunk';
+
 import reducer, { fetchTags, TagState, TagType } from './tag';
 
 describe('tag reducer', () => {

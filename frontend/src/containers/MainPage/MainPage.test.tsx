@@ -106,12 +106,16 @@ describe('<MainPage />', () => {
     screen.getByText('test-user님을 위한 맞춤 코스');
   });
 
-  it("should render without errors after login", () => {
+  it('should render without errors after login', () => {
     window.sessionStorage.setItem('access', 'test-access-jwt');
     window.sessionStorage.setItem('username', 'test-user');
-    render(<Provider store={mockStore}><MainPage /></Provider>);
+    render(
+      <Provider store={mockStore}>
+        <MainPage />
+      </Provider>,
+    );
     screen.getByText('test-user님을 위한 맞춤 코스');
-  })
+  });
 
   it('should navigate to posting page when clicked create-new-course button', () => {
     window.sessionStorage.setItem('access', 'test-access-jwt');
