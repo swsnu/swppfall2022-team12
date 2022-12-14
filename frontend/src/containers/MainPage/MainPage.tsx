@@ -21,6 +21,7 @@ function MainPage() {
     JSON.parse(window.sessionStorage.getItem('tags') ?? '[]'),
   );
   const [toOpenPopup, setToOpenPopup] = useState<boolean>(!window.sessionStorage.getItem('tags'));
+  const [recExist, setRecExist] = useState<boolean>(true);
 
   useEffect(() => {
     localStorage.removeItem('CATEGORY_KEY');
@@ -39,6 +40,14 @@ function MainPage() {
     dispatch(fetchRecommendedCourse());
   }, [toOpenPopup]);
 
+  useEffect(() => {
+    let len = 0;
+    courseState.recommendedCourses.forEach((set) => {
+      len += set.courses.length;
+    });
+    setRecExist(len > 0);
+  }, [courseState]);
+
   return (
     <div
       style={{
@@ -55,13 +64,29 @@ function MainPage() {
       {isLogin() ? (
         <>
           <TagSelectPopup toOpen={toOpenPopup} openHandler={setToOpenPopup} />
-          <div>
+          <div
+            style={{
+              width: '80%',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
             <h2>{window.sessionStorage.getItem('username')}님을 위한 맞춤 코스</h2>
             <div>
               {tagIds.length === 0 && <span>아직 선택한 태그가 없어요. 태그를 골라주세요!</span>}
               <Button onClick={() => setToOpenPopup(true)}>태그 선택</Button>
             </div>
-            <div>
+            <div
+              className="recommended-courses"
+              style={{
+                width: '90%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+              }}
+            >
+              <div>{!recExist ? '아쉽게도 추천이 없어요' : null}</div>
               {courseState.recommendedCourses.map((set) => {
                 const tagContent = set.tag;
                 const coursesData = set.courses;
@@ -71,7 +96,7 @@ function MainPage() {
                   <div
                     key={set.tag}
                     style={{
-                      width: '90%',
+                      width: '100%',
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'flex-start',
@@ -81,8 +106,10 @@ function MainPage() {
                     <h3>{tagContent} 코스 추천</h3>
                     <div
                       style={{
+                        width: '100%',
                         display: 'flex',
-                        overflowX: 'auto',
+                        alignItems: 'flex-start',
+                        overflowX: 'scroll',
                       }}
                     >
                       {coursesData.map((course) => {

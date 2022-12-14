@@ -24,7 +24,6 @@ describe('<LoginPage />', () => {
 
   it('should handle logo', () => {
     render(<LoginPage />);
-
     const logo = screen.getAllByRole('button')[0];
     fireEvent.click(logo);
     expect(mockNavigate).toBeCalledWith('/main');

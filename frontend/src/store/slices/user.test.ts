@@ -1,15 +1,6 @@
 import reducer from './user';
 
 describe('user reducer', () => {
-  // let store: EnhancedStore<
-  //   { user: UserState },
-  //   AnyAction,
-  //   [ThunkMiddleware<{ user: UserState }, AnyAction, undefined>]
-  // >;
-
-  // beforeAll(() => {
-  //   store = configureStore({ reducer: { user: reducer } });
-  // });
   beforeEach(() => {
     jest.clearAllMocks();
   });
