@@ -1,12 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
-<<<<<<< HEAD
-import { CourseState } from '../../store/slices/course';
-
-=======
 
 import { CourseState } from '../../store/slices/course';
->>>>>>> 00ebf3b574fb6fa993a3f8fc2e4a04864bd48a50
 import { getMockStore, renderWithProviders } from '../../test-utils/mocks';
 import MainPage from './MainPage';
 

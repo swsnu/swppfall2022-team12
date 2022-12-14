@@ -1,10 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import axios from 'axios';
 import { Provider } from 'react-redux';
-<<<<<<< HEAD
-=======
-
->>>>>>> 00ebf3b574fb6fa993a3f8fc2e4a04864bd48a50
 import { TagState } from '../../store/slices/tag';
 import { getMockStore } from '../../test-utils/mocks';
 import TagSelectPopup from './TagSelectPopup';
@@ -18,11 +14,7 @@ const tagInitState: TagState = {
     {
       id: 2,
       content: 'test-tag2',
-<<<<<<< HEAD
-    }
-=======
     },
->>>>>>> 00ebf3b574fb6fa993a3f8fc2e4a04864bd48a50
   ],
   selectedTags: [],
 };
@@ -42,11 +34,7 @@ const mockStore = getMockStore({
   tag: tagInitState,
 });
 
-<<<<<<< HEAD
-describe("<TagSelectPopup />", () => {
-=======
 describe('<TagSelectPopup />', () => {
->>>>>>> 00ebf3b574fb6fa993a3f8fc2e4a04864bd48a50
   beforeEach(() => {
     jest.clearAllMocks();
   });
