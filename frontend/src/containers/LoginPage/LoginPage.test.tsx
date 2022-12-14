@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import React from 'react';
 
 import LoginPage from './LoginPage';
 
@@ -16,20 +17,28 @@ describe('<LoginPage />', () => {
   it('should render without errors', () => {
     render(<LoginPage />);
 
-    screen.getByText('Login');
-    screen.getByText('New to Course Adviser?');
-    screen.getByText('Sign up');
+    screen.getByText('로그인');
+    screen.getByText('아직 계정이 없으신가요?');
+    screen.getByText('회원가입');
+  });
+
+  it('should handle logo', () => {
+    render(<LoginPage />);
+
+    const logo = screen.getAllByRole('button')[0];
+    fireEvent.click(logo);
+    expect(mockNavigate).toBeCalledWith('/main');
   });
 
   it('should switch login tab and signup tab', () => {
     render(<LoginPage />);
 
-    const signupTabButton = screen.getByText('Sign up');
+    const signupTabButton = screen.getByText('회원가입');
     fireEvent.click(signupTabButton);
-    screen.getByText('Check Password');
+    screen.getByText('이미 계정이 있으신가요?');
 
-    const loginTabButton = screen.getByText('Sign in');
+    const loginTabButton = screen.getByText('로그인');
     fireEvent.click(loginTabButton);
-    screen.getByText('New to Course Adviser?');
+    screen.getByText('아직 계정이 없으신가요?');
   });
 });

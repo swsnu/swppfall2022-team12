@@ -23,20 +23,18 @@ export default function Header() {
   };
 
   const onClickLogout = async () => {
-    if (window.sessionStorage.getItem('username') !== null) {
-      await axios
-        .get('/api/user/logout/', {
-          headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
-        })
-        .then(() => {
-          window.sessionStorage.clear();
-          navigate('/main');
-        })
-        .catch((error) => {
-          toast.error(error.response.data.detail);
-          navigate('/main');
-        });
-    }
+    await axios
+      .get('/api/user/logout/', {
+        headers: { Authorization: `Bearer ${window.sessionStorage.getItem('access')}` },
+      })
+      .then(() => {
+        window.sessionStorage.clear();
+        navigate('/main');
+      })
+      .catch((error) => {
+        toast.error(error.response.data.detail);
+        navigate('/main');
+      });
   };
 
   const onClickCategory = async (category: string) => {

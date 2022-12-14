@@ -40,10 +40,21 @@ describe('<ListFilter />', () => {
       </Provider>,
     );
     screen.getByLabelText('Filter');
-    screen.getByText('-');
+    screen.getByDisplayValue('-');
+  });
+
+  it('should handle default value', () => {
+    window.localStorage.setItem('FILTER', 'use');
+    render(
+      <Provider store={mockStore}>
+        <ListFilter />
+      </Provider>,
+    );
+    screen.getByDisplayValue('use');
   });
 
   it('should handle onChange withour errors', async () => {
+    window.localStorage.clear();
     render(
       <Provider store={mockStore}>
         <ListFilter />
@@ -52,8 +63,8 @@ describe('<ListFilter />', () => {
     const listFilter = screen.getByTestId('list-filter-testId');
 
     userEvent.click(getByRole(listFilter, 'button'));
-    await waitFor(() => fireEvent.click(screen.getByText('인기 순')));
-    await waitFor(() => expect(localStorage.getItem('FILTER')).toEqual('use'));
+    await waitFor(() => fireEvent.click(screen.getByText('시간 순▼')));
+    await waitFor(() => expect(localStorage.getItem('FILTER')).toEqual('time_desc'));
 
     userEvent.click(getByRole(listFilter, 'button'));
     await waitFor(() => fireEvent.click(screen.getByText('-')));

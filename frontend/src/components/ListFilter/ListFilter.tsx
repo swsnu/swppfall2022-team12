@@ -10,7 +10,7 @@ import { fetchCourses, FetchCoursesParams } from '../../store/slices/course';
 
 export default function ListFilter() {
   const dispatch = useDispatch<AppDispatch>();
-  const filterKey = localStorage.getItem('FILTER') ?? '-';
+  const filterKey = localStorage.getItem('FILTER');
 
   const handleFilter = async (e: SelectChangeEvent) => {
     if (e.target.value === '-') {

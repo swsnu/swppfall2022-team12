@@ -12,7 +12,7 @@ import CourseDetail from './containers/CourseDetail/DetailPage';
 import CourseEditPost from './containers/CourseEdit/CourseEditPost';
 import CourseEditSearch from './containers/CourseEdit/CourseEditSearch';
 import CourseList from './containers/CourseList/CourseList';
-import Login from './containers/LoginPage/LoginPage';
+import LoginPage from './containers/LoginPage/LoginPage';
 import MainPage from './containers/MainPage/MainPage';
 import { AppDispatch } from './store';
 import { fetchTags } from './store/slices/tag';
@@ -32,7 +32,7 @@ function App() {
           <Routes>
             <Route
               path="/login"
-              element={isLogin() ? <Navigate replace to="/main" /> : <Login />}
+              element={isLogin() ? <Navigate replace to="/main" /> : <LoginPage />}
             />
             <Route path="/main" element={<MainPage />} />
             <Route path="/courses" element={<CourseList />} />
@@ -45,7 +45,6 @@ function App() {
               path="/course/edit-post/:id"
               element={<PrivateRoute element={<CourseEditPost />} />}
             />
-
             <Route
               path="/course-create/search"
               element={<PrivateRoute element={<SearchCourse />} />}
