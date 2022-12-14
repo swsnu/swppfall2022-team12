@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { FaStar } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
-
 const { TextArea } = Input;
 
 interface ReviewPostProp {
@@ -20,8 +19,8 @@ export default function ReviewPost(prop: ReviewPostProp) {
   const [courseId, setCourseId] = useState<number>(1);
 
   const post = () => {
-    if(prop.courseAuthor === sessionStorage.getItem("username")){
-      toast.error("자신이 작성한 코스에 리뷰를 남길 수 없습니다.");
+    if (prop.courseAuthor === sessionStorage.getItem('username')) {
+      toast.error('자신이 작성한 코스에 리뷰를 남길 수 없습니다.');
       return;
     }
     if (content.length === 0) {
