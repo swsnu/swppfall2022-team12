@@ -42,7 +42,7 @@ class CourseViewSet(
             return CourseUpdateSerializer
 
     # POST /course
-    @transaction.atomic
+    #@transaction.atomic
     def create(self, request):
         """Create Course"""
         context = {
